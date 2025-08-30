@@ -1,10 +1,8 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
-import { Button } from '../../components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
-import { Badge } from '../../components/ui/badge';
+import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Badge } from '../components/ui/badge';
 import {
   BarChart3,
   TrendingUp,
@@ -19,12 +17,15 @@ import {
   AlertCircle,
   CheckCircle
 } from 'lucide-react';
-import UsageDashboard from '../../components/analytics/UsageDashboard';
-import InventoryInsights from '../../components/analytics/InventoryInsights';
-import EquipmentMetrics from '../../components/analytics/EquipmentMetrics';
-import ProjectAnalytics from '../../components/analytics/ProjectAnalytics';
-import RevenueCharts from '../../components/analytics/RevenueCharts';
-import DataExports from '../../components/analytics/DataExports';
+import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../hooks/use-toast';
+import UsageDashboard from '../components/analytics/UsageDashboard';
+import InventoryInsights from '../components/analytics/InventoryInsights';
+import EquipmentMetrics from '../components/analytics/EquipmentMetrics';
+import ProjectAnalytics from '../components/analytics/ProjectAnalytics';
+import RevenueCharts from '../components/analytics/RevenueCharts';
+
+import DataExports from '../components/analytics/DataExports';
 
 interface AnalyticsOverview {
   total_users: number;
@@ -66,153 +67,358 @@ interface AnalyticsDashboard {
   cache_expires_at: string;
 }
 
-export default function Analytics() {
-  const [activeTab, setActiveTab] = useState('overview');
-  const [loading, setLoading] = useState(true);
-  const [analyticsData, setAnalyticsData] = useState<AnalyticsDashboard | null>(null);
+const Analytics: React.FC = () => {
+  const { user, hasPermission } = useAuth();
+  const { toast } = useToast();
 
-  // Mock data for development
+  // Check if user has analytics access
+  const context = {
+    isAssignedMakerspace: user?.assignedMakerspaces && user.assignedMakerspaces.length > 0,
+    isOwnResource: false,
+    isCertified: false
+  };
+
+  if (!hasPermission('analytics', 'view', context)) {
+    return (
+      <div className="flex items-center justify-center min-h-96">
+        <div className="text-center">
+          <AlertCircle className="h-12 w-12 mx-auto text-red-400 mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Access Denied</h3>
+          <p className="text-gray-600 mb-4">You don't have permission to view analytics data</p>
+          <p className="text-sm text-gray-500">Contact your administrator for access</p>
+        </div>
+      </div>
+    );
+  }
+  const [activeTab, setActiveTab] = useState('overview');
+  const [dashboardData, setDashboardData] = useState<AnalyticsDashboard | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
+
   useEffect(() => {
-    const mockData: AnalyticsDashboard = {
-      overview: {
-        total_users: 245,
-        active_users_today: 42,
-        active_users_week: 156,
-        total_projects: 89,
-        active_projects: 23,
-        total_equipment: 34,
-        equipment_in_use: 12,
-        total_inventory_items: 567,
-        low_stock_items: 8,
-        total_revenue: 25847,
-        revenue_this_month: 3420
-      },
-      sections: [],
-      generated_at: new Date().toISOString(),
-      cache_expires_at: new Date(Date.now() + 30*60*1000).toISOString()
-    };
-    
-    setTimeout(() => {
-      setAnalyticsData(mockData);
-      setLoading(false);
-    }, 1000);
+    fetchDashboardData();
   }, []);
+
+  const fetchDashboardData = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/v1/analytics/dashboard', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setDashboardData(data);
+        setLastRefresh(new Date());
+      } else if (response.status === 403) {
+        toast({
+          title: "Access Denied",
+          description: "You don't have permission to view analytics",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to load analytics data",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching analytics:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load analytics data",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const refreshData = async () => {
+    setRefreshing(true);
+    try {
+      await fetchDashboardData();
+      toast({
+        title: "Success",
+        description: "Analytics data refreshed",
+      });
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  };
+
+  const formatPercentage = (value: number, total: number) => {
+    if (total === 0) return '0%';
+    return `${((value / total) * 100).toFixed(1)}%`;
+  };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <RefreshCw className="h-8 w-8 animate-spin" />
+      <div className="flex items-center justify-center min-h-96">
+        <div className="flex items-center gap-2">
+          <RefreshCw className="h-5 w-5 animate-spin" />
+          <span>Loading analytics...</span>
+        </div>
       </div>
     );
   }
 
+  if (!dashboardData) {
+    return (
+      <div className="flex items-center justify-center min-h-96">
+        <div className="text-center">
+          <AlertCircle className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Analytics Unavailable</h3>
+          <p className="text-gray-600 mb-4">Unable to load analytics data</p>
+          <Button onClick={fetchDashboardData}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
+
+  const { overview } = dashboardData;
+
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Analytics Dashboard</h1>
-        <Button variant="outline">
-          <Download className="h-4 w-4 mr-2" />
-          Export Report
-        </Button>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <BarChart3 className="h-6 w-6" />
+            Analytics & Reports
+          </h1>
+          <p className="text-gray-600">Monitor usage, performance, and insights across your makerspace</p>
+        </div>
+        <div className="flex items-center gap-3">
+          {lastRefresh && (
+            <Badge variant="outline" className="bg-green-100 text-green-800">
+              <CheckCircle className="h-3 w-3 mr-1" />
+              Updated {lastRefresh.toLocaleTimeString()}
+            </Badge>
+          )}
+
+          <Button 
+            onClick={refreshData} 
+            disabled={refreshing}
+            variant="outline"
+          >
+            {refreshing ? (
+              <RefreshCw className="h-4 w-4 animate-spin" />
+            ) : (
+              <>
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh
+              </>
+            )}
+          </Button>
+        </div>
       </div>
 
       {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{analyticsData?.overview.total_users}</div>
-            <p className="text-xs text-muted-foreground">
-              {analyticsData?.overview.active_users_today} active today
-            </p>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Total Users</p>
+                <p className="text-2xl font-bold text-gray-900">{overview.total_users}</p>
+                <p className="text-xs text-gray-500">
+                  {overview.active_users_today} active today
+                </p>
+              </div>
+              <Users className="h-8 w-8 text-blue-600" />
+            </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Projects</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{analyticsData?.overview.total_projects}</div>
-            <p className="text-xs text-muted-foreground">
-              {analyticsData?.overview.active_projects} active
-            </p>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Projects</p>
+                <p className="text-2xl font-bold text-gray-900">{overview.total_projects}</p>
+                <p className="text-xs text-green-600">
+                  {overview.active_projects} active
+                </p>
+              </div>
+              <Package className="h-8 w-8 text-green-600" />
+            </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Equipment</CardTitle>
-            <Wrench className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{analyticsData?.overview.total_equipment}</div>
-            <p className="text-xs text-muted-foreground">
-              {analyticsData?.overview.equipment_in_use} in use
-            </p>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Equipment</p>
+                <p className="text-2xl font-bold text-gray-900">{overview.total_equipment}</p>
+                <p className="text-xs text-orange-600">
+                  {overview.equipment_in_use} in use
+                </p>
+              </div>
+              <Wrench className="h-8 w-8 text-orange-600" />
+            </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Revenue</CardTitle>
-            <CreditCard className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${analyticsData?.overview.total_revenue}</div>
-            <p className="text-xs text-muted-foreground">
-              ${analyticsData?.overview.revenue_this_month} this month
-            </p>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Revenue</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {formatCurrency(overview.total_revenue)}
+                </p>
+                <p className="text-xs text-green-600">
+                  {formatCurrency(overview.revenue_this_month)} this month
+                </p>
+              </div>
+              <CreditCard className="h-8 w-8 text-purple-600" />
+            </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Detailed Analytics Tabs */}
+      {/* Quick Stats Bar */}
+      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+        <CardContent className="p-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+            <div>
+              <p className="text-sm text-blue-600">Weekly Active Users</p>
+              <p className="text-lg font-bold text-blue-900">{overview.active_users_week}</p>
+            </div>
+            <div>
+              <p className="text-sm text-blue-600">Inventory Items</p>
+              <p className="text-lg font-bold text-blue-900">{overview.total_inventory_items}</p>
+            </div>
+            <div>
+              <p className="text-sm text-blue-600">Low Stock Alerts</p>
+              <p className="text-lg font-bold text-red-600">{overview.low_stock_items}</p>
+            </div>
+            <div>
+              <p className="text-sm text-blue-600">Equipment Utilization</p>
+              <p className="text-lg font-bold text-blue-900">
+                {formatPercentage(overview.equipment_in_use, overview.total_equipment)}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Analytics Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="usage">Usage</TabsTrigger>
-          <TabsTrigger value="inventory">Inventory</TabsTrigger>
-          <TabsTrigger value="equipment">Equipment</TabsTrigger>
-          <TabsTrigger value="projects">Projects</TabsTrigger>
-          <TabsTrigger value="revenue">Revenue</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-6">
+          <TabsTrigger value="overview" className="flex items-center gap-2">
+            <TrendingUp className="h-4 w-4" />
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="usage" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Usage
+          </TabsTrigger>
+          <TabsTrigger value="inventory" className="flex items-center gap-2">
+            <Package className="h-4 w-4" />
+            Inventory
+          </TabsTrigger>
+          <TabsTrigger value="equipment" className="flex items-center gap-2">
+            <Wrench className="h-4 w-4" />
+            Equipment
+          </TabsTrigger>
+          <TabsTrigger value="revenue" className="flex items-center gap-2">
+            <CreditCard className="h-4 w-4" />
+            Revenue
+          </TabsTrigger>
+          <TabsTrigger value="exports" className="flex items-center gap-2">
+            <Download className="h-4 w-4" />
+            Data Exports
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>System Overview</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>Comprehensive analytics overview will be displayed here.</p>
-            </CardContent>
-          </Card>
+        {/* Overview Tab */}
+        <TabsContent value="overview" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {dashboardData.sections.map((section) => (
+              <Card key={section.section_id}>
+                <CardHeader>
+                  <CardTitle className="text-lg">{section.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {section.charts[0] && (
+                    <div className="h-64">
+                      {/* Chart component would go here */}
+                      <div className="flex items-center justify-center h-full text-gray-500">
+                        Chart: {section.charts[0].title}
+                      </div>
+                    </div>
+                  )}
+                  {section.summary_stats && (
+                    <div className="mt-4 pt-4 border-t">
+                      <div className="flex justify-between text-sm">
+                        {Object.entries(section.summary_stats).map(([key, value]) => (
+                          <div key={key} className="text-center">
+                            <p className="text-gray-600 capitalize">{key.replace('_', ' ')}</p>
+                            <p className="font-semibold">
+                              {typeof value === 'number' ? 
+                                (key.includes('revenue') || key.includes('cost') ? 
+                                  formatCurrency(value) : 
+                                  value.toLocaleString()
+                                ) : 
+                                String(value)
+                              }
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </TabsContent>
 
-        <TabsContent value="usage">
+        {/* Usage Dashboard Tab */}
+        <TabsContent value="usage" className="space-y-6">
           <UsageDashboard />
         </TabsContent>
 
-        <TabsContent value="inventory">
+        {/* Inventory Insights Tab */}
+        <TabsContent value="inventory" className="space-y-6">
           <InventoryInsights />
         </TabsContent>
 
-        <TabsContent value="equipment">
+        {/* Equipment Metrics Tab */}
+        <TabsContent value="equipment" className="space-y-6">
           <EquipmentMetrics />
         </TabsContent>
 
-        <TabsContent value="projects">
-          <ProjectAnalytics />
-        </TabsContent>
-
-        <TabsContent value="revenue">
+        {/* Revenue Charts Tab */}
+        <TabsContent value="revenue" className="space-y-6">
           <RevenueCharts />
         </TabsContent>
+
+        {/* Data Exports Tab */}
+        <TabsContent value="exports" className="space-y-6">
+          <DataExports />
+        </TabsContent>
       </Tabs>
+
+
     </div>
   );
-}
+};
+
+export default Analytics;

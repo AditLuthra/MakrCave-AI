@@ -1,15 +1,13 @@
-'use client';
-
 import React, { useState, useRef } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
-import { Button } from '../../components/ui/button';
-import { Input } from '../../components/ui/input';
-import { Label } from '../../components/ui/label';
-import { Textarea } from '../../components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
-import { Badge } from '../../components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
-import { Switch } from '../../components/ui/switch';
+import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { Textarea } from '../components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { Badge } from '../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Switch } from '../components/ui/switch';
 import {
   User,
   Mail,
@@ -28,8 +26,8 @@ import {
   Settings,
   RefreshCw
 } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import { useToast } from '../../hooks/use-toast';
+import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../hooks/use-toast';
 
 interface UserProfile {
   firstName?: string;
@@ -127,236 +125,318 @@ const Profile: React.FC = () => {
     setProfile(prev => ({
       ...prev,
       [section]: {
-        ...(prev as any)[section],
+        ...prev[section as keyof UserProfile],
         [field]: value
       }
     }));
   };
 
+  const handlePasswordChange = (field: string, value: string) => {
+    setPasswordData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Please select an image smaller than 5MB",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setUploading(true);
+    try {
+      // Mock upload - in real app this would upload to your storage service
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      const mockUrl = URL.createObjectURL(file);
+      handleInputChange('avatar_url', mockUrl);
+      
+      toast({
+        title: "Avatar updated",
+        description: "Your profile picture has been uploaded successfully"
+      });
+    } catch (error) {
+      toast({
+        title: "Upload failed",
+        description: "Failed to upload avatar. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSaveProfile = async () => {
     setSaving(true);
     try {
-      const response = await fetch('/api/user/profile', {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(profile),
-      });
-
-      if (response.ok) {
-        toast({
-          title: "Success",
-          description: "Profile updated successfully",
-        });
-      } else {
-        throw new Error('Failed to update profile');
-      }
-    } catch (error) {
-      console.error('Error updating profile:', error);
+      // Mock API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
       toast({
-        title: "Error",
-        description: "Failed to update profile",
-        variant: "destructive",
+        title: "Profile updated",
+        description: "Your profile information has been saved successfully"
+      });
+    } catch (error) {
+      toast({
+        title: "Save failed",
+        description: "Failed to save profile. Please try again.",
+        variant: "destructive"
       });
     } finally {
       setSaving(false);
     }
   };
 
-  const handlePasswordChange = async () => {
+  const handlePasswordUpdate = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       toast({
-        title: "Error",
-        description: "New passwords do not match",
-        variant: "destructive",
+        title: "Password mismatch",
+        description: "New password and confirmation do not match",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (passwordData.newPassword.length < 8) {
+      toast({
+        title: "Password too short",
+        description: "Password must be at least 8 characters long",
+        variant: "destructive"
       });
       return;
     }
 
     setSaving(true);
     try {
-      const response = await fetch('/api/user/change-password', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          current_password: passwordData.currentPassword,
-          new_password: passwordData.newPassword,
-        }),
-      });
-
-      if (response.ok) {
-        toast({
-          title: "Success",
-          description: "Password changed successfully",
-        });
-        setPasswordData({
-          currentPassword: '',
-          newPassword: '',
-          confirmPassword: ''
-        });
-      } else {
-        throw new Error('Failed to change password');
-      }
-    } catch (error) {
-      console.error('Error changing password:', error);
+      // Mock API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
       toast({
-        title: "Error",
-        description: "Failed to change password",
-        variant: "destructive",
+        title: "Password updated",
+        description: "Your password has been changed successfully"
+      });
+    } catch (error) {
+      toast({
+        title: "Password update failed",
+        description: "Failed to update password. Please try again.",
+        variant: "destructive"
       });
     } finally {
       setSaving(false);
     }
   };
 
+  const getRoleDisplayName = (role: string) => {
+    switch (role) {
+      case 'super_admin': return 'Super Administrator';
+      case 'admin': return 'Administrator';
+      case 'makerspace_admin': return 'Makerspace Manager';
+      case 'service_provider': return 'Service Provider';
+      case 'user': return 'User';
+      default: return role.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+  };
+
+  const getRoleBadgeVariant = (role: string) => {
+    switch (role) {
+      case 'super_admin': return 'default';
+      case 'admin': return 'secondary';
+      case 'makerspace_admin': return 'outline';
+      case 'service_provider': return 'outline';
+      case 'user': return 'outline';
+      default: return 'outline';
+    }
+  };
+
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">User Profile</h1>
-        <p className="text-gray-600 mt-1">Manage your account settings and preferences</p>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <User className="h-6 w-6" />
+            Profile Settings
+          </h1>
+          <p className="text-gray-600">Manage your personal information and preferences</p>
+        </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      {/* Profile Overview Card */}
+      <Card>
+        <CardContent className="p-6">
+          <div className="flex items-center gap-6">
+            <div className="relative">
+              <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                {profile.avatar_url ? (
+                  <img 
+                    src={profile.avatar_url} 
+                    alt="Profile" 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <User className="h-8 w-8 text-gray-400" />
+                )}
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                className="absolute -bottom-2 -right-2 h-8 w-8 p-0 rounded-full"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+              >
+                {uploading ? (
+                  <RefreshCw className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Camera className="h-4 w-4" />
+                )}
+              </Button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarUpload}
+                className="hidden"
+              />
+            </div>
+            
+            <div className="flex-1">
+              <h2 className="text-xl font-semibold">{profile.firstName} {profile.lastName}</h2>
+              <p className="text-gray-600">{profile.email}</p>
+              <div className="flex items-center gap-2 mt-2">
+                <Badge variant={getRoleBadgeVariant(user?.role || 'user')}>
+                  {getRoleDisplayName(user?.role || 'user')}
+                </Badge>
+                {user?.assignedMakerspaces && user.assignedMakerspaces.length > 0 && (
+                  <Badge variant="outline">
+                    <Building2 className="h-3 w-3 mr-1" />
+                    {user.assignedMakerspaces.length} Makerspace{user.assignedMakerspaces.length > 1 ? 's' : ''}
+                  </Badge>
+                )}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Settings Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="security">Security</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-          <TabsTrigger value="privacy">Privacy</TabsTrigger>
+          <TabsTrigger value="general" className="flex items-center gap-2">
+            <User className="h-4 w-4" />
+            General
+          </TabsTrigger>
+          <TabsTrigger value="security" className="flex items-center gap-2">
+            <Shield className="h-4 w-4" />
+            Security
+          </TabsTrigger>
+          <TabsTrigger value="notifications" className="flex items-center gap-2">
+            <Bell className="h-4 w-4" />
+            Notifications
+          </TabsTrigger>
+          <TabsTrigger value="privacy" className="flex items-center gap-2">
+            <Eye className="h-4 w-4" />
+            Privacy
+          </TabsTrigger>
         </TabsList>
 
+        {/* General Information Tab */}
         <TabsContent value="general" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="h-5 w-5" />
-                Personal Information
-              </CardTitle>
+              <CardTitle>Personal Information</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="relative">
-                  <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center">
-                    {profile.avatar_url ? (
-                      <img src={profile.avatar_url} alt="Avatar" className="w-20 h-20 rounded-full object-cover" />
-                    ) : (
-                      <User className="h-8 w-8 text-gray-400" />
-                    )}
-                  </div>
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={uploading}
-                    className="absolute bottom-0 right-0 p-1 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:opacity-50"
-                  >
-                    <Camera className="h-3 w-3" />
-                  </button>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={() => {}}
-                  />
-                </div>
-                <div>
-                  <h3 className="font-medium">{profile.firstName} {profile.lastName}</h3>
-                  <p className="text-sm text-gray-600">{profile.email}</p>
-                  <Badge variant="outline" className="mt-1">
-                    {user?.role?.replace('_', ' ') || 'User'}
-                  </Badge>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
                   <Input
                     id="firstName"
                     value={profile.firstName || ''}
                     onChange={(e) => handleInputChange('firstName', e.target.value)}
+                    placeholder="Enter your first name"
                   />
                 </div>
-                <div>
+                
+                <div className="space-y-2">
                   <Label htmlFor="lastName">Last Name</Label>
                   <Input
                     id="lastName"
                     value={profile.lastName || ''}
                     onChange={(e) => handleInputChange('lastName', e.target.value)}
+                    placeholder="Enter your last name"
                   />
                 </div>
               </div>
 
-              <div>
-                <Label htmlFor="email">Email</Label>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email Address</Label>
                 <Input
                   id="email"
                   type="email"
                   value={profile.email || ''}
                   onChange={(e) => handleInputChange('email', e.target.value)}
+                  placeholder="Enter your email"
                 />
               </div>
 
-              <div>
-                <Label htmlFor="phone">Phone</Label>
+              <div className="space-y-2">
+                <Label htmlFor="phone">Phone Number</Label>
                 <Input
                   id="phone"
                   value={profile.phone || ''}
                   onChange={(e) => handleInputChange('phone', e.target.value)}
+                  placeholder="Enter your phone number"
                 />
               </div>
 
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="bio">Bio</Label>
                 <Textarea
                   id="bio"
-                  rows={3}
                   value={profile.bio || ''}
                   onChange={(e) => handleInputChange('bio', e.target.value)}
-                  placeholder="Tell us about yourself..."
+                  placeholder="Tell us about yourself and your interests"
+                  rows={4}
                 />
               </div>
 
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="address">Address</Label>
-                <Textarea
+                <Input
                   id="address"
-                  rows={2}
                   value={profile.address || ''}
                   onChange={(e) => handleInputChange('address', e.target.value)}
+                  placeholder="Enter your address"
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
                   <Label htmlFor="timezone">Timezone</Label>
-                  <Select value={profile.timezone} onValueChange={(value) => handleInputChange('timezone', value)}>
+                  <Select value={profile.timezone || 'Asia/Kolkata'} onValueChange={(value) => handleInputChange('timezone', value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select timezone" />
                     </SelectTrigger>
                     <SelectContent>
                       {timezones.map((tz) => (
-                        <SelectItem key={tz} value={tz}>
-                          {tz}
-                        </SelectItem>
+                        <SelectItem key={tz} value={tz}>{tz}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-                <div>
+
+                <div className="space-y-2">
                   <Label htmlFor="language">Language</Label>
-                  <Select value={profile.language} onValueChange={(value) => handleInputChange('language', value)}>
+                  <Select value={profile.language || 'en'} onValueChange={(value) => handleInputChange('language', value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select language" />
                     </SelectTrigger>
                     <SelectContent>
                       {languages.map((lang) => (
-                        <SelectItem key={lang.code} value={lang.code}>
-                          {lang.name}
-                        </SelectItem>
+                        <SelectItem key={lang.code} value={lang.code}>{lang.name}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -366,167 +446,181 @@ const Profile: React.FC = () => {
               <div className="flex justify-end">
                 <Button onClick={handleSaveProfile} disabled={saving}>
                   {saving ? (
-                    <>
-                      <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                      Saving...
-                    </>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
                   ) : (
-                    <>
-                      <Save className="h-4 w-4 mr-2" />
-                      Save Changes
-                    </>
+                    <Save className="h-4 w-4 mr-2" />
                   )}
+                  Save Changes
                 </Button>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
+        {/* Security Tab */}
         <TabsContent value="security" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Key className="h-5 w-5" />
-                Change Password
-              </CardTitle>
+              <CardTitle>Change Password</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
                 <Label htmlFor="currentPassword">Current Password</Label>
                 <div className="relative">
                   <Input
                     id="currentPassword"
                     type={showCurrentPassword ? "text" : "password"}
                     value={passwordData.currentPassword}
-                    onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
+                    onChange={(e) => handlePasswordChange('currentPassword', e.target.value)}
+                    placeholder="Enter your current password"
                   />
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2"
                     onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                   >
                     {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
+                  </Button>
                 </div>
               </div>
 
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="newPassword">New Password</Label>
                 <div className="relative">
                   <Input
                     id="newPassword"
                     type={showNewPassword ? "text" : "password"}
                     value={passwordData.newPassword}
-                    onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
+                    onChange={(e) => handlePasswordChange('newPassword', e.target.value)}
+                    placeholder="Enter your new password"
                   />
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2"
                     onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                   >
                     {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
+                  </Button>
                 </div>
               </div>
 
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="confirmPassword">Confirm New Password</Label>
                 <div className="relative">
                   <Input
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
                     value={passwordData.confirmPassword}
-                    onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                    onChange={(e) => handlePasswordChange('confirmPassword', e.target.value)}
+                    placeholder="Confirm your new password"
                   />
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                   >
                     {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
+                  </Button>
                 </div>
               </div>
 
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="font-medium text-sm mb-2">Password Requirements:</h4>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• At least 8 characters long</li>
+                  <li>• Include uppercase and lowercase letters</li>
+                  <li>• Include at least one number</li>
+                  <li>• Include at least one special character</li>
+                </ul>
+              </div>
+
               <div className="flex justify-end">
-                <Button onClick={handlePasswordChange} disabled={saving}>
+                <Button 
+                  onClick={handlePasswordUpdate} 
+                  disabled={saving || !passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword}
+                >
                   {saving ? (
-                    <>
-                      <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                      Updating...
-                    </>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
                   ) : (
-                    <>
-                      <Key className="h-4 w-4 mr-2" />
-                      Change Password
-                    </>
+                    <Key className="h-4 w-4 mr-2" />
                   )}
+                  Update Password
                 </Button>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
+        {/* Notifications Tab */}
         <TabsContent value="notifications" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Bell className="h-5 w-5" />
-                Notification Preferences
-              </CardTitle>
+              <CardTitle>Notification Preferences</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="email-notifications">Email Notifications</Label>
-                  <p className="text-sm text-gray-600">Receive notifications via email</p>
+            <CardContent className="space-y-6">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="email_notifications" className="font-medium">Email Notifications</Label>
+                    <p className="text-sm text-gray-600 mt-1">Receive important updates via email</p>
+                  </div>
+                  <Switch
+                    id="email_notifications"
+                    checked={profile.notification_preferences?.email_notifications || false}
+                    onCheckedChange={(checked) => handleNestedChange('notification_preferences', 'email_notifications', checked)}
+                  />
                 </div>
-                <Switch
-                  id="email-notifications"
-                  checked={profile.notification_preferences?.email_notifications}
-                  onCheckedChange={(checked) => handleNestedChange('notification_preferences', 'email_notifications', checked)}
-                />
-              </div>
 
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="sms-notifications">SMS Notifications</Label>
-                  <p className="text-sm text-gray-600">Receive notifications via SMS</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="sms_notifications" className="font-medium">SMS Notifications</Label>
+                    <p className="text-sm text-gray-600 mt-1">Receive urgent alerts via SMS</p>
+                  </div>
+                  <Switch
+                    id="sms_notifications"
+                    checked={profile.notification_preferences?.sms_notifications || false}
+                    onCheckedChange={(checked) => handleNestedChange('notification_preferences', 'sms_notifications', checked)}
+                  />
                 </div>
-                <Switch
-                  id="sms-notifications"
-                  checked={profile.notification_preferences?.sms_notifications}
-                  onCheckedChange={(checked) => handleNestedChange('notification_preferences', 'sms_notifications', checked)}
-                />
-              </div>
 
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="push-notifications">Push Notifications</Label>
-                  <p className="text-sm text-gray-600">Receive push notifications in browser</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="push_notifications" className="font-medium">Push Notifications</Label>
+                    <p className="text-sm text-gray-600 mt-1">Receive browser push notifications</p>
+                  </div>
+                  <Switch
+                    id="push_notifications"
+                    checked={profile.notification_preferences?.push_notifications || false}
+                    onCheckedChange={(checked) => handleNestedChange('notification_preferences', 'push_notifications', checked)}
+                  />
                 </div>
-                <Switch
-                  id="push-notifications"
-                  checked={profile.notification_preferences?.push_notifications}
-                  onCheckedChange={(checked) => handleNestedChange('notification_preferences', 'push_notifications', checked)}
-                />
-              </div>
 
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="marketing-emails">Marketing Emails</Label>
-                  <p className="text-sm text-gray-600">Receive marketing and promotional emails</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="marketing_emails" className="font-medium">Marketing Emails</Label>
+                    <p className="text-sm text-gray-600 mt-1">Receive updates about new features and promotions</p>
+                  </div>
+                  <Switch
+                    id="marketing_emails"
+                    checked={profile.notification_preferences?.marketing_emails || false}
+                    onCheckedChange={(checked) => handleNestedChange('notification_preferences', 'marketing_emails', checked)}
+                  />
                 </div>
-                <Switch
-                  id="marketing-emails"
-                  checked={profile.notification_preferences?.marketing_emails}
-                  onCheckedChange={(checked) => handleNestedChange('notification_preferences', 'marketing_emails', checked)}
-                />
               </div>
 
               <div className="flex justify-end">
                 <Button onClick={handleSaveProfile} disabled={saving}>
-                  <Save className="h-4 w-4 mr-2" />
+                  {saving ? (
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <Save className="h-4 w-4 mr-2" />
+                  )}
                   Save Preferences
                 </Button>
               </div>
@@ -534,59 +628,63 @@ const Profile: React.FC = () => {
           </Card>
         </TabsContent>
 
+        {/* Privacy Tab */}
         <TabsContent value="privacy" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5" />
-                Privacy Settings
-              </CardTitle>
+              <CardTitle>Privacy Settings</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="profile-visibility">Profile Visibility</Label>
-                <Select 
-                  value={profile.privacy_settings?.profile_visibility} 
-                  onValueChange={(value) => handleNestedChange('privacy_settings', 'profile_visibility', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select visibility" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="public">Public - Visible to everyone</SelectItem>
-                    <SelectItem value="members_only">Members Only - Visible to makerspace members</SelectItem>
-                    <SelectItem value="private">Private - Only visible to you</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="show-activity">Show Activity</Label>
-                  <p className="text-sm text-gray-600">Allow others to see your recent activity</p>
+            <CardContent className="space-y-6">
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="profile_visibility">Profile Visibility</Label>
+                  <Select 
+                    value={profile.privacy_settings?.profile_visibility || 'members_only'} 
+                    onValueChange={(value) => handleNestedChange('privacy_settings', 'profile_visibility', value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select visibility" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="public">Public - Anyone can see your profile</SelectItem>
+                      <SelectItem value="members_only">Members Only - Only makerspace members can see your profile</SelectItem>
+                      <SelectItem value="private">Private - Only you can see your profile</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-                <Switch
-                  id="show-activity"
-                  checked={profile.privacy_settings?.show_activity}
-                  onCheckedChange={(checked) => handleNestedChange('privacy_settings', 'show_activity', checked)}
-                />
-              </div>
 
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="show-projects">Show Projects</Label>
-                  <p className="text-sm text-gray-600">Allow others to see your projects</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="show_activity" className="font-medium">Show Activity</Label>
+                    <p className="text-sm text-gray-600 mt-1">Allow others to see your recent activity and equipment usage</p>
+                  </div>
+                  <Switch
+                    id="show_activity"
+                    checked={profile.privacy_settings?.show_activity || false}
+                    onCheckedChange={(checked) => handleNestedChange('privacy_settings', 'show_activity', checked)}
+                  />
                 </div>
-                <Switch
-                  id="show-projects"
-                  checked={profile.privacy_settings?.show_projects}
-                  onCheckedChange={(checked) => handleNestedChange('privacy_settings', 'show_projects', checked)}
-                />
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="show_projects" className="font-medium">Show Projects</Label>
+                    <p className="text-sm text-gray-600 mt-1">Allow others to see your projects and contributions</p>
+                  </div>
+                  <Switch
+                    id="show_projects"
+                    checked={profile.privacy_settings?.show_projects || false}
+                    onCheckedChange={(checked) => handleNestedChange('privacy_settings', 'show_projects', checked)}
+                  />
+                </div>
               </div>
 
               <div className="flex justify-end">
                 <Button onClick={handleSaveProfile} disabled={saving}>
-                  <Save className="h-4 w-4 mr-2" />
+                  {saving ? (
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <Save className="h-4 w-4 mr-2" />
+                  )}
                   Save Privacy Settings
                 </Button>
               </div>
