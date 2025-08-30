@@ -285,7 +285,7 @@ const LandingPage = () => {
                   <InteractiveMap />
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link to="/portal/map">
+                  <Link href="/portal/map">
                     <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white">
                       See Full Map
                     </Button>
@@ -730,8 +730,8 @@ const LandingPage = () => {
             <div>
               <h4 className="text-white font-semibold mb-4">Discover</h4>
               <ul className="space-y-2 text-white/70">
-                <li><Link to="/find-makerspace" className="hover:text-white transition-colors">Find MakrCave</Link></li>
-                <li><Link to="/contact" className="hover:text-white transition-colors">Start a MakrCave</Link></li>
+                <li><Link href="/find-makerspace" className="hover:text-white transition-colors">Find MakrCave</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Start a MakrCave</Link></li>
                 <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
                 <li><a href="#community" className="hover:text-white transition-colors">Community</a></li>
               </ul>
@@ -753,7 +753,7 @@ const LandingPage = () => {
                 <li><a href="#" className="hover:text-white transition-colors">Instagram</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">YouTube</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">GitHub</a></li>
-                <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
               </ul>
             </div>
           </div>
@@ -763,7 +763,7 @@ const LandingPage = () => {
               © 2024 MakrX by Botness Technologies Pvt. Ltd. All rights reserved.
             </p>
             <div className="flex items-center space-x-6 mt-4 md:mt-0">
-              <Link to="/login" className="text-white/60 hover:text-white text-sm transition-colors">
+              <Link href="/login" className="text-white/60 hover:text-white text-sm transition-colors">
                 Portal Login
               </Link>
               <a href="#" className="text-white/60 hover:text-white text-sm transition-colors">
