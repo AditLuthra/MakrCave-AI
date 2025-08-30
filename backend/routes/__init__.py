@@ -1,7 +1,7 @@
 """Unified API router with route classifications and dependencies."""
 
 from fastapi import APIRouter, Depends
-from ..dependencies import get_current_user, require_roles, require_scope
+from dependencies import get_current_user, require_roles, require_scope
 
 api_router = APIRouter()
 

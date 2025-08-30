@@ -489,3 +489,10 @@ def get_permission_checker(
 ) -> PermissionChecker:
     """Get permission checker instance for current user"""
     return PermissionChecker(current_user)
+
+
+async def get_current_makerspace(
+    current_user: CurrentUser = Depends(get_current_user),
+) -> Optional[str]:
+    """Get current user's makerspace ID"""
+    return current_user.makerspace_id

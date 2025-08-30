@@ -11,8 +11,8 @@ import uuid
 from collections import defaultdict
 
 from fastapi import HTTPException, Request, status
-from fastapi.middleware.base import BaseHTTPMiddleware
-from security import get_request_context
+from starlette.middleware.base import BaseHTTPMiddleware
+from security.helpers import get_request_context
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         return "default"
     
     async def dispatch(self, request: Request, call_next):
-        client_ip = request.client.host
+        client_ip = request.client.host if request.client else "unknown"
         endpoint_category = self.get_endpoint_category(request.url.path)
         
         # Get limits for this endpoint category
@@ -139,7 +139,7 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
         request.state.request_id = request_id
 
         # Log request details
-        client_ip = request.client.host
+        client_ip = request.client.host if request.client else "unknown"
         method = request.method
         path = request.url.path
         user_agent = request.headers.get("user-agent", "")
