@@ -26,7 +26,8 @@ export default function AdminUsers() {
       </div>
 
       <div className="makrcave-card">
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden lg:block overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-border">
@@ -76,6 +77,54 @@ export default function AdminUsers() {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="lg:hidden space-y-4 p-4">
+          {users.map((user) => (
+            <div key={user.id} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="w-10 h-10 bg-makrx-teal rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-sm font-semibold text-white">
+                      {user.name.split(' ').map(n => n[0]).join('')}
+                    </span>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h4 className="font-medium text-gray-900 truncate">{user.name}</h4>
+                    <p className="text-sm text-gray-600 truncate">{user.email}</p>
+                  </div>
+                </div>
+                <div className="flex gap-2 flex-shrink-0">
+                  <button className="p-2 text-makrx-blue hover:bg-makrx-blue/10 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center">
+                    <Mail className="w-4 h-4" />
+                  </button>
+                  <button className="p-2 text-makrx-blue hover:bg-makrx-blue/10 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center">
+                    <Shield className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-3 gap-4 text-sm">
+                <div>
+                  <p className="text-gray-500 text-xs font-medium mb-1">Role</p>
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    user.role === 'makerspace_admin' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
+                  }`}>
+                    {user.role.replace('_', ' ')}
+                  </span>
+                </div>
+                <div className="text-center">
+                  <p className="text-gray-500 text-xs font-medium mb-1">Joined</p>
+                  <p className="text-gray-900 text-xs">{user.joinDate}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-gray-500 text-xs font-medium mb-1">Last Active</p>
+                  <p className="text-gray-900 text-xs">{user.lastActive}</p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

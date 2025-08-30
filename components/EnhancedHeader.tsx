@@ -15,6 +15,7 @@ interface EnhancedHeaderProps {
 export default function EnhancedHeader({ onMobileMenuClick }: EnhancedHeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showLauncher, setShowLauncher] = useState(false);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
@@ -62,51 +63,80 @@ export default function EnhancedHeader({ onMobileMenuClick }: EnhancedHeaderProp
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-blue-500/30 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
-          {/* Logo */}
-          <Link href="/dashboard" className="flex items-center gap-2 group flex-shrink-0">
-            <div className="w-7 h-7 bg-gradient-to-br from-blue-400 to-purple-600 rounded-lg flex items-center justify-center shadow-lg transition-all group-hover:shadow-blue-500/50">
-              <span className="text-white font-bold text-xs">M</span>
-            </div>
-            <span className="hidden sm:block text-lg font-bold text-white font-mono transition-colors group-hover:text-blue-400">
-              Makr<span className="text-yellow-400">Cave</span>
-            </span>
-          </Link>
-
-          {/* Desktop Navigation - Compact */}
-          <nav className="hidden lg:flex items-center gap-4">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-xs font-semibold font-mono transition-all text-slate-300 hover:text-blue-400 hover:shadow-lg px-2 py-1 rounded"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </nav>
-
-          {/* Search - Compact */}
-          <div className="hidden md:flex relative flex-1 max-w-xs mx-4">
-            <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 bg-slate-800 border border-blue-500/30 rounded-md text-xs text-white placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-transparent transition-all duration-200 hover:bg-slate-700"
-            />
+        <div className="flex items-center justify-between h-14 sm:h-16 gap-2">
+          {/* Left - Logo and Mobile Menu */}
+          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+            <Link href="/dashboard" className="flex items-center gap-2 group flex-shrink-0">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-400 to-purple-600 rounded-lg flex items-center justify-center shadow-lg transition-all group-hover:shadow-blue-500/50">
+                <span className="text-white font-bold text-xs">M</span>
+              </div>
+              <span className="hidden sm:block text-lg font-bold text-white font-mono transition-colors group-hover:text-blue-400">
+                Makr<span className="text-yellow-400">Cave</span>
+              </span>
+            </Link>
+            
+            {/* Mobile menu button */}
+            <button 
+              className="lg:hidden p-2 hover:bg-blue-500/10 rounded-lg transition-all text-blue-400 hover:shadow-lg flex-shrink-0 min-h-[44px] min-w-[44px] flex items-center justify-center"
+              onClick={() => {
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+                onMobileMenuClick?.();
+              }}
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
+            </button>
           </div>
 
-          {/* Desktop Actions - Compact */}
-          <div className="hidden md:flex items-center gap-1.5 flex-shrink-0">
-            {/* Universal Launcher */}
-            <div className="relative">
+          {/* Center - Navigation and Search for larger screens */}
+          <div className="hidden lg:flex items-center gap-4 flex-1 justify-center max-w-2xl">
+            <nav className="flex items-center gap-3">
+              {navigation.slice(0, 4).map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-xs font-semibold font-mono transition-all text-slate-300 hover:text-blue-400 hover:shadow-lg px-2 py-1 rounded whitespace-nowrap"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+            
+            <div className="relative flex-1 max-w-xs">
+              <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-8 pr-3 py-1.5 bg-slate-800 border border-blue-500/30 rounded-md text-xs text-white placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-transparent transition-all duration-200 hover:bg-slate-700"
+              />
+            </div>
+          </div>
+
+          {/* Right - Mobile and Desktop Actions */}
+          <div className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
+            {/* Mobile Search Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowMobileSearch(!showMobileSearch)}
+              className="lg:hidden p-2 rounded-lg hover:bg-blue-500/10 hover:shadow-lg transition-all text-blue-400"
+              aria-label="Search"
+            >
+              <Search className="w-4 h-4" />
+            </Button>
+
+            {/* Universal Launcher - hidden on smallest screens */}
+            <div className="hidden sm:block relative">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowLauncher(!showLauncher)}
-                className="p-1.5 rounded-md hover:bg-blue-500/10 hover:shadow-lg transition-all"
+                className="p-1.5 sm:p-2 rounded-md hover:bg-blue-500/10 hover:shadow-lg transition-all"
                 aria-label="Launch Apps"
               >
                 <Grid3X3 className="w-4 h-4 text-blue-400" />
@@ -145,12 +175,12 @@ export default function EnhancedHeader({ onMobileMenuClick }: EnhancedHeaderProp
               )}
             </div>
 
-            {/* Theme Toggle */}
+            {/* Theme Toggle - hidden on smallest screens */}
             <Button
               variant="ghost"
               size="sm"
               onClick={toggleTheme}
-              className="p-1.5 rounded-md hover:bg-blue-500/10 hover:shadow-lg transition-all"
+              className="hidden sm:flex p-1.5 sm:p-2 rounded-md hover:bg-blue-500/10 hover:shadow-lg transition-all"
               aria-label="Toggle theme"
             >
               <span className="text-yellow-400 text-xs">
@@ -162,7 +192,7 @@ export default function EnhancedHeader({ onMobileMenuClick }: EnhancedHeaderProp
             <Button
               variant="ghost"
               size="sm"
-              className="p-1.5 rounded-md hover:bg-blue-500/10 hover:shadow-lg transition-all text-blue-400 relative"
+              className="p-1.5 sm:p-2 rounded-md hover:bg-blue-500/10 hover:shadow-lg transition-all text-blue-400 relative"
               aria-label="Notifications"
             >
               <Bell className="w-4 h-4" />
@@ -170,35 +200,48 @@ export default function EnhancedHeader({ onMobileMenuClick }: EnhancedHeaderProp
             </Button>
 
             {/* User Menu - Compact */}
-            <div className="flex items-center gap-1.5 px-2 py-1 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-md shadow-lg backdrop-blur-sm">
-              <UserIcon className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
-              <span className="hidden lg:block text-xs font-medium text-white truncate max-w-[100px]">
-                {formatUserDisplayName(user)}
-              </span>
-              <span className="hidden xl:block text-xs text-blue-400 capitalize">
-                {user?.role?.replace('_', ' ')}
-              </span>
+            <div className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-1 sm:py-1.5 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-md shadow-lg backdrop-blur-sm">
+              <UserIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400 flex-shrink-0" />
+              <div className="hidden sm:block min-w-0">
+                <div className="text-xs font-medium text-white truncate max-w-[80px] lg:max-w-[120px]">
+                  {formatUserDisplayName(user)}
+                </div>
+                <div className="hidden lg:block text-xs text-blue-400 capitalize truncate">
+                  {user?.role?.replace('_', ' ')}
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setIsMobileMenuOpen(!isMobileMenuOpen);
-              onMobileMenuClick?.();
-            }}
-            className="md:hidden p-1.5 rounded-md hover:bg-blue-500/10 transition-all"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-4 h-4 text-blue-400" />
-            ) : (
-              <Menu className="w-4 h-4 text-blue-400" />
-            )}
-          </Button>
         </div>
+      </div>
+
+      {/* Mobile Search Overlay */}
+      {showMobileSearch && (
+        <div className="lg:hidden fixed inset-x-0 top-14 sm:top-16 z-50 bg-slate-900/95 backdrop-blur-md border-b border-blue-500/30 p-4">
+          <div className="flex items-center gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-blue-500/30 rounded-lg text-sm text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 hover:bg-slate-700 min-h-[48px]"
+                autoFocus
+              />
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowMobileSearch(false)}
+              className="p-2 rounded-lg hover:bg-blue-500/10 transition-all text-blue-400"
+            >
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
+        </div>
+      )}
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
@@ -297,6 +340,14 @@ export default function EnhancedHeader({ onMobileMenuClick }: EnhancedHeaderProp
         <div
           className="fixed inset-0 z-40"
           onClick={() => setShowLauncher(false)}
+        />
+      )}
+
+      {/* Backdrop for mobile search */}
+      {showMobileSearch && (
+        <div
+          className="lg:hidden fixed inset-0 z-40"
+          onClick={() => setShowMobileSearch(false)}
         />
       )}
     </header>

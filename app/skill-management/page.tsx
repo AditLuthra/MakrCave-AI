@@ -404,7 +404,8 @@ const SkillManagement: React.FC = () => {
               <CardTitle>Member Certifications</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
+              {/* Desktop Table View */}
+              <div className="hidden lg:block overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-gray-50 border-b">
                     <tr>
@@ -485,6 +486,86 @@ const SkillManagement: React.FC = () => {
                     ))}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Mobile Card View */}
+              <div className="lg:hidden space-y-4">
+                {filteredUserSkills.map((userSkill, index) => (
+                  <div key={`${userSkill.userId}-${userSkill.skillId}`} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-gray-900 truncate">{userSkill.userName}</h4>
+                        <p className="text-sm text-gray-600 truncate">{userSkill.userEmail}</p>
+                      </div>
+                      <div className="flex gap-2 flex-shrink-0">
+                        {userSkill.status === 'pending' && (
+                          <Button
+                            size="sm"
+                            onClick={() => handleCertifyUser(`${userSkill.userId}-${userSkill.skillId}`)}
+                            className="text-xs"
+                          >
+                            <CheckCircle className="h-3 w-3 mr-1" />
+                            Approve
+                          </Button>
+                        )}
+                        {userSkill.status === 'certified' && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleRevokeSkill(`${userSkill.userId}-${userSkill.skillId}`)}
+                            className="text-red-600 hover:text-red-700 text-xs"
+                          >
+                            <XCircle className="h-3 w-3 mr-1" />
+                            Revoke
+                          </Button>
+                        )}
+                        {userSkill.status === 'expired' && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleCertifyUser(`${userSkill.userId}-${userSkill.skillId}`)}
+                            className="text-xs"
+                          >
+                            <Award className="h-3 w-3 mr-1" />
+                            Recertify
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <p className="text-gray-500 text-xs font-medium mb-1">Skill</p>
+                        <p className="font-medium text-gray-900">{userSkill.skillName}</p>
+                        {userSkill.notes && (
+                          <p className="text-gray-600 text-xs mt-1">{userSkill.notes}</p>
+                        )}
+                      </div>
+                      <div className="text-right">
+                        <p className="text-gray-500 text-xs font-medium mb-1">Status</p>
+                        {getStatusBadge(userSkill.status)}
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4 text-sm mt-3 pt-3 border-t border-gray-100">
+                      <div>
+                        <p className="text-gray-500 text-xs font-medium mb-1">Certified</p>
+                        <p className="text-gray-900 text-xs">
+                          {userSkill.certifiedAt ? new Date(userSkill.certifiedAt).toLocaleDateString() : '-'}
+                        </p>
+                        {userSkill.certifiedBy && (
+                          <p className="text-gray-600 text-xs">by {userSkill.certifiedBy}</p>
+                        )}
+                      </div>
+                      <div className="text-right">
+                        <p className="text-gray-500 text-xs font-medium mb-1">Expires</p>
+                        <p className="text-gray-900 text-xs">
+                          {userSkill.expiresAt ? new Date(userSkill.expiresAt).toLocaleDateString() : '-'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
