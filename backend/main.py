@@ -3,10 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import uvicorn
 import os
-import sys
 
-# Add current directory to path for imports
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Import security middleware
+from middleware.security import add_security_middleware
+from middleware.error_handling import ErrorHandlingMiddleware
 
 from routes import api_router
 
@@ -35,7 +35,6 @@ if os.getenv("ENVIRONMENT") == "development":
         "http://gateway-frontend:5173",
         "http://makrcave-frontend:5174",
         "http://makrx-store-frontend:5175",
-        "*",  # Allow all origins in development for Replit compatibility
     ])
 
 app.add_middleware(
@@ -54,7 +53,11 @@ app.add_middleware(
     ],
 )
 
-# Security middleware and error handling temporarily disabled for initial setup
+# Add security middleware (after CORS)
+add_security_middleware(app)
+
+# Add unified error handling middleware
+app.add_middleware(ErrorHandlingMiddleware)
 
 # Global exception handler (fallback)
 @app.exception_handler(Exception)
@@ -86,7 +89,7 @@ if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=5000,
+        port=8000,
         reload=True,
         log_level="info"
     )
