@@ -1,6 +1,6 @@
 # Overview
 
-MakrCave is a global maker network platform that connects makerspaces, FabLabs, and individual makers worldwide. The application serves as a discovery platform where users can find and explore makerspaces, view their equipment, contact locations, and access information about the global maker community. Built as a full-stack web application, it provides a comprehensive directory of maker facilities with search capabilities, featured locations, and detailed facility information.
+MakrCave is an enterprise-grade makerspace management platform that provides comprehensive tools for managing makerspaces, equipment, inventory, members, projects, and operations. Originally migrated from MyTrial, this platform offers advanced features including multi-tenant architecture, role-based access control, equipment reservations, inventory management, project collaboration, and billing systems. The application serves both as a makerspace discovery platform and a complete management solution for FabLabs and makerspaces worldwide.
 
 # User Preferences
 
@@ -8,21 +8,22 @@ Preferred communication style: Simple, everyday language.
 
 # System Architecture
 
-## Frontend Architecture
-The frontend is built using **React 18** with **TypeScript** and follows a component-based architecture:
-- **Routing**: Uses Wouter for lightweight client-side routing with pages for home, locations listing, location details, and about
-- **State Management**: Leverages React Query (TanStack Query) for server state management and caching
-- **UI Framework**: Implements shadcn/ui component library built on Radix UI primitives for accessible, customizable components
-- **Styling**: Uses Tailwind CSS with custom design tokens and CSS variables for theming
-- **Build Tool**: Vite for fast development and optimized production builds
+## Frontend Architecture (Next.js + React)
+The frontend is built using **Next.js 14** with **React 18** and TypeScript:
+- **Framework**: Next.js 14 with App Router for modern React development
+- **Authentication**: Keycloak integration for enterprise SSO and role-based access
+- **UI Framework**: Radix UI primitives with custom component library
+- **Styling**: Tailwind CSS with custom design system and dark mode support
+- **State Management**: React Context API with providers for auth, notifications, and features
+- **Build Tools**: Hybrid Next.js/Vite configuration for development flexibility
 
-## Backend Architecture
-The server follows a **RESTful API** architecture using Express.js:
-- **Framework**: Express.js with TypeScript for type safety
-- **Route Structure**: Organized route handlers in separate modules with clear endpoint definitions
-- **Data Layer**: Abstracted storage interface (IStorage) allowing for different implementations
-- **Current Implementation**: In-memory storage with sample data for development
-- **Middleware**: Custom logging middleware for API request monitoring
+## Backend Architecture (FastAPI + Python)
+The server follows a **microservices-ready architecture** using FastAPI:
+- **Framework**: FastAPI with Pydantic for API validation and OpenAPI documentation
+- **Authentication**: JWT-based authentication with Keycloak integration
+- **Database**: PostgreSQL with SQLAlchemy ORM for data persistence
+- **Security**: Comprehensive middleware for rate limiting, input validation, and CORS
+- **Multi-tenancy**: Makerspace-isolated data access with role-based permissions
 
 ## Data Storage Solutions
 **Database Schema** (Drizzle ORM with PostgreSQL):

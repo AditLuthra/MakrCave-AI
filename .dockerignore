@@ -1,0 +1,40 @@
+# Ignore virtual environments
+.venv/
+
+# Node and build artifacts
+node_modules/
+dist/
+.next/
+build/
+
+# Python artifacts
+__pycache__/
+*.pyc
+
+# Test and coverage artifacts
+.pytest_cache/
+coverage/
+
+# Logs and databases
+*.log
+logs/
+*.sqlite*
+*.db
+
+# Uploaded and temporary files
+uploads/
+tmp/
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.*.example
+!.env.*.template
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+*~
+*.swp
