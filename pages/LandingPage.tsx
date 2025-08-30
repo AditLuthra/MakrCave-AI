@@ -3,7 +3,7 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { ArrowRight, MapPin, Users, Zap, Shield, Star, ChevronRight, Play, ExternalLink, Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import InteractiveMap from '../components/InteractiveMap';
 
 const LandingPage = () => {
@@ -47,18 +47,18 @@ const LandingPage = () => {
                   </div>
                 </div>
               </div>
-              <Link to="/find-makerspace" className="text-white/80 hover:text-white transition-colors">Find Makerspace</Link>
-              <Link to="/makrverse" className="text-white/80 hover:text-white transition-colors">MakrVerse</Link>
+              <Link href="/find-makerspace" className="text-white/80 hover:text-white transition-colors">Find Makerspace</Link>
+              <Link href="/makrverse" className="text-white/80 hover:text-white transition-colors">MakrVerse</Link>
               <a href="#features" className="text-white/80 hover:text-white transition-colors">Features</a>
               <a href="#institutions" className="text-white/80 hover:text-white transition-colors">Institutions</a>
-              <Link to="/contact" className="text-white/80 hover:text-white transition-colors">Contact</Link>
+              <Link href="/contact" className="text-white/80 hover:text-white transition-colors">Contact</Link>
             </nav>
 
             <div className="hidden md:flex items-center space-x-4">
-              <Link to="/register" className="text-white/80 hover:text-white transition-colors">
+              <Link href="/register" className="text-white/80 hover:text-white transition-colors">
                 Join the Movement
               </Link>
-              <Link to="/login">
+              <Link href="/login">
                 <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none">
                   Go to Portal
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -82,15 +82,15 @@ const LandingPage = () => {
             <div className="container mx-auto px-6 py-4">
               <nav className="flex flex-col space-y-4">
                 <a href="#explore" className="text-white/80 hover:text-white transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Explore</a>
-                <Link to="/makrverse" className="text-white/80 hover:text-white transition-colors" onClick={() => setIsMobileMenuOpen(false)}>MakrVerse</Link>
+                <Link href="/makrverse" className="text-white/80 hover:text-white transition-colors" onClick={() => setIsMobileMenuOpen(false)}>MakrVerse</Link>
                 <a href="#features" className="text-white/80 hover:text-white transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Features</a>
                 <a href="#institutions" className="text-white/80 hover:text-white transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Institutions</a>
                 <a href="#community" className="text-white/80 hover:text-white transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Community</a>
                 <hr className="border-white/20" />
-                <Link to="/register" className="text-white/80 hover:text-white transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                <Link href="/register" className="text-white/80 hover:text-white transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
                   Join the Movement
                 </Link>
-                <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
                   <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none w-full">
                     Go to Portal
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -118,7 +118,7 @@ const LandingPage = () => {
               The heart of the MakrX ecosystem: comprehensive management for inventory, equipment, skills, service orders, and community collaboration — all in one powerful platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center max-w-lg sm:max-w-none mx-auto">
-              <Link to="/find-makerspace">
+              <Link href="/find-makerspace">
                 <Button size="lg" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4">
                   <MapPin className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Find a MakrCave
@@ -233,7 +233,7 @@ const LandingPage = () => {
                       <p className="text-lg text-white/80 mb-6 max-w-md">
                         Watch real-time projects, discover AR exploration points, and earn travel badges
                       </p>
-                      <Link to="/makrverse">
+                      <Link href="/makrverse">
                         <Button className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white px-8 py-3 text-lg">
                           <MapPin className="mr-2 h-5 w-5" />
                           Explore MakrVerse
