@@ -13,7 +13,9 @@ import {
   BarChart3,
   Shield,
   LogOut,
-  UserCog
+  UserCog,
+  Package,
+  FolderOpen
 } from 'lucide-react';
 
 function AdminSidebar() {

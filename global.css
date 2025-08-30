@@ -73,23 +73,38 @@ html, body {
   box-shadow: 0 0 25px rgba(251, 191, 36, 0.8), 0 0 50px rgba(251, 191, 36, 0.5);
 }
 
-/* Responsive utilities */
+/* Enhanced Responsive utilities */
 @media (max-width: 640px) {
   .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
 
   /* Ensure text doesn't break awkwardly on mobile */
   .text-responsive {
     word-wrap: break-word;
     overflow-wrap: break-word;
+    hyphens: auto;
   }
 
   /* Mobile-first button sizing */
   .btn-mobile {
     min-height: 44px; /* iOS touch target size */
     padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  /* Mobile-first input sizing */
+  .input-mobile {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem; /* Prevent zoom on iOS */
+  }
+
+  /* Mobile card spacing */
+  .card-mobile {
+    padding: 1rem;
+    margin-bottom: 1rem;
   }
 }
 
@@ -191,7 +206,7 @@ html, body {
 }
 
 @layer components {
-  /* MakrCave specific components */
+  /* Enhanced MakrCave specific components with better responsiveness */
   .makrcave-sidebar {
     @apply bg-card border-r border-border h-screen w-64 fixed left-0 top-0 z-40 flex flex-col overflow-hidden;
   }
@@ -201,20 +216,28 @@ html, body {
   }
 
   .makrcave-header {
-    @apply bg-card border-b border-border px-6 py-4 flex items-center justify-between;
+    @apply bg-card border-b border-border px-3 sm:px-6 py-3 sm:py-4 flex items-center justify-between;
   }
 
   .makrcave-card {
-    @apply bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow;
+    @apply bg-card border border-border rounded-lg p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow;
   }
 
   .makrcave-btn-primary {
-    @apply bg-makrx-blue text-white px-4 py-2.5 rounded-lg font-medium hover:bg-makrx-blue/90 transition-colors inline-flex items-center justify-center gap-2 text-sm;
+    @apply bg-makrx-blue text-white px-4 py-2.5 rounded-lg font-medium hover:bg-makrx-blue/90 transition-colors inline-flex items-center justify-center gap-2 text-sm min-h-[44px];
+  }
+
+  .makrcave-nav-item {
+    @apply flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2.5 rounded-lg text-sm font-medium transition-colors min-h-[44px];
   }
 
   @media (max-width: 640px) {
     .makrcave-btn-primary, .makrcave-btn-secondary, .makrcave-btn-outline {
-      @apply px-3 py-2 text-xs;
+      @apply px-4 py-3 text-sm min-h-[48px];
+    }
+    
+    .makrcave-nav-item {
+      @apply py-3 text-base min-h-[48px];
     }
   }
 
@@ -306,22 +329,41 @@ html, body {
 /* Mobile-first responsive utilities */
 @media (max-width: 480px) {
   .makrcave-main main {
-    @apply p-2;
-  }
-
-  .makrcave-card {
     @apply p-3;
   }
 
+  .makrcave-card {
+    @apply p-4;
+  }
+
   h1 {
-    @apply text-xl;
+    @apply text-xl leading-tight;
   }
 
   h2 {
-    @apply text-lg;
+    @apply text-lg leading-snug;
   }
 
   h3 {
-    @apply text-base;
+    @apply text-base leading-normal;
+  }
+
+  /* Enhanced mobile grid layouts */
+  .grid-mobile-1 {
+    @apply grid-cols-1;
+  }
+
+  .grid-mobile-2 {
+    @apply grid-cols-2 gap-3;
+  }
+
+  /* Mobile table responsiveness */
+  .table-mobile {
+    @apply text-sm;
+  }
+
+  .table-mobile th,
+  .table-mobile td {
+    @apply px-2 py-3;
   }
 }

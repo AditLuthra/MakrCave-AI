@@ -297,17 +297,17 @@ const MakerspaceFormModal: React.FC<MakerspaceFormModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Building2 className="h-5 w-5" />
+      <DialogContent className="max-w-4xl mx-3 sm:mx-auto max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="pb-3">
+          <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
+            <Building2 className="h-5 w-5 flex-shrink-0" />
             {makerspace ? 'Edit Makerspace' : 'Create New Makerspace'}
           </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name">Makerspace Name *</Label>
               <Input

@@ -524,7 +524,7 @@ h1, h2, h3, h4, h5, h6{
     max-width: 1400px;
   }
 }
-/* MakrCave specific components */
+/* Enhanced MakrCave specific components with better responsiveness */
 .makrcave-sidebar{
   position: fixed;
   left: 0px;
@@ -553,7 +553,7 @@ h1, h2, h3, h4, h5, h6{
   border-width: 1px;
   border-color: hsl(var(--border));
   background-color: hsl(var(--card));
-  padding: 1.5rem;
+  padding: 1rem;
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
@@ -566,8 +566,14 @@ h1, h2, h3, h4, h5, h6{
   --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
+@media (min-width: 640px){
+  .makrcave-card{
+    padding: 1.5rem;
+  }
+}
 .makrcave-btn-primary{
   display: inline-flex;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
@@ -590,14 +596,47 @@ h1, h2, h3, h4, h5, h6{
 .makrcave-btn-primary:hover{
   background-color: rgb(26 61 124 / 0.9);
 }
-@media (max-width: 640px) {
-    .makrcave-btn-primary, .makrcave-btn-secondary, .makrcave-btn-outline{
+.makrcave-nav-item{
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--radius);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+@media (min-width: 640px){
+  .makrcave-nav-item{
+    gap: 0.75rem;
     padding-left: 0.75rem;
     padding-right: 0.75rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    font-size: 0.75rem;
-    line-height: 1rem;
+  }
+}
+@media (max-width: 640px) {
+    .makrcave-btn-primary, .makrcave-btn-secondary, .makrcave-btn-outline{
+    min-height: 48px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+    
+    .makrcave-nav-item{
+    min-height: 48px;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
   }
   }
 .makrcave-btn-secondary{
@@ -905,6 +944,10 @@ h1, h2, h3, h4, h5, h6{
 .mx-2{
   margin-left: 0.5rem;
   margin-right: 0.5rem;
+}
+.mx-3{
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
 }
 .mx-4{
   margin-left: 1rem;
@@ -1219,6 +1262,9 @@ h1, h2, h3, h4, h5, h6{
 }
 .min-h-\[400px\]{
   min-height: 400px;
+}
+.min-h-\[40px\]{
+  min-height: 40px;
 }
 .min-h-\[60vh\]{
   min-height: 60vh;
@@ -3889,23 +3935,38 @@ html, body {
   box-shadow: 0 0 25px rgba(251, 191, 36, 0.8), 0 0 50px rgba(251, 191, 36, 0.5);
 }
 
-/* Responsive utilities */
+/* Enhanced Responsive utilities */
 @media (max-width: 640px) {
   .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
 
   /* Ensure text doesn't break awkwardly on mobile */
   .text-responsive {
     word-wrap: break-word;
     overflow-wrap: break-word;
+    hyphens: auto;
   }
 
   /* Mobile-first button sizing */
   .btn-mobile {
     min-height: 44px; /* iOS touch target size */
     padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  /* Mobile-first input sizing */
+  .input-mobile {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem; /* Prevent zoom on iOS */
+  }
+
+  /* Mobile card spacing */
+  .card-mobile {
+    padding: 1rem;
+    margin-bottom: 1rem;
   }
 }
 
@@ -4002,26 +4063,53 @@ html, body {
 /* Mobile-first responsive utilities */
 @media (max-width: 480px) {
   .makrcave-main main{
-    padding: 0.5rem;
+    padding: 0.75rem;
   }
 
   .makrcave-card{
-    padding: 0.75rem;
+    padding: 1rem;
   }
 
   h1{
     font-size: 1.25rem;
     line-height: 1.75rem;
+    line-height: 1.25;
   }
 
   h2{
     font-size: 1.125rem;
     line-height: 1.75rem;
+    line-height: 1.375;
   }
 
   h3{
     font-size: 1rem;
     line-height: 1.5rem;
+    line-height: 1.5;
+  }
+
+  /* Enhanced mobile grid layouts */
+  .grid-mobile-1{
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .grid-mobile-2{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  /* Mobile table responsiveness */
+  .table-mobile{
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .table-mobile th,
+  .table-mobile td{
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
   }
 }
 .file\:border-0::file-selector-button{
@@ -5178,6 +5266,10 @@ html, body {
   .sm\:top-auto{
     top: auto;
   }
+  .sm\:mx-auto{
+    margin-left: auto;
+    margin-right: auto;
+  }
   .sm\:-mt-20{
     margin-top: -5rem;
   }
@@ -5202,11 +5294,20 @@ html, body {
   .sm\:inline{
     display: inline;
   }
+  .sm\:table-cell{
+    display: table-cell;
+  }
   .sm\:hidden{
     display: none;
   }
   .sm\:h-10{
     height: 2.5rem;
+  }
+  .sm\:h-12{
+    height: 3rem;
+  }
+  .sm\:h-16{
+    height: 4rem;
   }
   .sm\:h-4{
     height: 1rem;
@@ -5223,8 +5324,14 @@ html, body {
   .sm\:max-h-\[90vh\]{
     max-height: 90vh;
   }
+  .sm\:min-h-\[44px\]{
+    min-height: 44px;
+  }
   .sm\:w-10{
     width: 2.5rem;
+  }
+  .sm\:w-12{
+    width: 3rem;
   }
   .sm\:w-4{
     width: 1rem;
@@ -5240,6 +5347,9 @@ html, body {
   }
   .sm\:w-auto{
     width: auto;
+  }
+  .sm\:max-w-md{
+    max-width: 28rem;
   }
   .sm\:max-w-none{
     max-width: none;
@@ -5324,6 +5434,10 @@ html, body {
     padding-left: 2rem;
     padding-right: 2rem;
   }
+  .sm\:py-2\.5{
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
   .sm\:py-24{
     padding-top: 6rem;
     padding-bottom: 6rem;
@@ -5334,6 +5448,10 @@ html, body {
   }
   .sm\:text-left{
     text-align: left;
+  }
+  .sm\:text-2xl{
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
   .sm\:text-3xl{
     font-size: 1.875rem;
@@ -5388,6 +5506,9 @@ html, body {
   }
   .md\:flex{
     display: flex;
+  }
+  .md\:table-cell{
+    display: table-cell;
   }
   .md\:hidden{
     display: none;
@@ -5466,6 +5587,9 @@ html, body {
   }
   .lg\:flex{
     display: flex;
+  }
+  .lg\:table-cell{
+    display: table-cell;
   }
   .lg\:hidden{
     display: none;
@@ -5551,6 +5675,9 @@ html, body {
 @media (min-width: 1280px){
   .xl\:block{
     display: block;
+  }
+  .xl\:table-cell{
+    display: table-cell;
   }
   .xl\:grid-cols-3{
     grid-template-columns: repeat(3, minmax(0, 1fr));

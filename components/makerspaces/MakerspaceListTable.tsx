@@ -96,31 +96,37 @@ const MakerspaceListTable: React.FC<MakerspaceListTableProps> = ({
     <Card>
       <CardContent className="p-0">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full table-mobile">
             <thead className="bg-gray-50 border-b">
               <tr>
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-900">Makerspace</th>
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-900">Status</th>
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-900">Admin(s)</th>
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-900">Users</th>
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-900">Revenue</th>
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-900">Created</th>
-                <th className="text-right py-3 px-6 text-sm font-medium text-gray-900">Actions</th>
+                <th className="text-left py-3 px-3 sm:px-6 text-xs sm:text-sm font-medium text-gray-900">Makerspace</th>
+                <th className="hidden sm:table-cell text-left py-3 px-3 sm:px-6 text-xs sm:text-sm font-medium text-gray-900">Status</th>
+                <th className="hidden md:table-cell text-left py-3 px-3 sm:px-6 text-xs sm:text-sm font-medium text-gray-900">Admin(s)</th>
+                <th className="hidden lg:table-cell text-left py-3 px-3 sm:px-6 text-xs sm:text-sm font-medium text-gray-900">Users</th>
+                <th className="hidden lg:table-cell text-left py-3 px-3 sm:px-6 text-xs sm:text-sm font-medium text-gray-900">Revenue</th>
+                <th className="hidden xl:table-cell text-left py-3 px-3 sm:px-6 text-xs sm:text-sm font-medium text-gray-900">Created</th>
+                <th className="text-right py-3 px-3 sm:px-6 text-xs sm:text-sm font-medium text-gray-900">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {makerspaces.map((makerspace) => (
                 <tr key={makerspace.id} className="hover:bg-gray-50">
-                  <td className="py-4 px-6">
+                  <td className="py-3 px-3 sm:py-4 sm:px-6">
                     <div>
-                      <div className="font-medium text-gray-900">{makerspace.name}</div>
-                      <div className="text-sm text-gray-600 flex items-center gap-1">
-                        <MapPin className="h-3 w-3" />
-                        {makerspace.location}
+                      <div className="font-medium text-gray-900 text-sm sm:text-base">{makerspace.name}</div>
+                      <div className="text-xs sm:text-sm text-gray-600 flex items-center gap-1 mt-1">
+                        <MapPin className="h-3 w-3 flex-shrink-0" />
+                        <span className="truncate">{makerspace.location}</span>
+                      </div>
+                      <div className="sm:hidden mt-2 flex flex-wrap gap-2">
+                        {getStatusBadge(makerspace.status)}
+                        <div className="text-xs text-gray-500">
+                          {makerspace.stats?.totalUsers || 0} users
+                        </div>
                       </div>
                     </div>
                   </td>
-                  <td className="py-4 px-6">
+                  <td className="hidden sm:table-cell py-3 px-3 sm:py-4 sm:px-6">
                     {getStatusBadge(makerspace.status)}
                   </td>
                   <td className="py-4 px-6">

@@ -17,53 +17,53 @@ function SuperAdminDashboard() {
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-purple-600 to-purple-700 dark:from-purple-700 dark:to-purple-800 rounded-lg p-6 text-white">
-        <div className="flex items-center gap-4">
-          <Crown className="w-12 h-12" />
-          <div>
-            <h1 className="text-2xl font-bold">Super Admin Console</h1>
-            <p className="text-purple-100">Welcome back, {user?.firstName}! You have full system access.</p>
+        <div className="flex items-center gap-3 sm:gap-4">
+          <Crown className="w-8 h-8 sm:w-12 sm:h-12 flex-shrink-0" />
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold">Super Admin Console</h1>
+            <p className="text-purple-100 text-sm sm:text-base">Welcome back, {user?.firstName}! You have full system access.</p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <div className="makrcave-card">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Total Makerspaces</p>
-              <p className="text-2xl font-bold">12</p>
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-muted-foreground">Total Makerspaces</p>
+              <p className="text-xl sm:text-2xl font-bold">12</p>
             </div>
-            <Building2 className="w-8 h-8 text-purple-600" />
+            <Building2 className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600 flex-shrink-0" />
           </div>
         </div>
         
         <div className="makrcave-card">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">System Users</p>
-              <p className="text-2xl font-bold">1,248</p>
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-muted-foreground">System Users</p>
+              <p className="text-xl sm:text-2xl font-bold">1,248</p>
             </div>
-            <Users className="w-8 h-8 text-blue-600" />
+            <Users className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 flex-shrink-0" />
           </div>
         </div>
         
         <div className="makrcave-card">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Total Equipment</p>
-              <p className="text-2xl font-bold">156</p>
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-muted-foreground">Total Equipment</p>
+              <p className="text-xl sm:text-2xl font-bold">156</p>
             </div>
-            <Wrench className="w-8 h-8 text-green-600" />
+            <Wrench className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 flex-shrink-0" />
           </div>
         </div>
         
         <div className="makrcave-card">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Active Projects</p>
-              <p className="text-2xl font-bold">89</p>
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-muted-foreground">Active Projects</p>
+              <p className="text-xl sm:text-2xl font-bold">89</p>
             </div>
-            <FolderOpen className="w-8 h-8 text-makrx-teal" />
+            <FolderOpen className="w-6 h-6 sm:w-8 sm:h-8 text-makrx-teal flex-shrink-0" />
           </div>
         </div>
       </div>
@@ -107,11 +107,11 @@ function AdminDashboard() {
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800 rounded-lg p-6 text-white">
-        <div className="flex items-center gap-4">
-          <Shield className="w-12 h-12" />
-          <div>
-            <h1 className="text-2xl font-bold">Organization Admin</h1>
-            <p className="text-blue-100">Welcome, {user?.firstName}! Manage users and view organization data.</p>
+        <div className="flex items-center gap-3 sm:gap-4">
+          <Shield className="w-8 h-8 sm:w-12 sm:h-12 flex-shrink-0" />
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold">Organization Admin</h1>
+            <p className="text-blue-100 text-sm sm:text-base">Welcome, {user?.firstName}! Manage users and view organization data.</p>
           </div>
         </div>
       </div>
@@ -181,23 +181,23 @@ function MakerspaceAdminDashboard() {
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-makrx-teal to-teal-600 dark:from-makrx-teal dark:to-teal-700 rounded-lg p-6 text-white">
-        <div className="flex items-center gap-4">
-          <Building2 className="w-12 h-12" />
-          <div>
-            <h1 className="text-2xl font-bold">Makerspace Console</h1>
-            <p className="text-teal-100">Welcome back, {user?.firstName}! Manage your makerspace operations.</p>
+        <div className="flex items-center gap-3 sm:gap-4">
+          <Building2 className="w-8 h-8 sm:w-12 sm:h-12 flex-shrink-0" />
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold">Makerspace Console</h1>
+            <p className="text-teal-100 text-sm sm:text-base">Welcome back, {user?.firstName}! Manage your makerspace operations.</p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <div className="makrcave-card">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Active Members</p>
-              <p className="text-2xl font-bold">86</p>
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-muted-foreground">Active Members</p>
+              <p className="text-xl sm:text-2xl font-bold">86</p>
             </div>
-            <Users className="w-8 h-8 text-blue-600" />
+            <Users className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 flex-shrink-0" />
           </div>
         </div>
         
@@ -233,7 +233,7 @@ function MakerspaceAdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <AnalyticsWidget />
+        <AnalyticsWidget title="Equipment Analytics" />
         <NotificationWidget
           category="equipment"
           title="Equipment Status"
@@ -248,7 +248,7 @@ function MakerspaceAdminDashboard() {
           maxItems={5}
         />
         <NotificationWidget
-          category="reservations"
+          category="equipment"
           title="Today's Reservations"
           maxItems={5}
         />

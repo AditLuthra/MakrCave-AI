@@ -57,6 +57,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({
     try {
       await addMember({
         ...formData,
+        role: formData.role as "user" | "service_provider" | "admin" | "makerspace_admin",
         skills: formData.skills ? formData.skills.split(',').map(s => s.trim()) : [],
       });
       
@@ -95,10 +96,10 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <UserPlus className="h-5 w-5" />
+      <DialogContent className="max-w-md mx-3 sm:mx-auto max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="pb-3">
+          <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
+            <UserPlus className="h-5 w-5 flex-shrink-0" />
             Add New Member
           </DialogTitle>
         </DialogHeader>
@@ -113,26 +114,26 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="firstName">First Name *</Label>
+              <Label htmlFor="firstName" className="text-sm font-medium">First Name *</Label>
               <Input
                 id="firstName"
                 value={formData.firstName}
                 onChange={(e) => handleInputChange('firstName', e.target.value)}
                 placeholder="John"
-                className="mt-1"
+                className="mt-1 input-mobile"
                 required
               />
             </div>
             <div>
-              <Label htmlFor="lastName">Last Name *</Label>
+              <Label htmlFor="lastName" className="text-sm font-medium">Last Name *</Label>
               <Input
                 id="lastName"
                 value={formData.lastName}
                 onChange={(e) => handleInputChange('lastName', e.target.value)}
                 placeholder="Doe"
-                className="mt-1"
+                className="mt-1 input-mobile"
                 required
               />
             </div>
