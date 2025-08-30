@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Integer, Boolean, DateTime, Float, Text, 
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
-from ..database import Base
+from database import Base
 import uuid
 import enum
 
@@ -64,7 +64,7 @@ class Transaction(Base):
     # Service-specific details
     service_type = Column(String(50))  # 3d_print, laser_cut, workshop, etc.
     service_id = Column(String)  # Reference to specific service/job
-    service_metadata = Column(JSON, default=dict)  # Additional service data
+    service_log_metadata = Column(JSON, default=dict)  # Additional service data
     
     # Credit system
     credits_used = Column(Integer, default=0)
@@ -188,7 +188,7 @@ class CreditTransaction(Base):
     
     # Description and metadata
     description = Column(Text)
-    metadata = Column(JSON, default=dict)
+    log_metadata = Column(JSON, default=dict)
     
     # Admin fields
     processed_by = Column(String)  # For manual adjustments

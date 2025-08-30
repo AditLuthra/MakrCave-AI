@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Integer, Boolean, DateTime, Float, Text, 
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from ..database import Base
+from database import Base
 import uuid
 import enum
 from datetime import datetime, timedelta
@@ -91,7 +91,7 @@ class Notification(Base):
     # Related resources
     related_resource_type = Column(String(50), nullable=True)  # job, equipment, inventory, etc.
     related_resource_id = Column(UUID(as_uuid=True), nullable=True)
-    related_metadata = Column(JSON, nullable=True)
+    related_log_metadata = Column(JSON, nullable=True)
     
     # Delivery status
     status = Column(SQLEnum(NotificationStatus), default=NotificationStatus.PENDING, index=True)
@@ -158,7 +158,7 @@ class NotificationDeliveryLog(Base):
     external_id = Column(String(255), nullable=True)  # ID from external service
     response_code = Column(String(10), nullable=True)
     response_message = Column(Text, nullable=True)
-    response_metadata = Column(JSON, nullable=True)
+    response_log_metadata = Column(JSON, nullable=True)
     
     # Timing
     sent_at = Column(DateTime(timezone=True), nullable=True)

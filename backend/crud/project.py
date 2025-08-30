@@ -4,14 +4,14 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime
 import uuid
 
-from ..utils.github_service import GitHubService
+from utils.github_service import GitHubService
 
-from ..models.project import (
+from models.project import (
     Project, ProjectCollaborator, ProjectBOM, ProjectEquipmentReservation,
     ProjectFile, ProjectMilestone, ProjectActivityLog, ProjectStatus,
     ProjectVisibility, CollaboratorRole, ActivityType
 )
-from ..schemas.project import (
+from schemas.project import (
     ProjectCreate, ProjectUpdate, ProjectFilter, ProjectSort,
     CollaboratorAdd, CollaboratorUpdate, BOMItemCreate, BOMItemUpdate,
     EquipmentReservationCreate, EquipmentReservationUpdate,

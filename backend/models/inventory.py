@@ -4,7 +4,7 @@ from sqlalchemy.dialects.postgresql import JSON
 from datetime import datetime
 import enum
 
-from ..database import Base
+from database import Base
 
 class ItemStatus(enum.Enum):
     ACTIVE = "active"
@@ -86,7 +86,7 @@ class InventoryUsageLog(Base):
     linked_job_id = Column(String, ForeignKey("jobs.id"))
     
     # Additional context
-    metadata = Column(JSON)  # For storing additional context data
+    log_metadata = Column(JSON)  # For storing additional context data
     
     # Relationships
     inventory_item = relationship("InventoryItem", back_populates="usage_logs")

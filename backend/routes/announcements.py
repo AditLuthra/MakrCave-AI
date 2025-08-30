@@ -5,14 +5,14 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 from uuid import UUID
 
-from ..database import get_db
-from ..dependencies import get_current_user, get_current_admin_user
-from ..models.user import User
-from ..models.announcements import (
+from database import get_db
+from dependencies import get_current_user, get_current_admin_user
+from models.user import User
+from models.announcements import (
     Announcement, AnnouncementAcknowledgment, AnnouncementView,
     AnnouncementType, Priority, TargetAudience
 )
-from ..models.member import Member
+from models.member import Member
 
 router = APIRouter(prefix="/api/v1/announcements", tags=["Announcements"])
 

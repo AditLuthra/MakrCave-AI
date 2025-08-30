@@ -9,10 +9,12 @@ from collections import defaultdict
 
 from database import get_db
 from models.enhanced_analytics import (
-    UsageMetric, RevenueRecord, EquipmentUsage, 
-    MemberActivity, SafetyIncident, SystemHealth
+    EnhancedUsageMetrics, EquipmentUtilizationMetrics, RevenueAnalyticsEnhanced, 
+    MemberEngagementMetrics, AnalyticsAlert, PerformanceBenchmark
 )
-from models.enhanced_member import Member, MemberSkill, Certification
+from models.enhanced_member import Member
+from models.skill import Skill, UserSkill
+from models.machine_access import UserCertification
 from models.equipment import Equipment, EquipmentReservation
 from models.makerspace_settings import MakerspaceSettings
 from models.project import Project

@@ -6,9 +6,9 @@ from datetime import datetime, timedelta
 import uuid
 import json
 
-from ..database import get_db
-from ..dependencies import get_current_user
-from ..schemas.notifications import (
+from database import get_db
+from dependencies import get_current_user
+from schemas.notifications import (
     NotificationCreate, NotificationUpdate, NotificationResponse,
     BulkNotificationCreate, BulkNotificationResponse,
     NotificationTemplateCreate, NotificationTemplateUpdate, NotificationTemplateResponse,
@@ -19,7 +19,7 @@ from ..schemas.notifications import (
     NotificationEvent, UnreadNotificationsSummary, TemplateRenderRequest, TemplateRenderResponse,
     NotificationSystemHealth, NotificationChannel, NotificationPriority, NotificationType, NotificationStatus
 )
-from ..crud import notifications as crud_notifications
+from crud import notifications as crud_notifications
 
 router = APIRouter()
 

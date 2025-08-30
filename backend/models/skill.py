@@ -160,7 +160,7 @@ class SkillAuditLog(Base):
     
     # Additional context
     reason = Column(Text)
-    metadata = Column(Text)  # JSON string for additional data
+    log_metadata = Column(Text)  # JSON string for additional data
     
     # Timestamp
     created_at = Column(DateTime(timezone=True), server_default=func.now())

@@ -5,17 +5,17 @@ from typing import List, Optional
 import uuid
 from datetime import datetime
 
-from ..database import get_db
-from ..dependencies import get_current_user
-from ..schemas.member import (
+from database import get_db
+from dependencies import get_current_user
+from schemas.member import (
     MemberCreate, MemberUpdate, MemberResponse, MemberSummaryResponse, MemberSuspend,
     MembershipPlanCreate, MembershipPlanUpdate, MembershipPlanResponse,
     MemberInviteCreate, MemberInviteUpdate, MemberInviteResponse,
     MemberActivityLogResponse, MembershipTransactionResponse,
     MemberFilter, MemberSort, MemberStatistics, BulkMemberOperation
 )
-from ..crud import member as crud_member
-from ..utils.email_service import send_member_invite_email
+from crud import member as crud_member
+from utils.email_service import send_member_invite_email
 
 router = APIRouter()
 security = HTTPBearer()

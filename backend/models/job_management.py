@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Text, DateTime, Boolean, ForeignKey, Inte
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 import enum
-from ..database import Base
+from database import Base
 
 class JobStatus(str, enum.Enum):
     PENDING = "pending"
@@ -186,7 +186,7 @@ class ServiceJobFile(Base):
 
     # G-code specific information
     is_gcode = Column(Boolean, default=False)
-    gcode_metadata = Column(JSON, nullable=True)  # Slicer settings, estimated time, etc.
+    gcode_log_metadata = Column(JSON, nullable=True)  # Slicer settings, estimated time, etc.
     layer_count = Column(Integer, nullable=True)
     estimated_print_time_gcode = Column(Integer, nullable=True)  # From G-code analysis
     estimated_material_usage_gcode = Column(Float, nullable=True)  # From G-code analysis

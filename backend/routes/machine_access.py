@@ -5,16 +5,16 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 import uuid
 
-from ..database import get_db
-from ..dependencies import get_current_user, get_current_user_optional
-from ..models.machine_access import (
+from database import get_db
+from dependencies import get_current_user, get_current_user_optional
+from models.machine_access import (
     MachineAccessRule, UserCertification, Badge, UserBadge, 
     MachineAccessAttempt, SafetyIncident, SkillAssessment,
     AccessLevel, BadgeType, BadgeRarity, AccessAttemptResult, CertificationStatus
 )
-from ..models.equipment import Equipment
-from ..models.skill import Skill
-from ..schemas.machine_access import (
+from models.equipment import Equipment
+from models.skill import Skill
+from schemas.machine_access import (
     MachineAccessRuleCreate, MachineAccessRuleUpdate, MachineAccessRuleResponse,
     UserCertificationCreate, UserCertificationUpdate, UserCertificationResponse,
     BadgeCreate, BadgeUpdate, BadgeResponse, UserBadgeAward, UserBadgeResponse,

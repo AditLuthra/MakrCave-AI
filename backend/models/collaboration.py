@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
 
-from ..database import Base
+from database import Base
 
 class CollaborationMessage(Base):
     __tablename__ = "collaboration_messages"
@@ -14,7 +14,7 @@ class CollaborationMessage(Base):
     user_id = Column(String, nullable=False, index=True)
     message = Column(Text, nullable=False)
     message_type = Column(String, default="message")  # message, system, annotation
-    metadata = Column(JSON, default=dict)
+    log_metadata = Column(JSON, default=dict)
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     

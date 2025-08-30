@@ -9,14 +9,14 @@ import hashlib
 import os
 from pathlib import Path
 
-from ..database import get_db
-from ..dependencies import get_current_user, get_current_user_optional
-from ..models.job_management import (
+from database import get_db
+from dependencies import get_current_user, get_current_user_optional
+from models.job_management import (
     ServiceJob, ServiceJobFile, JobStatusUpdate, JobMaterialUsage, 
     JobTimeLog, JobQualityCheck, ServiceProvider, ProviderEquipment, JobTemplate,
     JobStatus, JobPriority, JobType, FilamentType
 )
-from ..schemas.job_management import (
+from schemas.job_management import (
     ServiceJobCreate, ServiceJobUpdate, ServiceJobResponse, ServiceJobFileUpload,
     ServiceJobFileResponse, JobStatusUpdateCreate, JobStatusUpdateResponse,
     JobMaterialUsageCreate, JobMaterialUsageResponse, JobTimeLogCreate,

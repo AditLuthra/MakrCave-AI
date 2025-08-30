@@ -46,7 +46,7 @@ class UsageEvent(Base):
     resource_type = Column(String(50), nullable=True)  # 'equipment', 'project', 'inventory'
     timestamp = Column(DateTime, default=datetime.utcnow, nullable=False)
     duration_minutes = Column(Integer, nullable=True)  # For time-based events
-    metadata = Column(JSON, nullable=True)
+    log_metadata = Column(JSON, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     def __repr__(self):

@@ -4,11 +4,11 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 import uuid
 
-from ..models.equipment import (
+from models.equipment import (
     Equipment, EquipmentMaintenanceLog, EquipmentReservation, 
     EquipmentRating, EquipmentUsageSession, EquipmentStatus, ReservationStatus
 )
-from ..schemas.equipment import (
+from schemas.equipment import (
     EquipmentCreate, EquipmentUpdate, EquipmentFilter,
     ReservationCreate, ReservationUpdate,
     MaintenanceLogCreate, MaintenanceLogUpdate,

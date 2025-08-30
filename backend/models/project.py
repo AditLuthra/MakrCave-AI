@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Text, DateTime, Boolean, ForeignKey, Inte
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 import enum
-from ..database import Base
+from database import Base
 
 class ProjectStatus(str, enum.Enum):
     DRAFT = "draft"
@@ -283,7 +283,7 @@ class ProjectActivityLog(Base):
     description = Column(Text, nullable=True)
     
     # Activity data (JSON for flexibility)
-    metadata = Column(JSON, nullable=True)  # Store additional context about the activity
+    log_metadata = Column(JSON, nullable=True)  # Store additional context about the activity
     
     # User and timing
     user_id = Column(String(100), nullable=False)

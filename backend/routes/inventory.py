@@ -7,14 +7,14 @@ import io
 import uuid
 import multipart  # noqa: F401 - ensure python-multipart is installed for file uploads
 
-from ..crud.inventory import InventoryCRUD
-from ..schemas.inventory import (
+from crud.inventory import InventoryCRUD
+from schemas.inventory import (
     InventoryItemResponse, InventoryItemCreate, InventoryItemUpdate,
     IssueItemRequest, ReorderRequest, InventoryUsageLogResponse,
     BulkImportRequest, InventoryStatsResponse, LowStockAlertResponse
 )
-from ..models.inventory import InventoryItem, InventoryUsageLog, InventoryAlert
-from ..dependencies import get_db, get_current_user, check_permission
+from models.inventory import InventoryItem, InventoryUsageLog, InventoryAlert
+from dependencies import get_db, get_current_user, check_permission
 
 router = APIRouter(prefix="/inventory", tags=["inventory"])
 inventory_crud = InventoryCRUD()

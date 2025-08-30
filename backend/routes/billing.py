@@ -8,9 +8,9 @@ import os
 import io
 from datetime import datetime, timedelta
 
-from ..database import get_db
-from ..dependencies import get_current_user
-from ..schemas.billing import (
+from database import get_db
+from dependencies import get_current_user
+from schemas.billing import (
     TransactionCreate, TransactionUpdate, TransactionResponse,
     InvoiceCreate, InvoiceUpdate, InvoiceResponse,
     CreditWalletResponse, CreditWalletUpdate, CreditTransactionResponse,
@@ -21,10 +21,10 @@ from ..schemas.billing import (
     ServiceBillingCreate, ServiceBillingResponse,
     WebhookPayload, BulkRefundRequest, CreditAdjustment
 )
-from ..crud import billing as crud_billing
-from ..utils.payment_service import payment_service, calculate_service_charge
-from ..utils.invoice_generator import generate_invoice_pdf, save_invoice_to_file, generate_invoice_filename
-from ..utils.email_service import send_invoice_email
+from crud import billing as crud_billing
+from utils.payment_service import payment_service, calculate_service_charge
+from utils.invoice_generator import generate_invoice_pdf, save_invoice_to_file, generate_invoice_filename
+from utils.email_service import send_invoice_email
 
 router = APIRouter()
 security = HTTPBearer()

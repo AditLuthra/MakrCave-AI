@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Integer, Boolean, DateTime, Float, Text, 
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from sqlalchemy.sql import func
-from ..database import Base
+from database import Base
 import uuid
 import enum
 from datetime import datetime
@@ -399,7 +399,7 @@ class MemberActivityLog(Base):
     # Activity details
     activity_type = Column(String(100), nullable=False)
     description = Column(Text)
-    metadata = Column(JSON, default=dict)
+    log_log_metadata = Column(JSON, default=dict)
     
     # Context
     ip_address = Column(String(45))

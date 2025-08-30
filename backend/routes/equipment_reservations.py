@@ -4,10 +4,10 @@ from typing import List, Optional
 from datetime import datetime, timedelta
 import uuid
 
-from .. import models
-from ..database import get_db
-from ..dependencies import get_current_user
-from ..schemas.equipment_reservations import (
+from  import models
+from database import get_db
+from dependencies import get_current_user
+from schemas.equipment_reservations import (
     EnhancedReservationCreate, EnhancedReservationUpdate, EnhancedReservationResponse,
     CostRuleCreate, CostRuleUpdate, CostRuleResponse,
     SkillGateCreate, SkillGateUpdate, SkillGateResponse,
