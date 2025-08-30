@@ -1512,6 +1512,9 @@ h1, h2, h3, h4, h5, h6{
 .max-w-\[90vw\]{
   max-width: 90vw;
 }
+.max-w-full{
+  max-width: 100%;
+}
 .max-w-lg{
   max-width: 32rem;
 }
@@ -1883,6 +1886,9 @@ h1, h2, h3, h4, h5, h6{
 }
 .overflow-y-auto{
   overflow-y: auto;
+}
+.overflow-x-hidden{
+  overflow-x: hidden;
 }
 .truncate{
   overflow: hidden;
@@ -3995,9 +4001,11 @@ h1, h2, h3, h4, h5, h6{
   animation-play-state: running;
 }
 
-/* Smooth scrolling for anchor links */
-html {
+/* Smooth scrolling for anchor links and prevent horizontal overflow */
+html, body {
   scroll-behavior: smooth;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 /* Animation delay utilities */
@@ -5415,6 +5423,9 @@ html {
   .sm\:w-8{
     width: 2rem;
   }
+  .sm\:w-80{
+    width: 20rem;
+  }
   .sm\:w-auto{
     width: auto;
   }
@@ -5450,6 +5461,9 @@ html {
   }
   .sm\:gap-0{
     gap: 0px;
+  }
+  .sm\:gap-2{
+    gap: 0.5rem;
   }
   .sm\:gap-3{
     gap: 0.75rem;
@@ -5583,9 +5597,6 @@ html {
   .md\:mt-0{
     margin-top: 0px;
   }
-  .md\:block{
-    display: block;
-  }
   .md\:flex{
     display: flex;
   }
@@ -5709,6 +5720,9 @@ html {
   .lg\:justify-between{
     justify-content: space-between;
   }
+  .lg\:gap-4{
+    gap: 1rem;
+  }
   .lg\:gap-8{
     gap: 2rem;
   }
@@ -5738,6 +5752,10 @@ html {
   }
   .lg\:p-8{
     padding: 2rem;
+  }
+  .lg\:px-3{
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
   .lg\:px-8{
     padding-left: 2rem;
@@ -5771,6 +5789,9 @@ html {
   }
 }
 @media (min-width: 1280px){
+  .xl\:block{
+    display: block;
+  }
   .xl\:grid-cols-3{
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
