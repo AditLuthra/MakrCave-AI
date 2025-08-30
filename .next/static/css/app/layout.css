@@ -729,6 +729,10 @@ h1, h2, h3, h4, h5, h6{
 .inset-0{
   inset: 0px;
 }
+.inset-x-0{
+  left: 0px;
+  right: 0px;
+}
 .-bottom-0\.5{
   bottom: -0.125rem;
 }
@@ -863,6 +867,9 @@ h1, h2, h3, h4, h5, h6{
 }
 .top-12{
   top: 3rem;
+}
+.top-14{
+  top: 3.5rem;
 }
 .top-2{
   top: 0.5rem;
@@ -1265,6 +1272,9 @@ h1, h2, h3, h4, h5, h6{
 }
 .min-h-\[40px\]{
   min-height: 40px;
+}
+.min-h-\[48px\]{
+  min-height: 48px;
 }
 .min-h-\[60vh\]{
   min-height: 60vh;
@@ -5294,6 +5304,9 @@ html, body {
   .sm\:inline{
     display: inline;
   }
+  .sm\:flex{
+    display: flex;
+  }
   .sm\:table-cell{
     display: table-cell;
   }
@@ -5308,6 +5321,9 @@ html, body {
   }
   .sm\:h-16{
     height: 4rem;
+  }
+  .sm\:h-3{
+    height: 0.75rem;
   }
   .sm\:h-4{
     height: 1rem;
@@ -5324,14 +5340,14 @@ html, body {
   .sm\:max-h-\[90vh\]{
     max-height: 90vh;
   }
-  .sm\:min-h-\[44px\]{
-    min-height: 44px;
-  }
   .sm\:w-10{
     width: 2.5rem;
   }
   .sm\:w-12{
     width: 3rem;
+  }
+  .sm\:w-3{
+    width: 0.75rem;
   }
   .sm\:w-4{
     width: 1rem;
@@ -5345,11 +5361,11 @@ html, body {
   .sm\:w-8{
     width: 2rem;
   }
+  .sm\:w-80{
+    width: 20rem;
+  }
   .sm\:w-auto{
     width: auto;
-  }
-  .sm\:max-w-md{
-    max-width: 28rem;
   }
   .sm\:max-w-none{
     max-width: none;
@@ -5380,6 +5396,9 @@ html, body {
   }
   .sm\:gap-0{
     gap: 0px;
+  }
+  .sm\:gap-2{
+    gap: 0.5rem;
   }
   .sm\:gap-3{
     gap: 0.75rem;
@@ -5433,10 +5452,6 @@ html, body {
   .sm\:px-8{
     padding-left: 2rem;
     padding-right: 2rem;
-  }
-  .sm\:py-2\.5{
-    padding-top: 0.625rem;
-    padding-bottom: 0.625rem;
   }
   .sm\:py-24{
     padding-top: 6rem;
@@ -5500,9 +5515,6 @@ html, body {
   }
   .md\:mt-0{
     margin-top: 0px;
-  }
-  .md\:block{
-    display: block;
   }
   .md\:flex{
     display: flex;
