@@ -55,11 +55,16 @@ async def validate_token(token: str, request: Request) -> dict:
     try:
         header = jwt.get_unverified_header(token)
         kid = header.get("kid")
+        if not kid:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token header - missing kid"
+            )
 
         key = await jwks.get_jwk(kid, JWKS_URL)
 
         # Use standardized validator for comprehensive security checks
-        payload = await jwt_validator.validate_token(token, key, request)
+        payload = await jwt_validator.validate_token(token, str(key), request)
 
         # Extract and filter user information
         filtered_payload = {
@@ -83,7 +88,7 @@ async def validate_token(token: str, request: Request) -> dict:
                 error="Unauthorized",
                 message="Token validation failed",
                 code="token_validation_failed",
-                request_id=request_id,
+                request_id=getattr(request.state, "request_id", None),
             ).model_dump(),
             headers={"WWW-Authenticate": "Bearer"},
         )
@@ -132,6 +137,11 @@ async def get_current_user(
     """Return the authenticated user object from the validated token."""
     try:
         user_id = token.get("sub")
+        if not user_id:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token - missing user ID"
+            )
         email = token.get("email", "")
         username = email
         keycloak_roles = token.get("realm_access", {}).get("roles", [])

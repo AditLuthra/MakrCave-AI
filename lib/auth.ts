@@ -77,7 +77,7 @@ export const init = async (): Promise<boolean> => {
       } catch {
         sessionStorage.setItem("makrx_redirect_url", window.location.href);
         window.alert("Session expired. Please log in again.");
-        redirectToSSO();
+        redirectToSSO({ url: KEYCLOAK_URL, realm: REALM, clientId: CLIENT_ID });
       }
     };
   }
@@ -98,7 +98,7 @@ export const getToken = async (): Promise<string | null> => {
   } catch {
     sessionStorage.setItem("makrx_redirect_url", window.location.href);
     window.alert("Session expired. Please log in again.");
-    redirectToSSO();
+    redirectToSSO({ url: KEYCLOAK_URL, realm: REALM, clientId: CLIENT_ID });
     return null;
   }
 };
@@ -167,7 +167,7 @@ export const logout = async (): Promise<void> => {
   if (!isClient) return;
   notifyAuthListeners(null);
   localStorage.removeItem('auth_token');
-  logoutFromSSO();
+  logoutFromSSO({ url: KEYCLOAK_URL, realm: REALM, clientId: CLIENT_ID });
 };
 
 // Handle auth callback after redirect from Keycloak
