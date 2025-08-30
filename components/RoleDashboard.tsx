@@ -1,3 +1,5 @@
+'use client';
+
 import { useAuth } from '../contexts/AuthContext';
 import NotificationWidget from './NotificationWidget';
 import AnalyticsWidget from './AnalyticsWidget';
@@ -178,12 +180,12 @@ function MakerspaceAdminDashboard() {
   
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-makrx-blue to-blue-700 rounded-lg p-6 text-white">
+      <div className="bg-gradient-to-r from-makrx-teal to-teal-600 dark:from-makrx-teal dark:to-teal-700 rounded-lg p-6 text-white">
         <div className="flex items-center gap-4">
-          <Wrench className="w-12 h-12" />
+          <Building2 className="w-12 h-12" />
           <div>
-            <h1 className="text-2xl font-bold">MakrCave Manager</h1>
-            <p className="text-blue-100">Hello, {user?.firstName}! Manage your makerspace operations.</p>
+            <h1 className="text-2xl font-bold">Makerspace Console</h1>
+            <p className="text-teal-100">Welcome back, {user?.firstName}! Manage your makerspace operations.</p>
           </div>
         </div>
       </div>
@@ -193,17 +195,17 @@ function MakerspaceAdminDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-muted-foreground">Active Members</p>
-              <p className="text-2xl font-bold">42</p>
+              <p className="text-2xl font-bold">86</p>
             </div>
-            <Users className="w-8 h-8 text-makrx-blue" />
+            <Users className="w-8 h-8 text-blue-600" />
           </div>
         </div>
         
         <div className="makrcave-card">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Equipment</p>
-              <p className="text-2xl font-bold">18</p>
+              <p className="text-sm font-medium text-muted-foreground">Equipment Items</p>
+              <p className="text-2xl font-bold">24</p>
             </div>
             <Wrench className="w-8 h-8 text-green-600" />
           </div>
@@ -212,149 +214,61 @@ function MakerspaceAdminDashboard() {
         <div className="makrcave-card">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Low Stock Items</p>
-              <p className="text-2xl font-bold">5</p>
+              <p className="text-sm font-medium text-muted-foreground">Inventory Items</p>
+              <p className="text-2xl font-bold">342</p>
             </div>
-            <AlertTriangle className="w-8 h-8 text-red-600" />
+            <Package className="w-8 h-8 text-purple-600" />
           </div>
         </div>
         
         <div className="makrcave-card">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Today's Bookings</p>
-              <p className="text-2xl font-bold">12</p>
+              <p className="text-sm font-medium text-muted-foreground">Monthly Revenue</p>
+              <p className="text-2xl font-bold">$2,845</p>
             </div>
-            <Calendar className="w-8 h-8 text-makrx-teal" />
+            <BarChart3 className="w-8 h-8 text-makrx-teal" />
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="makrcave-card">
-          <h3 className="text-lg font-semibold mb-4">Your Makerspace</h3>
-          <p className="text-muted-foreground">
-            You can manage inventory, approve reservations, add/edit equipment, and oversee all operations
-            within your assigned makerspace. Full control over member management and project oversight.
-          </p>
-        </div>
-
+        <AnalyticsWidget />
         <NotificationWidget
           category="equipment"
-          title="Equipment Alerts"
-          maxItems={3}
+          title="Equipment Status"
+          maxItems={4}
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <NotificationWidget
           category="inventory"
-          title="Inventory Status"
-          maxItems={4}
+          title="Low Stock Alerts"
+          maxItems={5}
         />
-
         <NotificationWidget
-          title="Recent Activity"
-          maxItems={4}
-        />
-      </div>
-
-      {/* Analytics Widgets */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6">
-        <AnalyticsWidget
-          type="usage"
-          title="Usage Analytics"
-          timeframe="7d"
-          height={250}
-        />
-
-        <AnalyticsWidget
-          type="equipment"
-          title="Equipment Status"
-          timeframe="7d"
-          height={250}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-        <div className="makrcave-card">
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <Activity className="h-5 w-5 text-makrx-blue" />
-            Performance Metrics
-          </h3>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Equipment Utilization</span>
-              <span className="font-semibold text-green-600">87%</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Project Completion Rate</span>
-              <span className="font-semibold text-blue-600">92%</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Member Satisfaction</span>
-              <span className="font-semibold text-makrx-teal">4.8/5</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Space Capacity</span>
-              <span className="font-semibold text-orange-600">68%</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="makrcave-card">
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-makrx-blue" />
-            Today's Schedule
-          </h3>
-          <div className="space-y-3">
-            <div className="border-l-4 border-blue-500 pl-3">
-              <p className="font-medium text-sm">10:00 AM - 3D Printer Workshop</p>
-              <p className="text-xs text-muted-foreground">Room A • 8 participants</p>
-            </div>
-            <div className="border-l-4 border-green-500 pl-3">
-              <p className="font-medium text-sm">2:00 PM - Laser Cutting Session</p>
-              <p className="text-xs text-muted-foreground">Room B • 5 participants</p>
-            </div>
-            <div className="border-l-4 border-orange-500 pl-3">
-              <p className="font-medium text-sm">4:00 PM - Electronics Lab</p>
-              <p className="text-xs text-muted-foreground">Lab C • 12 participants</p>
-            </div>
-            <div className="border-l-4 border-purple-500 pl-3">
-              <p className="font-medium text-sm">6:00 PM - Community Meeting</p>
-              <p className="text-xs text-muted-foreground">Main Hall • All members</p>
-            </div>
-          </div>
-        </div>
-
-        <AnalyticsWidget
-          type="revenue"
-          title="Revenue Trends"
-          timeframe="30d"
-          height={250}
+          category="reservations"
+          title="Today's Reservations"
+          maxItems={5}
         />
       </div>
     </div>
   );
 }
 
-// Service Provider Dashboard - Now Functional!
-function ServiceProviderDashboardWrapper() {
-  return <ServiceProviderDashboard />;
-}
-
-// Maker Dashboard
-function MakerDashboard() {
+// Default Role Dashboard
+function DefaultDashboard() {
   const { user } = useAuth();
   
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-lg p-6 text-white">
+      <div className="bg-gradient-to-r from-gray-600 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-lg p-6 text-white">
         <div className="flex items-center gap-4">
           <UserCheck className="w-12 h-12" />
           <div>
-            <h1 className="text-2xl font-bold">Maker Dashboard</h1>
-            <p className="text-green-100">Welcome, {user?.firstName}! Let's create something amazing.</p>
+            <h1 className="text-2xl font-bold">Welcome to MakrCave</h1>
+            <p className="text-gray-100">Hello, {user?.firstName}! Explore makerspaces and manage your projects.</p>
           </div>
         </div>
       </div>
@@ -364,84 +278,71 @@ function MakerDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-muted-foreground">My Projects</p>
-              <p className="text-2xl font-bold">7</p>
-            </div>
-            <FolderOpen className="w-8 h-8 text-green-600" />
-          </div>
-        </div>
-        
-        <div className="makrcave-card">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Equipment Certified</p>
-              <p className="text-2xl font-bold">4</p>
-            </div>
-            <Wrench className="w-8 h-8 text-blue-600" />
-          </div>
-        </div>
-        
-        <div className="makrcave-card">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Upcoming Bookings</p>
               <p className="text-2xl font-bold">3</p>
             </div>
-            <Calendar className="w-8 h-8 text-makrx-teal" />
+            <FolderOpen className="w-8 h-8 text-blue-600" />
+          </div>
+        </div>
+        
+        <div className="makrcave-card">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Reservations</p>
+              <p className="text-2xl font-bold">2</p>
+            </div>
+            <Calendar className="w-8 h-8 text-green-600" />
+          </div>
+        </div>
+        
+        <div className="makrcave-card">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Certifications</p>
+              <p className="text-2xl font-bold">1</p>
+            </div>
+            <Shield className="w-8 h-8 text-purple-600" />
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="makrcave-card">
-          <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-          <div className="space-y-2">
-            <button className="w-full makrcave-btn-primary text-sm py-3">
-              Reserve Equipment
-            </button>
-            <button className="w-full makrcave-btn-secondary text-sm py-3">
-              Start New Project
-            </button>
-            <button className="w-full makrcave-btn-primary text-sm py-3">
-              View Inventory
-            </button>
-          </div>
-        </div>
-
-        <div className="makrcave-card">
-          <h3 className="text-lg font-semibold mb-4">Your Access</h3>
-          <p className="text-muted-foreground text-sm">
-            Create and manage your own projects, reserve equipment you're certified to use,
-            and collaborate with other makers. Add materials to your project BOMs linked to the store.
+          <h3 className="text-lg font-semibold mb-4">Getting Started</h3>
+          <p className="text-muted-foreground mb-4">
+            Welcome to MakrCave! Start by exploring makerspaces near you, booking equipment, and connecting with the maker community.
           </p>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-sm">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span>Complete your profile</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span>Find makerspaces near you</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+              <span>Book your first equipment session</span>
+            </div>
+          </div>
         </div>
 
         <NotificationWidget
-          category="projects"
-          title="Project Updates"
-          maxItems={3}
+          title="Recent Activity"
+          maxItems={4}
         />
       </div>
-
-      <NotificationWidget
-        title="Recent Notifications"
-        maxItems={5}
-      />
     </div>
   );
 }
 
-// Main Role Dashboard Component
 export default function RoleDashboard() {
   const { user } = useAuth();
-
+  
   if (!user) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-muted-foreground">Please log in to view your dashboard.</p>
-      </div>
-    );
+    return <DefaultDashboard />;
   }
-
+  
   switch (user.role) {
     case 'super_admin':
       return <SuperAdminDashboard />;
@@ -450,10 +351,8 @@ export default function RoleDashboard() {
     case 'makerspace_admin':
       return <MakerspaceAdminDashboard />;
     case 'service_provider':
-      return <ServiceProviderDashboardWrapper />;
-    case 'user':
-      return <MakerDashboard />;
+      return <ServiceProviderDashboard />;
     default:
-      return <MakerDashboard />;
+      return <DefaultDashboard />;
   }
 }
