@@ -29,7 +29,8 @@ import {
   Home,
   ArrowLeft,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Bell
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -157,12 +158,34 @@ const globalStats = {
   activeMachines: makrCaves.reduce((sum, cave) => sum + cave.machinesRunning, 0)
 };
 
+// Real-time activity feed
+const activityTypes = [
+  'Project started', 'Machine activated', 'Member joined', 'Equipment booked',
+  'Project completed', 'Workshop scheduled', 'Collaboration formed', 'Resource shared'
+];
+
+const generateActivity = () => {
+  const cave = makrCaves[Math.floor(Math.random() * makrCaves.length)];
+  const activity = activityTypes[Math.floor(Math.random() * activityTypes.length)];
+  return {
+    id: Date.now() + Math.random(),
+    cave: cave.name,
+    activity,
+    timestamp: new Date(),
+    user: `User${Math.floor(Math.random() * 100)}`
+  };
+};
+
 export default function MakrVersePage() {
   const [selectedCave, setSelectedCave] = useState<MakrCave | null>(null);
   const [viewMode, setViewMode] = useState('overview'); // 'overview', 'detailed'
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterSpecialization, setFilterSpecialization] = useState('all');
+  const [realTimeData, setRealTimeData] = useState(false);
+  const [animateMarkers, setAnimateMarkers] = useState(true);
+  const [activities, setActivities] = useState<any[]>([]);
+  const [showActivityFeed, setShowActivityFeed] = useState(false);
   const mapRef = useRef(null);
 
   const filteredCaves = makrCaves.filter(cave => {
@@ -177,12 +200,34 @@ export default function MakrVersePage() {
 
   const specializations = ['all', ...new Set(makrCaves.flatMap(cave => cave.specialization))];
 
-  // Initialize map effect
+  // Initialize map and real-time updates
   useEffect(() => {
     if (typeof window !== 'undefined' && mapRef.current) {
       initializeMap();
     }
-  }, []);
+    
+    // Simulate real-time updates
+    const interval = setInterval(() => {
+      if (realTimeData) {
+        // Add new activity
+        setActivities(prev => [generateActivity(), ...prev.slice(0, 9)]);
+        
+        // Simulate small changes in online members and running machines
+        setSelectedCave(prev => {
+          if (prev) {
+            return {
+              ...prev,
+              onlineMembers: Math.max(1, prev.onlineMembers + Math.floor(Math.random() * 6) - 2),
+              machinesRunning: Math.max(0, prev.machinesRunning + Math.floor(Math.random() * 3) - 1)
+            };
+          }
+          return prev;
+        });
+      }
+    }, 3000);
+    
+    return () => clearInterval(interval);
+  }, [realTimeData]);
 
   const initializeMap = () => {
     // Simple SVG world map with Indian subcontinent focus
@@ -232,13 +277,14 @@ export default function MakrVersePage() {
                 MakrVerse
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <Button
                 variant={viewMode === 'overview' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setViewMode('overview')}
                 className="text-xs"
               >
+                <Globe className="w-3 h-3 mr-1" />
                 Overview
               </Button>
               <Button
@@ -247,7 +293,26 @@ export default function MakrVersePage() {
                 onClick={() => setViewMode('detailed')}
                 className="text-xs"
               >
+                <Layers className="w-3 h-3 mr-1" />
                 Detailed
+              </Button>
+              <Button
+                variant={realTimeData ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setRealTimeData(!realTimeData)}
+                className="text-xs"
+              >
+                <Activity className="w-3 h-3 mr-1" />
+                {realTimeData ? 'Live' : 'Static'}
+              </Button>
+              <Button
+                variant={showActivityFeed ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setShowActivityFeed(!showActivityFeed)}
+                className="text-xs"
+              >
+                <Bell className="w-3 h-3 mr-1" />
+                Activity
               </Button>
             </div>
           </div>
@@ -314,34 +379,44 @@ export default function MakrVersePage() {
           </Card>
         </div>
 
-        {/* Search and Filter */}
+        {/* Enhanced Search and Filter */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search MakrCaves by name or city..."
+              placeholder="Search MakrCaves by name, city, or project..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-slate-800 border border-blue-500/30 rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full pl-10 pr-4 py-2 bg-slate-800 border border-blue-500/30 rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
             />
           </div>
-          <select
-            value={filterSpecialization}
-            onChange={(e) => setFilterSpecialization(e.target.value)}
-            className="px-4 py-2 bg-slate-800 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            {specializations.map(spec => (
-              <option key={spec} value={spec} className="bg-slate-800">
-                {spec === 'all' ? 'All Specializations' : spec}
-              </option>
-            ))}
-          </select>
+          <div className="flex gap-2">
+            <select
+              value={filterSpecialization}
+              onChange={(e) => setFilterSpecialization(e.target.value)}
+              className="px-4 py-2 bg-slate-800 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              {specializations.map(spec => (
+                <option key={spec} value={spec} className="bg-slate-800">
+                  {spec === 'all' ? 'All Specializations' : spec}
+                </option>
+              ))}
+            </select>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setAnimateMarkers(!animateMarkers)}
+              className="px-3"
+            >
+              <Zap className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Interactive Map */}
-          <div className="lg:col-span-2">
+          <div className={showActivityFeed ? "lg:col-span-1" : "lg:col-span-2"}>
             <Card className="bg-slate-800/50 border-blue-500/30 h-96">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
@@ -394,11 +469,15 @@ export default function MakrVersePage() {
                           style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
                           onClick={() => setSelectedCave(cave)}
                         >
-                          <div className={`w-4 h-4 rounded-full border-2 ${
+                          <div className={`relative w-5 h-5 rounded-full border-2 ${
                             cave.featured 
                               ? 'bg-yellow-400 border-yellow-300 shadow-yellow-400/50' 
                               : 'bg-blue-400 border-blue-300 shadow-blue-400/50'
-                          } shadow-lg animate-pulse`}>
+                          } shadow-lg ${animateMarkers ? 'animate-pulse' : ''} transition-all hover:scale-110`}>
+                            {/* Activity indicator */}
+                            <div className={`absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full ${
+                              cave.status === 'active' ? 'bg-green-400 animate-ping' : 'bg-gray-400'
+                            }`}></div>
                           </div>
                           <div className="absolute top-5 left-1/2 transform -translate-x-1/2 bg-slate-800 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                             {cave.name}
@@ -411,6 +490,47 @@ export default function MakrVersePage() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Activity Feed */}
+          {showActivityFeed && (
+            <div className="space-y-4">
+              <Card className="bg-slate-800/50 border-blue-500/30">
+                <CardHeader>
+                  <CardTitle className="text-lg text-blue-400 flex items-center gap-2">
+                    <Activity className="w-5 h-5" />
+                    Live Activity Feed
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Real-time updates from MakrVerse
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3 max-h-80 overflow-y-auto">
+                  {activities.length === 0 ? (
+                    <div className="text-center text-gray-400 py-8">
+                      <Clock className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                      <p>Enable Live mode to see real-time activity</p>
+                    </div>
+                  ) : (
+                    activities.map((activity, index) => (
+                      <div
+                        key={activity.id}
+                        className="p-3 rounded-lg bg-slate-700/30 border border-blue-500/10 hover:border-blue-400/30 transition-all"
+                      >
+                        <div className="flex items-start justify-between mb-1">
+                          <span className="text-sm font-medium text-white">{activity.activity}</span>
+                          <span className="text-xs text-gray-400">
+                            {activity.timestamp.toLocaleTimeString()}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-300">{activity.cave}</p>
+                        <p className="text-xs text-blue-400">{activity.user}</p>
+                      </div>
+                    ))
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           {/* Selected Cave Details or Cave List */}
           <div className="space-y-4">
@@ -477,9 +597,22 @@ export default function MakrVersePage() {
                     </p>
                   </div>
                   
-                  <Button className="w-full" onClick={() => window.open(`/makrcave/${selectedCave.id}`, '_blank')}>
-                    Connect to MakrCave
-                  </Button>
+                  <div className="space-y-2">
+                    <Button className="w-full" onClick={() => window.open(`/makrcave/${selectedCave.id}`, '_blank')}>
+                      <Wifi className="w-4 h-4 mr-2" />
+                      Connect to MakrCave
+                    </Button>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button variant="outline" size="sm" className="text-xs">
+                        <Eye className="w-3 h-3 mr-1" />
+                        View Projects
+                      </Button>
+                      <Button variant="outline" size="sm" className="text-xs">
+                        <Calendar className="w-3 h-3 mr-1" />
+                        Schedule Visit
+                      </Button>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             ) : (
