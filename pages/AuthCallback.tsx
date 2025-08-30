@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Building2, Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { ThemeToggle } from '../../../packages/ui/components/ThemeToggle';
 import auth from '../lib/auth';
 import { getRoleRedirect } from '../lib/roleRedirect';
 
 export default function AuthCallback() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
 
   useEffect(() => {
@@ -19,10 +19,10 @@ export default function AuthCallback() {
         const redirectUrl =
           sessionStorage.getItem('makrx_redirect_url') || defaultUrl;
         sessionStorage.removeItem('makrx_redirect_url');
-        setTimeout(() => navigate(redirectUrl), 1500);
+        setTimeout(() => router.push(redirectUrl), 1500);
       } else {
         setStatus('error');
-        setTimeout(() => navigate('/'), 3000);
+        setTimeout(() => router.push('/'), 3000);
       }
     };
     process();

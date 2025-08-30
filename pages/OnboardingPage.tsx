@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useRouter, useSearchParams } from 'next/navigation';
 import OnboardingFlow from '../components/onboarding/OnboardingFlow';
 import TutorialOverlay from '../components/onboarding/TutorialOverlay';
 import QuickStartWizard from '../components/onboarding/QuickStartWizard';
@@ -20,7 +20,7 @@ interface OnboardingState {
 }
 
 const OnboardingPage: React.FC = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [searchParams] = useSearchParams();
   const [onboardingState, setOnboardingState] = useState<OnboardingState>({
     stage: 'welcome',
@@ -163,7 +163,7 @@ const OnboardingPage: React.FC = () => {
     
     // Navigate to appropriate dashboard
     setTimeout(() => {
-      navigate('/dashboard');
+      router.push('/dashboard');
     }, 2000);
   };
 
@@ -176,7 +176,7 @@ const OnboardingPage: React.FC = () => {
   };
 
   const handleSkipAll = () => {
-    navigate('/dashboard');
+    router.push('/dashboard');
   };
 
   if (onboardingState.stage === 'profile_setup' || onboardingState.stage === 'welcome') {
@@ -216,7 +216,7 @@ const OnboardingPage: React.FC = () => {
             </div>
 
             <Button
-              onClick={() => navigate('/dashboard')}
+              onClick={() => router.push('/dashboard')}
               className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3"
             >
               Enter Dashboard Now

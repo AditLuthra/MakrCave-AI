@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -138,7 +139,7 @@ interface Project {
 
 const ProjectDetail: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { user } = useAuth();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
@@ -231,7 +232,7 @@ const ProjectDetail: React.FC = () => {
   };
 
   const handleEdit = () => {
-    navigate(`/portal/projects/${projectId}/edit`);
+    router.push(`/portal/projects/${projectId}/edit`);
   };
 
   const handleShare = () => {
@@ -274,7 +275,7 @@ const ProjectDetail: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="sm" onClick={() => navigate('/portal/projects')}>
+          <Button variant="ghost" size="sm" onClick={() => router.push('/portal/projects')}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Projects
           </Button>

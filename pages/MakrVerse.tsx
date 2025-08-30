@@ -27,7 +27,7 @@ import {
   Home,
   ArrowLeft
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 // Mock data for MakrCaves and activities
 const makrCaves = [
