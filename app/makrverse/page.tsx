@@ -27,639 +27,489 @@ import {
   Clock,
   Activity,
   Home,
-  ArrowLeft
+  ArrowLeft,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import Link from 'next/link';
 
-// Mock data for MakrCaves and activities
-const makrCaves = [
+// Enhanced MakrCaves data with real-world locations
+interface MakrCave {
+  id: number;
+  name: string;
+  location: { lat: number; lng: number };
+  country: string;
+  city: string;
+  activeProjects: number;
+  onlineMembers: number;
+  machinesRunning: number;
+  status: string;
+  specialization: string[];
+  currentProject: string;
+  featured: boolean;
+  capacity: number;
+  utilizationRate: number;
+}
+
+const makrCaves: MakrCave[] = [
   {
     id: 1,
-    name: "San Francisco MakrLab",
-    location: { lat: 37.7749, lng: -122.4194 },
-    country: "USA",
-    activeProjects: 12,
-    onlineMembers: 23,
-    machinesRunning: 8,
+    name: "Bangalore Innovation Hub",
+    location: { lat: 12.9716, lng: 77.5946 },
+    country: "India",
+    city: "Bangalore",
+    activeProjects: 24,
+    onlineMembers: 45,
+    machinesRunning: 12,
     status: "active",
-    specialization: ["3D Printing", "Electronics", "Woodworking"],
-    currentProject: "Robotic Arm Assembly",
-    featured: true
+    specialization: ["3D Printing", "Electronics", "IoT", "Robotics"],
+    currentProject: "Smart City Sensors",
+    featured: true,
+    capacity: 100,
+    utilizationRate: 78
   },
   {
     id: 2,
-    name: "Berlin MakerSpace",
-    location: { lat: 52.5200, lng: 13.4050 },
-    country: "Germany",
+    name: "Mumbai MakerSpace",
+    location: { lat: 19.0760, lng: 72.8777 },
+    country: "India", 
+    city: "Mumbai",
     activeProjects: 18,
     onlineMembers: 31,
-    machinesRunning: 12,
+    machinesRunning: 8,
     status: "active",
-    specialization: ["Metalworking", "CNC", "Laser Cutting"],
-    currentProject: "Precision Engine Parts",
-    featured: false
+    specialization: ["Laser Cutting", "CNC", "Product Design"],
+    currentProject: "Sustainable Packaging",
+    featured: false,
+    capacity: 80,
+    utilizationRate: 65
   },
   {
     id: 3,
-    name: "Tokyo TechForge",
-    location: { lat: 35.6762, lng: 139.6503 },
-    country: "Japan",
-    activeProjects: 25,
-    onlineMembers: 45,
-    machinesRunning: 15,
+    name: "Delhi Tech Forge",
+    location: { lat: 28.6139, lng: 77.2090 },
+    country: "India",
+    city: "Delhi",
+    activeProjects: 22,
+    onlineMembers: 38,
+    machinesRunning: 10,
     status: "active",
-    specialization: ["Robotics", "AI", "Biotech"],
-    currentProject: "Neural Interface Prototype",
-    featured: true
+    specialization: ["AI/ML", "Embedded Systems", "Hardware"],
+    currentProject: "Agricultural Automation",
+    featured: true,
+    capacity: 120,
+    utilizationRate: 82
   },
   {
     id: 4,
-    name: "Mumbai Innovation Hub",
-    location: { lat: 19.0760, lng: 72.8777 },
+    name: "Pune Innovation Lab",
+    location: { lat: 18.5204, lng: 73.8567 },
     country: "India",
-    activeProjects: 22,
-    onlineMembers: 67,
-    machinesRunning: 18,
+    city: "Pune",
+    activeProjects: 16,
+    onlineMembers: 28,
+    machinesRunning: 7,
     status: "active",
-    specialization: ["IoT", "Textiles", "Sustainability"],
-    currentProject: "Smart Farming Sensors",
-    featured: false
+    specialization: ["Automotive Tech", "Mechanical Design"],
+    currentProject: "Electric Vehicle Components",
+    featured: false,
+    capacity: 90,
+    utilizationRate: 71
   },
   {
     id: 5,
-    name: "São Paulo MakrCentral",
-    location: { lat: -23.5558, lng: -46.6396 },
-    country: "Brazil",
-    activeProjects: 14,
-    onlineMembers: 29,
+    name: "Hyderabad Digital Lab",
+    location: { lat: 17.3850, lng: 78.4867 },
+    country: "India",
+    city: "Hyderabad",
+    activeProjects: 20,
+    onlineMembers: 35,
     machinesRunning: 9,
     status: "active",
-    specialization: ["Automotive", "Design", "Art"],
-    currentProject: "Electric Vehicle Components",
-    featured: false
+    specialization: ["Software", "Blockchain", "Cybersecurity"],
+    currentProject: "Decentralized Identity",
+    featured: false,
+    capacity: 85,
+    utilizationRate: 68
   },
   {
     id: 6,
-    name: "London Innovation Labs",
-    location: { lat: 51.5074, lng: -0.1278 },
-    country: "UK",
-    activeProjects: 20,
-    onlineMembers: 38,
-    machinesRunning: 14,
+    name: "Chennai Maker Hub",
+    location: { lat: 13.0827, lng: 80.2707 },
+    country: "India",
+    city: "Chennai",
+    activeProjects: 19,
+    onlineMembers: 33,
+    machinesRunning: 11,
     status: "active",
-    specialization: ["Fintech", "Healthcare", "Aerospace"],
-    currentProject: "Medical Device Testing",
-    featured: true
+    specialization: ["Aerospace", "Marine Tech", "Precision Machining"],
+    currentProject: "Drone Navigation System",
+    featured: true,
+    capacity: 110,
+    utilizationRate: 75
   }
 ];
 
-const liveActivities = [
-  { id: 1, cave: "Tokyo TechForge", activity: "Neural interface calibration started", time: "2 min ago", type: "project" },
-  { id: 2, cave: "Berlin MakerSpace", activity: "CNC mill activated for precision cuts", time: "5 min ago", type: "machine" },
-  { id: 3, cave: "Mumbai Innovation Hub", activity: "New member @agritech_innovator joined", time: "8 min ago", type: "member" },
-  { id: 4, cave: "San Francisco MakrLab", activity: "3D printer #3 completed robotic hand", time: "12 min ago", type: "completion" },
-  { id: 5, cave: "London Innovation Labs", activity: "Collaborative project with Oxford started", time: "15 min ago", type: "collaboration" }
-];
-
-const badges = [
-  { id: 1, name: "Global Explorer", description: "Visited 5+ MakrCaves", icon: "🌍", unlocked: true },
-  { id: 2, name: "Innovation Pioneer", description: "First to visit new MakrCave", icon: "🚀", unlocked: true },
-  { id: 3, name: "Cross-Continental", description: "Visited caves on 3+ continents", icon: "✈️", unlocked: false },
-  { id: 4, name: "Tech Voyager", description: "Used 10+ different machine types", icon: "🔧", unlocked: true },
-  { id: 5, name: "Community Builder", description: "Connected 50+ makers", icon: "🤝", unlocked: false },
-  { id: 6, name: "AR Explorer", description: "Discovered 25+ AR points", icon: "👀", unlocked: false }
-];
-
-// Map Component
-const MakrVerseMap = ({ selectedCave, onCaveSelect }: { selectedCave: any, onCaveSelect: (cave: any) => void }) => {
-  const [mapStyle, setMapStyle] = useState('satellite');
-  const [isLive, setIsLive] = useState(true);
-  const [connections, setConnections] = useState(true);
-
-  return (
-    <div className="relative h-full bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 rounded-lg overflow-hidden">
-      {/* Responsive Map Controls */}
-      <div className="absolute top-2 right-2 sm:top-4 sm:right-4 z-20 space-y-1 sm:space-y-2">
-        <div className="flex flex-col bg-black/80 backdrop-blur-md rounded-lg p-1 sm:p-2 space-y-1 sm:space-y-2">
-          <Button
-            size="sm"
-            variant={mapStyle === 'satellite' ? 'default' : 'outline'}
-            className="text-xs px-2 py-1"
-            onClick={() => setMapStyle('satellite')}
-          >
-            <Globe className="h-3 w-3 mr-1" />
-            <span className="hidden sm:inline">Satellite</span>
-          </Button>
-          <Button
-            size="sm"
-            variant={mapStyle === 'network' ? 'default' : 'outline'}
-            className="text-xs px-2 py-1"
-            onClick={() => setMapStyle('network')}
-          >
-            <Wifi className="h-3 w-3 mr-1" />
-            <span className="hidden sm:inline">Network</span>
-          </Button>
-          <Button
-            size="sm"
-            variant={connections ? 'default' : 'outline'}
-            className="text-xs px-2 py-1"
-            onClick={() => setConnections(!connections)}
-          >
-            <Layers className="h-3 w-3 mr-1" />
-            <span className="hidden sm:inline">Links</span>
-          </Button>
-        </div>
-      </div>
-
-      {/* Responsive Live Indicator */}
-      <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-20">
-        <div className="flex items-center bg-black/80 backdrop-blur-md rounded-full px-2 sm:px-3 py-1 sm:py-2">
-          <div className={`w-2 h-2 rounded-full mr-1 sm:mr-2 ${isLive ? 'bg-red-500 animate-pulse' : 'bg-gray-500'}`}></div>
-          <span className="text-white text-xs font-medium">
-            {isLive ? 'LIVE' : 'OFFLINE'}
-          </span>
-          <Button
-            size="sm"
-            variant="ghost"
-            className="ml-1 sm:ml-2 h-5 w-5 sm:h-6 sm:w-6 p-0"
-            onClick={() => setIsLive(!isLive)}
-          >
-            {isLive ? <Pause className="h-2 w-2 sm:h-3 sm:w-3" /> : <Play className="h-2 w-2 sm:h-3 sm:w-3" />}
-          </Button>
-        </div>
-      </div>
-
-      {/* Real World Map Background */}
-      <div className="absolute inset-0">
-        {mapStyle === 'satellite' ? (
-          <div className="w-full h-full relative overflow-hidden">
-            {/* Realistic world map with satellite styling */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-700 to-blue-900">
-              {/* Ocean texture */}
-              <div className="absolute inset-0 opacity-60">
-                <div className="w-full h-full bg-gradient-radial from-blue-600/30 via-blue-800/50 to-blue-900/70"></div>
-              </div>
-            </div>
-
-            {/* Realistic continents with proper geographical positioning */}
-            {/* North America */}
-            <div className="absolute top-[20%] left-[15%] w-[25%] h-[35%] bg-green-700/40 rounded-[40%] blur-[2px] transform rotate-12"></div>
-            <div className="absolute top-[25%] left-[18%] w-[20%] h-[25%] bg-green-600/50 rounded-[35%] blur-[1px] transform rotate-8"></div>
-
-            {/* South America */}
-            <div className="absolute top-[45%] left-[22%] w-[12%] h-[30%] bg-green-700/40 rounded-[50%] blur-[2px] transform rotate-[-15deg]"></div>
-
-            {/* Europe */}
-            <div className="absolute top-[25%] left-[45%] w-[15%] h-[20%] bg-green-600/40 rounded-[30%] blur-[2px] transform rotate-5"></div>
-
-            {/* Africa */}
-            <div className="absolute top-[35%] left-[48%] w-[12%] h-[25%] bg-green-700/40 rounded-[40%] blur-[2px] transform rotate-3"></div>
-
-            {/* Asia */}
-            <div className="absolute top-[20%] left-[55%] w-[30%] h-[40%] bg-green-600/40 rounded-[45%] blur-[2px] transform rotate-8"></div>
-
-            {/* Australia */}
-            <div className="absolute top-[65%] left-[75%] w-[10%] h-[12%] bg-green-700/40 rounded-[40%] blur-[2px] transform rotate-15"></div>
-
-            {/* Mountain ranges and terrain details */}
-            <div className="absolute top-[30%] left-[60%] w-[20%] h-[8%] bg-brown-600/30 rounded-full blur-[3px] transform rotate-45"></div>
-            <div className="absolute top-[35%] left-[20%] w-[15%] h-[6%] bg-brown-500/30 rounded-full blur-[3px] transform rotate-75"></div>
-          </div>
-        ) : (
-          <div className="w-full h-full relative overflow-hidden bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900">
-            {/* Network view with realistic geography outline */}
-            <div className="absolute inset-0 opacity-20">
-              {/* Subtle continent outlines */}
-              <svg className="w-full h-full" viewBox="0 0 100 100">
-                {/* Simplified world outline paths */}
-                <path
-                  d="M15,25 Q25,20 35,25 Q40,30 35,40 Q30,45 25,40 Q20,35 15,25"
-                  fill="none"
-                  stroke="rgba(156, 163, 175, 0.3)"
-                  strokeWidth="0.5"
-                />
-                <path
-                  d="M45,25 Q55,22 65,28 Q70,35 65,42 Q60,45 55,42 Q50,38 45,25"
-                  fill="none"
-                  stroke="rgba(156, 163, 175, 0.3)"
-                  strokeWidth="0.5"
-                />
-                <path
-                  d="M22,45 Q28,42 32,48 Q35,55 30,65 Q25,70 22,65 Q20,55 22,45"
-                  fill="none"
-                  stroke="rgba(156, 163, 175, 0.3)"
-                  strokeWidth="0.5"
-                />
-              </svg>
-            </div>
-
-            {/* Network visualization */}
-            <div className="absolute inset-0 opacity-40">
-              <svg className="w-full h-full">
-                {connections && makrCaves.map((cave, idx) => (
-                  makrCaves.slice(idx + 1).map((otherCave, otherIdx) => (
-                    <line
-                      key={`${cave.id}-${otherCave.id}`}
-                      x1={`${((cave.location.lng + 180) / 360) * 100}%`}
-                      y1={`${((90 - cave.location.lat) / 180) * 100}%`}
-                      x2={`${((otherCave.location.lng + 180) / 360) * 100}%`}
-                      y2={`${((90 - otherCave.location.lat) / 180) * 100}%`}
-                      stroke="rgba(59, 130, 246, 0.4)"
-                      strokeWidth="1"
-                      className="animate-pulse"
-                      strokeDasharray="2,2"
-                    />
-                  ))
-                ))
-                }
-              </svg>
-            </div>
-
-            {/* Data flow visualization */}
-            <div className="absolute inset-0">
-              {makrCaves.map((cave, idx) => {
-                const x = ((cave.location.lng + 180) / 360) * 100;
-                const y = ((90 - cave.location.lat) / 180) * 100;
-                return (
-                  <div
-                    key={`pulse-${cave.id}`}
-                    className="absolute"
-                    style={{ left: `${x}%`, top: `${y}%` }}
-                  >
-                    <div className="w-16 h-16 border border-cyan-400/20 rounded-full animate-ping"></div>
-                    <div className="absolute top-2 left-2 w-12 h-12 border border-blue-400/30 rounded-full animate-ping animation-delay-1000"></div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* MakrCave Markers */}
-      {makrCaves.map((cave) => {
-        const x = ((cave.location.lng + 180) / 360) * 100;
-        const y = ((90 - cave.location.lat) / 180) * 100;
-        
-        return (
-          <div
-            key={cave.id}
-            className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
-            style={{ left: `${x}%`, top: `${y}%` }}
-            onClick={() => onCaveSelect(cave)}
-          >
-            {/* Enhanced Cave Marker with realistic map integration */}
-            <div className={`relative transition-all duration-300 ${selectedCave?.id === cave.id ? 'scale-125' : 'group-hover:scale-110'}`}>
-              {/* Marker base with enhanced visibility */}
-              <div className={`w-8 h-8 rounded-full border-3 ${
-                cave.featured
-                  ? 'bg-yellow-400 border-yellow-200 map-marker-featured'
-                  : cave.status === 'active'
-                    ? 'bg-green-400 border-green-200 map-marker-glow'
-                    : 'bg-gray-400 border-gray-200'
-              } relative z-10 backdrop-blur-sm`}>
-                {cave.status === 'active' && (
-                  <div className="absolute inset-0 rounded-full bg-green-400 animate-ping opacity-30"></div>
-                )}
-                {cave.featured && (
-                  <Star className="h-4 w-4 text-yellow-900 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-                )}
-                {!cave.featured && cave.status === 'active' && (
-                  <div className="w-2 h-2 bg-white rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
-                )}
-              </div>
-
-              {/* Location pin shadow for depth */}
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-1 h-3 bg-black/30 blur-sm"></div>
-
-              {/* Activity Rings with enhanced visibility */}
-              {isLive && cave.status === 'active' && (
-                <>
-                  <div className="absolute -inset-2 rounded-full border-2 border-green-400/60 animate-ping"></div>
-                  <div className="absolute -inset-4 rounded-full border border-blue-400/40 animate-ping animation-delay-500"></div>
-                  <div className="absolute -inset-6 rounded-full border border-cyan-400/20 animate-ping animation-delay-1000"></div>
-                </>
-              )}
-
-              {/* Data transmission visualization */}
-              {cave.status === 'active' && (
-                <div className="absolute -inset-8">
-                  {[...Array(3)].map((_, i) => (
-                    <div
-                      key={i}
-                      className={`absolute inset-0 border border-blue-400/20 rounded-full animate-ping`}
-                      style={{ animationDelay: `${i * 0.8}s`, animationDuration: '2.4s' }}
-                    ></div>
-                  ))}
-                </div>
-              )}
-              
-              {/* Enhanced Quick Info Tooltip */}
-              <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-20">
-                <div className="bg-black/95 backdrop-blur-md text-white text-sm rounded-lg px-4 py-3 whitespace-nowrap border border-white/20 shadow-2xl">
-                  <div className="font-semibold text-white mb-1">{cave.name}</div>
-                  <div className="text-blue-300 text-xs">{cave.country}</div>
-                  <div className="text-gray-300 text-xs mt-1">{cave.onlineMembers} makers online</div>
-                  <div className="text-green-400 text-xs">{cave.machinesRunning} machines running</div>
-                  {cave.featured && (
-                    <div className="text-yellow-400 text-xs mt-1 flex items-center">
-                      <Star className="h-3 w-3 mr-1" />
-                      Featured Location
-                    </div>
-                  )}
-                </div>
-                {/* Tooltip arrow */}
-                <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
-                  <div className="w-3 h-3 bg-black/95 border-r border-b border-white/20 transform rotate-45"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      })}
-
-      {/* AR Exploration Points */}
-      <div className="absolute top-1/2 left-1/4 w-3 h-3 bg-purple-400 rounded-full animate-pulse cursor-pointer" title="AR Point: Historic Workshop"></div>
-      <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-purple-400 rounded-full animate-pulse cursor-pointer" title="AR Point: Innovation Timeline"></div>
-      <div className="absolute bottom-1/4 left-1/2 w-3 h-3 bg-purple-400 rounded-full animate-pulse cursor-pointer" title="AR Point: Future Vision"></div>
-    </div>
-  );
+const globalStats = {
+  totalMakrCaves: makrCaves.length,
+  activeMakers: makrCaves.reduce((sum, cave) => sum + cave.onlineMembers, 0),
+  runningProjects: makrCaves.reduce((sum, cave) => sum + cave.activeProjects, 0),
+  activeMachines: makrCaves.reduce((sum, cave) => sum + cave.machinesRunning, 0)
 };
 
-const MakrVerse = () => {
-  const [selectedCave, setSelectedCave] = useState(makrCaves[0]);
+export default function MakrVersePage() {
+  const [selectedCave, setSelectedCave] = useState<MakrCave | null>(null);
+  const [viewMode, setViewMode] = useState('overview'); // 'overview', 'detailed'
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [showBadges, setShowBadges] = useState(false);
-  const [realTimeUpdates, setRealTimeUpdates] = useState(true);
-  const [currentActivity, setCurrentActivity] = useState(0);
+  const [filterSpecialization, setFilterSpecialization] = useState('all');
+  const mapRef = useRef(null);
 
-  // Simulate real-time updates
+  const filteredCaves = makrCaves.filter(cave => {
+    const matchesSearch = cave.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         cave.city.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter = filterSpecialization === 'all' || 
+                         cave.specialization.some(spec => 
+                           spec.toLowerCase().includes(filterSpecialization.toLowerCase())
+                         );
+    return matchesSearch && matchesFilter;
+  });
+
+  const specializations = ['all', ...new Set(makrCaves.flatMap(cave => cave.specialization))];
+
+  // Initialize map effect
   useEffect(() => {
-    if (!realTimeUpdates) return;
+    if (typeof window !== 'undefined' && mapRef.current) {
+      initializeMap();
+    }
+  }, []);
+
+  const initializeMap = () => {
+    // Simple SVG world map with Indian subcontinent focus
+    const svg = `
+      <svg viewBox="0 0 1000 500" className="w-full h-full">
+        <!-- India outline (simplified) -->
+        <path d="M320 180 L340 160 L380 170 L420 180 L450 200 L470 240 L460 280 L440 320 L400 340 L360 330 L340 310 L320 280 L310 240 Z" 
+              fill="rgba(59, 130, 246, 0.1)" 
+              stroke="rgba(59, 130, 246, 0.3)" 
+              strokeWidth="1"/>
+        <!-- Other continents (very simplified) -->
+        <path d="M100 200 L200 180 L250 220 L200 260 L100 240 Z" 
+              fill="rgba(75, 85, 99, 0.1)" 
+              stroke="rgba(75, 85, 99, 0.2)" 
+              strokeWidth="1"/>
+        <path d="M600 150 L750 140 L780 200 L750 250 L600 240 Z" 
+              fill="rgba(75, 85, 99, 0.1)" 
+              stroke="rgba(75, 85, 99, 0.2)" 
+              strokeWidth="1"/>
+      </svg>
+    `;
     
-    const interval = setInterval(() => {
-      setCurrentActivity((prev) => (prev + 1) % liveActivities.length);
-    }, 3000);
+    if (mapRef.current) {
+      (mapRef.current as HTMLElement).innerHTML = svg;
+    }
+  };
 
-    return () => clearInterval(interval);
-  }, [realTimeUpdates]);
-
-  const filteredCaves = makrCaves.filter(cave => 
-    cave.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    cave.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    cave.specialization.some(spec => spec.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const getMarkerPosition = (cave: MakrCave) => {
+    // Convert lat/lng to SVG coordinates (focused on India)
+    const x = ((cave.location.lng - 65) / 25) * 200 + 320; // India longitude range
+    const y = ((35 - cave.location.lat) / 25) * 160 + 180; // India latitude range
+    return { x, y };
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Responsive Header */}
-      <div className="bg-black/20 backdrop-blur-md border-b border-white/10 sticky top-0 z-30">
-        <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
-            {/* Logo and Title Row */}
-            <div className="flex items-center justify-between w-full sm:w-auto">
-              <div className="flex items-center space-x-2 sm:space-x-4">
-                <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-400 to-purple-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-xs sm:text-sm">M</span>
-                  </div>
-                  <span className="text-lg sm:text-xl font-bold text-white">MakrVerse</span>
-                </Link>
-                <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs">
-                  Live Map
-                </Badge>
-              </div>
-
-              {/* Mobile Navigation Buttons */}
-              <div className="flex items-center space-x-2 sm:hidden">
-                <Link href="/">
-                  <Button variant="outline" size="sm" className="border-gray-600 text-gray-300 hover:bg-gray-800 px-2">
-                    <Home className="h-4 w-4" />
-                  </Button>
-                </Link>
-                <Link href="/portal">
-                  <Button size="sm" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-3">
-                    Portal
-                  </Button>
-                </Link>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
+      {/* Header */}
+      <div className="border-b border-blue-500/30 bg-slate-900/50 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link href="/dashboard" className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors">
+                <ArrowLeft className="w-5 h-5" />
+                <span>Back to Dashboard</span>
+              </Link>
+              <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                MakrVerse
               </div>
             </div>
-
-            {/* Search and Controls Row */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
-              {/* Navigation Breadcrumb */}
-              <div className="hidden lg:flex items-center text-gray-400 text-sm">
-                <Link href="/" className="hover:text-white transition-colors">Home</Link>
-                <span className="mx-2">{'>'}</span>
-                <span className="text-white">MakrVerse</span>
-              </div>
-
-              {/* Search */}
-              <div className="relative flex-1 sm:flex-none">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search MakrCaves..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full sm:w-auto bg-black/50 border border-white/20 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none text-sm"
-                />
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-center justify-between sm:justify-start gap-2 sm:gap-4">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10 flex-1 sm:flex-none"
-                  onClick={() => setShowBadges(!showBadges)}
-                >
-                  <Trophy className="h-4 w-4 mr-1 sm:mr-2" />
-                  <span className="hidden sm:inline">Badges</span>
-                </Button>
-
-                {/* Desktop Navigation Buttons */}
-                <div className="hidden sm:flex items-center space-x-2">
-                  <Link href="/">
-                    <Button variant="outline" size="sm" className="border-gray-600 text-gray-300 hover:bg-gray-800">
-                      <Home className="h-4 w-4 mr-1" />
-                      Home
-                    </Button>
-                  </Link>
-
-                  <Link href="/portal">
-                    <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white">
-                      Portal
-                    </Button>
-                  </Link>
-                </div>
-              </div>
+            <div className="flex items-center gap-4">
+              <Button
+                variant={viewMode === 'overview' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('overview')}
+                className="text-xs"
+              >
+                Overview
+              </Button>
+              <Button
+                variant={viewMode === 'detailed' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('detailed')}
+                className="text-xs"
+              >
+                Detailed
+              </Button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row h-screen pt-0">
-        {/* Responsive Sidebar */}
-        <div className="w-full lg:w-96 h-[50vh] lg:h-full bg-black/30 backdrop-blur-md border-b lg:border-b-0 lg:border-r border-white/10 overflow-y-auto">
-          <div className="p-3 sm:p-4 lg:p-6 space-y-4 lg:space-y-6">
-            {/* Global Stats */}
-            <Card className="bg-white/10 backdrop-blur-md border-white/20">
+      {/* Global Stats */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <Card className="bg-slate-800/50 border-blue-500/30">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                  <Home className="w-5 h-5 text-blue-400" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-white">{globalStats.totalMakrCaves}</div>
+                  <div className="text-xs text-gray-400">Active MakrCaves</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-slate-800/50 border-blue-500/30">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                  <Users className="w-5 h-5 text-green-400" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-white">{globalStats.activeMakers}</div>
+                  <div className="text-xs text-gray-400">Online Makers</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-slate-800/50 border-blue-500/30">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                  <Activity className="w-5 h-5 text-purple-400" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-white">{globalStats.runningProjects}</div>
+                  <div className="text-xs text-gray-400">Active Projects</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-slate-800/50 border-blue-500/30">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center">
+                  <Wrench className="w-5 h-5 text-orange-400" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-white">{globalStats.activeMachines}</div>
+                  <div className="text-xs text-gray-400">Running Machines</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Search and Filter */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search MakrCaves by name or city..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-slate-800 border border-blue-500/30 rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+          <select
+            value={filterSpecialization}
+            onChange={(e) => setFilterSpecialization(e.target.value)}
+            className="px-4 py-2 bg-slate-800 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            {specializations.map(spec => (
+              <option key={spec} value={spec} className="bg-slate-800">
+                {spec === 'all' ? 'All Specializations' : spec}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Interactive Map */}
+          <div className="lg:col-span-2">
+            <Card className="bg-slate-800/50 border-blue-500/30 h-96">
               <CardHeader className="pb-3">
-                <CardTitle className="text-white text-lg flex items-center">
-                  <Globe className="h-5 w-5 mr-2 text-blue-400" />
-                  Global MakrVerse
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg text-blue-400">Global MakrVerse Map</CardTitle>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsFullscreen(!isFullscreen)}
+                    className="text-blue-400 hover:text-blue-300"
+                  >
+                    {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+                  </Button>
+                </div>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="grid grid-cols-2 lg:grid-cols-2 gap-2 sm:gap-4">
-                  <div className="text-center">
-                    <div className="text-lg sm:text-2xl font-bold text-green-400">{makrCaves.length}</div>
-                    <div className="text-xs text-gray-400">Active Caves</div>
+              <CardContent className="h-80">
+                <div className="relative w-full h-full bg-slate-900 rounded-lg overflow-hidden">
+                  {/* World Map Background */}
+                  <div className="absolute inset-0 opacity-30">
+                    <svg viewBox="0 0 1000 500" className="w-full h-full">
+                      {/* Simplified world map */}
+                      <defs>
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(59, 130, 246, 0.1)" strokeWidth="1"/>
+                        </pattern>
+                      </defs>
+                      <rect width="100%" height="100%" fill="url(#grid)" />
+                      
+                      {/* India (detailed) */}
+                      <path 
+                        d="M320 180 L340 160 L380 170 L420 180 L450 200 L470 240 L460 280 L440 320 L400 340 L360 330 L340 310 L320 280 L310 240 Z" 
+                        fill="rgba(59, 130, 246, 0.2)" 
+                        stroke="rgba(59, 130, 246, 0.5)" 
+                        strokeWidth="2"
+                      />
+                      
+                      {/* Other continents */}
+                      <path d="M100 200 L200 180 L250 220 L200 260 L100 240 Z" fill="rgba(75, 85, 99, 0.1)" stroke="rgba(75, 85, 99, 0.3)" strokeWidth="1"/>
+                      <path d="M600 150 L750 140 L780 200 L750 250 L600 240 Z" fill="rgba(75, 85, 99, 0.1)" stroke="rgba(75, 85, 99, 0.3)" strokeWidth="1"/>
+                    </svg>
                   </div>
-                  <div className="text-center">
-                    <div className="text-lg sm:text-2xl font-bold text-blue-400">{makrCaves.reduce((sum, cave) => sum + cave.onlineMembers, 0)}</div>
-                    <div className="text-xs text-gray-400">Makers Online</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-lg sm:text-2xl font-bold text-purple-400">{makrCaves.reduce((sum, cave) => sum + cave.activeProjects, 0)}</div>
-                    <div className="text-xs text-gray-400">Active Projects</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-lg sm:text-2xl font-bold text-yellow-400">{makrCaves.reduce((sum, cave) => sum + cave.machinesRunning, 0)}</div>
-                    <div className="text-xs text-gray-400">Machines Running</div>
+                  
+                  {/* MakrCave Markers */}
+                  <div className="absolute inset-0">
+                    {filteredCaves.map((cave) => {
+                      const pos = getMarkerPosition(cave);
+                      return (
+                        <div
+                          key={cave.id}
+                          className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+                          style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
+                          onClick={() => setSelectedCave(cave)}
+                        >
+                          <div className={`w-4 h-4 rounded-full border-2 ${
+                            cave.featured 
+                              ? 'bg-yellow-400 border-yellow-300 shadow-yellow-400/50' 
+                              : 'bg-blue-400 border-blue-300 shadow-blue-400/50'
+                          } shadow-lg animate-pulse`}>
+                          </div>
+                          <div className="absolute top-5 left-1/2 transform -translate-x-1/2 bg-slate-800 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                            {cave.name}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </CardContent>
             </Card>
+          </div>
 
-            {/* Selected Cave Details */}
-            {selectedCave && (
-              <Card className="bg-white/10 backdrop-blur-md border-white/20">
-                <CardHeader className="pb-3">
+          {/* Selected Cave Details or Cave List */}
+          <div className="space-y-4">
+            {selectedCave ? (
+              <Card className="bg-slate-800/50 border-blue-500/30">
+                <CardHeader>
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-white text-lg">{selectedCave.name}</CardTitle>
-                    {selectedCave.featured && (
-                      <Badge className="bg-yellow-500 text-black">
-                        <Star className="h-3 w-3 mr-1" />
-                        Featured
-                      </Badge>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {selectedCave.featured && <Star className="w-4 h-4 text-yellow-400" />}
+                      <CardTitle className="text-lg text-blue-400">{selectedCave.name}</CardTitle>
+                    </div>
+                    <Badge variant={selectedCave.status === 'active' ? 'default' : 'secondary'}>
+                      {selectedCave.status}
+                    </Badge>
                   </div>
-                  <CardDescription className="text-gray-300">{selectedCave.country}</CardDescription>
+                  <CardDescription className="text-gray-400">
+                    {selectedCave.city}, {selectedCave.country}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Online Members</span>
-                      <span className="text-green-400">{selectedCave.onlineMembers}</span>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div className="flex items-center gap-2">
+                      <Users className="w-4 h-4 text-blue-400" />
+                      <span>{selectedCave.onlineMembers} online</span>
                     </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Active Projects</span>
-                      <span className="text-blue-400">{selectedCave.activeProjects}</span>
+                    <div className="flex items-center gap-2">
+                      <Activity className="w-4 h-4 text-green-400" />
+                      <span>{selectedCave.activeProjects} projects</span>
                     </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Machines Running</span>
-                      <span className="text-yellow-400">{selectedCave.machinesRunning}</span>
+                    <div className="flex items-center gap-2">
+                      <Wrench className="w-4 h-4 text-orange-400" />
+                      <span>{selectedCave.machinesRunning} machines</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Zap className="w-4 h-4 text-yellow-400" />
+                      <span>{selectedCave.utilizationRate}% utilization</span>
                     </div>
                   </div>
-
+                  
                   <div>
-                    <div className="text-sm text-gray-400 mb-2">Current Project</div>
-                    <div className="text-white font-medium">{selectedCave.currentProject}</div>
-                  </div>
-
-                  <div>
-                    <div className="text-sm text-gray-400 mb-2">Specializations</div>
+                    <h4 className="font-medium text-white mb-2">Specializations</h4>
                     <div className="flex flex-wrap gap-1">
-                      {selectedCave.specialization.map((spec, idx) => (
-                        <Badge key={idx} variant="outline" className="text-xs border-white/30 text-white">
+                      {selectedCave.specialization.map((spec: string) => (
+                        <Badge key={spec} variant="outline" className="text-xs">
                           {spec}
                         </Badge>
                       ))}
                     </div>
                   </div>
-
-                  <div className="flex space-x-2">
-                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white flex-1">
-                      <Eye className="h-4 w-4 mr-1" />
-                      Visit
-                    </Button>
-                    <Button size="sm" variant="outline" className="border-white/30 text-white hover:bg-white/10">
-                      <Navigation className="h-4 w-4" />
-                    </Button>
+                  
+                  <div>
+                    <h4 className="font-medium text-white mb-2">Current Focus</h4>
+                    <p className="text-sm text-gray-300">{selectedCave.currentProject}</p>
                   </div>
+                  
+                  <div>
+                    <h4 className="font-medium text-white mb-2">Capacity</h4>
+                    <Progress 
+                      value={selectedCave.utilizationRate} 
+                      className="h-2"
+                    />
+                    <p className="text-xs text-gray-400 mt-1">
+                      {selectedCave.utilizationRate}% of {selectedCave.capacity} member capacity
+                    </p>
+                  </div>
+                  
+                  <Button className="w-full" onClick={() => window.open(`/makrcave/${selectedCave.id}`, '_blank')}>
+                    Connect to MakrCave
+                  </Button>
                 </CardContent>
               </Card>
-            )}
-
-            {/* Live Activity Feed */}
-            <Card className="bg-white/10 backdrop-blur-md border-white/20">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-white text-lg flex items-center">
-                  <Activity className="h-5 w-5 mr-2 text-green-400" />
-                  Live Activity
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="ml-auto h-6 w-6 p-0"
-                    onClick={() => setRealTimeUpdates(!realTimeUpdates)}
-                  >
-                    {realTimeUpdates ? (
-                      <Pause className="h-3 w-3 text-green-400" />
-                    ) : (
-                      <Play className="h-3 w-3 text-gray-400" />
-                    )}
-                  </Button>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {liveActivities.slice(0, 5).map((activity, idx) => (
-                  <div 
-                    key={activity.id} 
-                    className={`p-3 rounded-lg border transition-all duration-300 ${
-                      idx === currentActivity && realTimeUpdates
-                        ? 'bg-blue-500/20 border-blue-400/50 shadow-lg' 
-                        : 'bg-black/30 border-white/10'
-                    }`}
-                  >
-                    <div className="text-sm text-white">{activity.activity}</div>
-                    <div className="flex items-center justify-between mt-1">
-                      <div className="text-xs text-gray-400">{activity.cave}</div>
-                      <div className="text-xs text-gray-500">{activity.time}</div>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* Travel Badges */}
-            {showBadges && (
-              <Card className="bg-white/10 backdrop-blur-md border-white/20">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-white text-lg flex items-center">
-                    <Trophy className="h-5 w-5 mr-2 text-yellow-400" />
-                    Travel Badges
-                  </CardTitle>
+            ) : (
+              <Card className="bg-slate-800/50 border-blue-500/30">
+                <CardHeader>
+                  <CardTitle className="text-lg text-blue-400">MakrCaves</CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Click on a marker to view details
+                  </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-3">
-                  {badges.map((badge) => (
-                    <div 
-                      key={badge.id} 
-                      className={`p-3 rounded-lg border ${
-                        badge.unlocked 
-                          ? 'bg-yellow-500/20 border-yellow-400/50' 
-                          : 'bg-gray-500/20 border-gray-400/30'
-                      }`}
+                <CardContent className="space-y-3 max-h-80 overflow-y-auto">
+                  {filteredCaves.map((cave) => (
+                    <div
+                      key={cave.id}
+                      className="p-3 rounded-lg bg-slate-700/50 border border-blue-500/20 hover:border-blue-400/50 cursor-pointer transition-all"
+                      onClick={() => setSelectedCave(cave)}
                     >
-                      <div className="flex items-center">
-                        <span className="text-2xl mr-3">{badge.icon}</span>
-                        <div>
-                          <div className={`font-medium ${badge.unlocked ? 'text-yellow-400' : 'text-gray-400'}`}>
-                            {badge.name}
-                          </div>
-                          <div className="text-xs text-gray-500">{badge.description}</div>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          {cave.featured && <Star className="w-3 h-3 text-yellow-400" />}
+                          <span className="font-medium text-white text-sm">{cave.name}</span>
                         </div>
+                        <Badge variant={cave.status === 'active' ? 'default' : 'secondary'} className="text-xs">
+                          {cave.status}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-gray-400 mb-2">{cave.city}, {cave.country}</p>
+                      <div className="flex justify-between text-xs text-gray-300">
+                        <span>{cave.onlineMembers} online</span>
+                        <span>{cave.activeProjects} projects</span>
                       </div>
                     </div>
                   ))}
@@ -668,90 +518,7 @@ const MakrVerse = () => {
             )}
           </div>
         </div>
-
-        {/* Responsive Main Map Area */}
-        <div className="flex-1 relative h-[50vh] lg:h-full">
-          {/* Mobile Back Button */}
-          <div className="absolute top-2 left-2 z-30 sm:top-4 sm:left-4 lg:hidden">
-            <Link href="/">
-              <Button size="sm" className="bg-black/80 backdrop-blur-md text-white border border-white/20 hover:bg-black/90 text-xs sm:text-sm">
-                <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                Back
-              </Button>
-            </Link>
-          </div>
-
-          <MakrVerseMap selectedCave={selectedCave} onCaveSelect={setSelectedCave} />
-
-          {/* Map Legend */}
-          <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md rounded-lg p-4 text-white">
-            <div className="text-sm font-semibold mb-2">Legend</div>
-            <div className="space-y-1 text-xs">
-              <div className="flex items-center">
-                <div className="w-3 h-3 bg-yellow-400 rounded-full mr-2"></div>
-                <span>Featured MakrCave</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
-                <span>Active MakrCave</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-3 h-3 bg-purple-400 rounded-full mr-2"></div>
-                <span>AR Exploration Point</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Responsive Real-time Stats Overlay */}
-          <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-black/80 backdrop-blur-md rounded-lg px-2 sm:px-4 py-1 sm:py-2 max-w-[90vw]">
-            <div className="flex items-center space-x-2 sm:space-x-4 lg:space-x-6 text-white text-xs sm:text-sm">
-              <div className="flex items-center">
-                <div className="w-2 h-2 bg-green-400 rounded-full mr-1 sm:mr-2 animate-pulse"></div>
-                <span className="hidden sm:inline">{makrCaves.filter(c => c.status === 'active').length} Caves Online</span>
-                <span className="sm:hidden">{makrCaves.filter(c => c.status === 'active').length}</span>
-              </div>
-              <div className="flex items-center">
-                <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-blue-400" />
-                <span className="hidden sm:inline">{makrCaves.reduce((sum, cave) => sum + cave.onlineMembers, 0)} Makers</span>
-                <span className="sm:hidden">{makrCaves.reduce((sum, cave) => sum + cave.onlineMembers, 0)}</span>
-              </div>
-              <div className="flex items-center">
-                <Wrench className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-yellow-400" />
-                <span className="hidden sm:inline">{makrCaves.reduce((sum, cave) => sum + cave.machinesRunning, 0)} Machines</span>
-                <span className="sm:hidden">{makrCaves.reduce((sum, cave) => sum + cave.machinesRunning, 0)}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Jump Panel */}
-          <div className="absolute bottom-4 right-4 bg-black/80 backdrop-blur-md rounded-lg p-3 max-w-xs">
-            <div className="text-white text-sm font-semibold mb-2">Quick Jump</div>
-            <div className="space-y-1">
-              {makrCaves.filter(cave => cave.featured).map((cave) => (
-                <button
-                  key={cave.id}
-                  onClick={() => setSelectedCave(cave)}
-                  className={`w-full text-left px-2 py-1 rounded text-xs transition-colors ${
-                    selectedCave?.id === cave.id
-                      ? 'bg-yellow-500/30 text-yellow-300'
-                      : 'text-gray-300 hover:bg-white/10 hover:text-white'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="truncate">{cave.name}</span>
-                    <div className="flex items-center ml-2">
-                      <Star className="h-3 w-3 text-yellow-400" />
-                      <span className="text-green-400 ml-1">{cave.onlineMembers}</span>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
-};
-
-export default MakrVerse;
+}
