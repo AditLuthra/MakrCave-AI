@@ -8,7 +8,7 @@ import json
 
 from database import get_db
 from dependencies import get_current_user, get_current_admin_user
-from models.user import User
+# User import removed - using CurrentUser from dependencies
 from models.filament_tracking import (
     FilamentRoll, FilamentUsageLog, FilamentReorderRequest, FilamentCompatibility,
     FilamentMaterial, FilamentBrand, FilamentRollStatus, DeductionMethod
@@ -233,7 +233,7 @@ async def get_filament_roll(
 async def create_filament_roll(
     roll_data: FilamentRollCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_admin_user)
+    current_user = Depends(get_current_admin_user)
 ):
     """Create a new filament roll"""
     
@@ -271,7 +271,7 @@ async def update_filament_roll(
     roll_id: str,
     roll_data: FilamentRollUpdate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_admin_user)
+    current_user = Depends(get_current_admin_user)
 ):
     """Update an existing filament roll"""
     

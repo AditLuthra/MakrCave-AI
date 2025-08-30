@@ -35,6 +35,7 @@ if os.getenv("ENVIRONMENT") == "development":
         "http://gateway-frontend:5173",
         "http://makrcave-frontend:5174",
         "http://makrx-store-frontend:5175",
+        "*",  # Allow all origins in development for Replit compatibility
     ])
 
 app.add_middleware(
@@ -89,7 +90,7 @@ if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=8000,
+        port=5000,
         reload=True,
         log_level="info"
     )

@@ -17,7 +17,7 @@ def main():
     """Main startup function"""
     # Configuration
     host = os.getenv("HOST", "0.0.0.0")
-    port = int(os.getenv("PORT", 8000))
+    port = int(os.getenv("PORT", 5000))
     # Disable debug/reload in production for security
     environment = os.getenv("ENVIRONMENT", "development")
     reload = environment == "development" and os.getenv("DEBUG", "False").lower() == "true"

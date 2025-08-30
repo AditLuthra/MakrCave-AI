@@ -518,3 +518,13 @@ def require_scope(scope: str):
         # For now, just return the user - can implement scope checking later
         return user
     return scope_dependency
+
+
+async def get_current_admin_user(current_user: CurrentUser = Depends(get_current_user)) -> CurrentUser:
+    """Get current user and ensure they have admin privileges"""
+    if current_user.role not in ["admin", "makerspace_admin", "super_admin"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin privileges required"
+        )
+    return current_user
