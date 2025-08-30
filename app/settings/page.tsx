@@ -1,14 +1,8 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
-import { Button } from '../../components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
-import { Badge } from '../../components/ui/badge';
-import { Input } from '../../components/ui/input';
-import { Label } from '../../components/ui/label';
-import { Textarea } from '../../components/ui/textarea';
-import { Switch } from '../../components/ui/switch';
+import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Badge } from '../components/ui/badge';
 import {
   Settings as SettingsIcon,
   Building2,
@@ -24,8 +18,13 @@ import {
   AlertCircle,
   Info
 } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import { useToast } from '../../hooks/use-toast';
+import { useAuth } from '../contexts/AuthContext';
+import GeneralSettingsForm from '../components/settings/GeneralSettingsForm';
+import AccessControlSettings from '../components/settings/AccessControlSettings';
+import InventorySettings from '../components/settings/InventorySettings';
+import BillingConfig from '../components/settings/BillingConfig';
+import ServiceModeToggle from '../components/settings/ServiceModeToggle';
+import { useToast } from '../hooks/use-toast';
 
 interface MakerspaceSettings {
   id?: string;
@@ -93,9 +92,6 @@ const Settings: React.FC = () => {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
-  // Check if user has permission to modify settings
-  const canModifySettings = user?.role === 'super_admin' || user?.role === 'makerspace_admin';
-
   useEffect(() => {
     fetchSettings();
   }, []);
@@ -103,48 +99,23 @@ const Settings: React.FC = () => {
   const fetchSettings = async () => {
     setLoading(true);
     try {
-      // Mock settings data
-      const mockSettings = {
-        makerspace_name: 'TechHub Makerspace',
-        description: 'A collaborative workspace for makers, engineers, and creators',
-        address: '123 Innovation Drive, Tech Park, Bangalore 560001',
-        contact_email: 'hello@techhub.com',
-        contact_phone: '+91 80 1234 5678',
-        timezone: 'Asia/Kolkata',
-        membership_required: true,
-        public_registration: true,
-        skill_gated_access: true,
-        enable_reservations: true,
-        auto_approve_members: false,
-        filament_deduction_enabled: true,
-        minimum_stock_alerts: true,
-        default_stock_threshold: 10,
-        credit_system_enabled: true,
-        default_tax_percent: 18,
-        default_currency: 'INR',
-        enable_membership_billing: true,
-        service_mode_enabled: false,
-        accept_jobs_from_store: true,
-        delivery_radius_km: 25,
-        default_service_fee_percent: 15,
-        auto_job_assignment: false,
-        theme_mode: 'light',
-        welcome_message: 'Welcome to TechHub Makerspace! Ready to create something amazing?',
-        enable_chat_widget: true,
-        enable_help_widget: true,
-        email_notifications_enabled: true,
-        sms_notifications_enabled: false,
-        push_notifications_enabled: true,
-        maintenance_reminder_days: 7,
-        require_safety_training: true,
-        equipment_access_logging: true,
-        visitor_registration_required: true,
-        enable_iot_monitoring: false,
-        enable_rfid_access: false,
-        enable_camera_monitoring: false
-      };
-      
-      setSettings(mockSettings);
+      const response = await fetch('/api/makerspace/settings/', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSettings(data);
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to load settings",
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       console.error('Error fetching settings:', error);
       toast({
@@ -157,25 +128,16 @@ const Settings: React.FC = () => {
     }
   };
 
-  const handleSettingChange = (key: string, value: any) => {
-    setSettings(prev => ({ ...prev, [key]: value }));
+  const updateSettings = (section: string, newData: Partial<MakerspaceSettings>) => {
+    setSettings(prev => ({ ...prev, ...newData }));
     setHasUnsavedChanges(true);
   };
 
   const saveSettings = async () => {
-    if (!canModifySettings) {
-      toast({
-        title: "Access Denied",
-        description: "You don't have permission to modify settings",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setSaving(true);
     try {
-      const response = await fetch('/api/makerspace/settings/', {
-        method: 'PUT',
+      const response = await fetch('/api/makerspace/settings/update', {
+        method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
           'Content-Type': 'application/json',
@@ -184,14 +146,21 @@ const Settings: React.FC = () => {
       });
 
       if (response.ok) {
+        const updatedSettings = await response.json();
+        setSettings(updatedSettings);
+        setHasUnsavedChanges(false);
+        setLastSaved(new Date());
         toast({
           title: "Success",
           description: "Settings saved successfully",
         });
-        setHasUnsavedChanges(false);
-        setLastSaved(new Date());
       } else {
-        throw new Error('Failed to save settings');
+        const errorData = await response.json();
+        toast({
+          title: "Error",
+          description: errorData.detail || "Failed to save settings",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error('Error saving settings:', error);
@@ -205,461 +174,295 @@ const Settings: React.FC = () => {
     }
   };
 
+  const saveSectionSettings = async (section: string, sectionData: any) => {
+    setSaving(true);
+    try {
+      const response = await fetch(`/api/makerspace/settings/section/${section}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(sectionData),
+      });
+
+      if (response.ok) {
+        const updatedSettings = await response.json();
+        setSettings(updatedSettings);
+        setHasUnsavedChanges(false);
+        setLastSaved(new Date());
+        toast({
+          title: "Success",
+          description: `${section.charAt(0).toUpperCase() + section.slice(1)} settings saved successfully`,
+        });
+      } else {
+        const errorData = await response.json();
+        toast({
+          title: "Error",
+          description: errorData.detail || "Failed to save settings",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error saving section settings:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save settings",
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const exportSettings = async () => {
+    try {
+      const response = await fetch('/api/makerspace/settings/export', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `makerspace-settings-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        toast({
+          title: "Success",
+          description: "Settings exported successfully",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to export settings",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error exporting settings:', error);
+      toast({
+        title: "Error",
+        description: "Failed to export settings",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const resetToDefaults = async () => {
+    if (!confirm('Are you sure you want to reset all settings to defaults? This action cannot be undone.')) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // First delete existing settings, then fetch defaults
+      await fetch('/api/makerspace/settings/', {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      });
+
+      // Fetch new default settings
+      await fetchSettings();
+      
+      toast({
+        title: "Success",
+        description: "Settings reset to defaults",
+      });
+    } catch (error) {
+      console.error('Error resetting settings:', error);
+      toast({
+        title: "Error",
+        description: "Failed to reset settings",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return (
-      <div className="p-6">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="flex items-center justify-center min-h-96">
+        <div className="flex items-center gap-2">
+          <RefreshCw className="h-5 w-5 animate-spin" />
+          <span>Loading settings...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Makerspace Settings</h1>
-          <p className="text-gray-600 mt-1">Configure your makerspace operations and preferences</p>
+          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <SettingsIcon className="h-6 w-6" />
+            Makerspace Settings
+          </h1>
+          <p className="text-gray-600">Configure and customize your makerspace operations</p>
         </div>
-        
-        <div className="flex items-center gap-4">
-          {lastSaved && (
-            <span className="text-sm text-gray-500">
-              Last saved: {lastSaved.toLocaleTimeString()}
-            </span>
-          )}
+        <div className="flex items-center gap-3">
           {hasUnsavedChanges && (
-            <Badge variant="outline" className="text-orange-600 border-orange-200">
-              Unsaved changes
+            <Badge variant="outline" className="bg-orange-100 text-orange-800">
+              <AlertCircle className="h-3 w-3 mr-1" />
+              Unsaved Changes
             </Badge>
           )}
+          {lastSaved && (
+            <Badge variant="outline" className="bg-green-100 text-green-800">
+              <CheckCircle className="h-3 w-3 mr-1" />
+              Saved {lastSaved.toLocaleTimeString()}
+            </Badge>
+          )}
+          <Button variant="outline" onClick={exportSettings}>
+            <Download className="h-4 w-4 mr-2" />
+            Export
+          </Button>
           <Button 
             onClick={saveSettings} 
-            disabled={saving || !canModifySettings}
-            className="flex items-center gap-2"
+            disabled={saving || !hasUnsavedChanges}
+            className="min-w-24"
           >
             {saving ? (
-              <>
-                <RefreshCw className="h-4 w-4 animate-spin" />
-                Saving...
-              </>
+              <RefreshCw className="h-4 w-4 animate-spin" />
             ) : (
               <>
-                <Save className="h-4 w-4" />
-                Save Settings
+                <Save className="h-4 w-4 mr-2" />
+                Save All
               </>
             )}
           </Button>
         </div>
       </div>
 
-      {!canModifySettings && (
-        <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <div className="flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 text-yellow-600" />
-            <p className="text-yellow-800 font-medium">View Only</p>
+      {/* Settings Info Card */}
+      <Card className="bg-blue-50 border-blue-200">
+        <CardContent className="p-4">
+          <div className="flex items-start gap-3">
+            <Info className="h-5 w-5 text-blue-600 mt-0.5" />
+            <div className="text-sm text-blue-800">
+              <p className="font-medium">Settings Management</p>
+              <p className="text-blue-700 mt-1">
+                Configure your makerspace operations including access control, billing, inventory management, and appearance. 
+                Changes are automatically validated and will take effect immediately after saving.
+              </p>
+            </div>
           </div>
-          <p className="text-yellow-700 text-sm mt-1">
-            You can view settings but don't have permission to modify them. Contact your makerspace admin for changes.
-          </p>
-        </div>
-      )}
+        </CardContent>
+      </Card>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      {/* Settings Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="access">Access Control</TabsTrigger>
-          <TabsTrigger value="inventory">Inventory</TabsTrigger>
-          <TabsTrigger value="billing">Billing</TabsTrigger>
-          <TabsTrigger value="advanced">Advanced</TabsTrigger>
+          <TabsTrigger value="general" className="flex items-center gap-2">
+            <Building2 className="h-4 w-4" />
+            General
+          </TabsTrigger>
+          <TabsTrigger value="access" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Access
+          </TabsTrigger>
+          <TabsTrigger value="inventory" className="flex items-center gap-2">
+            <Package className="h-4 w-4" />
+            Inventory
+          </TabsTrigger>
+          <TabsTrigger value="billing" className="flex items-center gap-2">
+            <CreditCard className="h-4 w-4" />
+            Billing
+          </TabsTrigger>
+          <TabsTrigger value="service" className="flex items-center gap-2">
+            <Store className="h-4 w-4" />
+            Service
+          </TabsTrigger>
         </TabsList>
 
+        {/* General Information Tab */}
         <TabsContent value="general" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Building2 className="h-5 w-5" />
-                Basic Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="makerspace-name">Makerspace Name</Label>
-                <Input
-                  id="makerspace-name"
-                  value={settings.makerspace_name || ''}
-                  onChange={(e) => handleSettingChange('makerspace_name', e.target.value)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="description">Description</Label>
-                <Textarea
-                  id="description"
-                  rows={3}
-                  value={settings.description || ''}
-                  onChange={(e) => handleSettingChange('description', e.target.value)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="address">Address</Label>
-                <Textarea
-                  id="address"
-                  rows={2}
-                  value={settings.address || ''}
-                  onChange={(e) => handleSettingChange('address', e.target.value)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="contact-email">Contact Email</Label>
-                  <Input
-                    id="contact-email"
-                    type="email"
-                    value={settings.contact_email || ''}
-                    onChange={(e) => handleSettingChange('contact_email', e.target.value)}
-                    disabled={!canModifySettings}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="contact-phone">Contact Phone</Label>
-                  <Input
-                    id="contact-phone"
-                    value={settings.contact_phone || ''}
-                    onChange={(e) => handleSettingChange('contact_phone', e.target.value)}
-                    disabled={!canModifySettings}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <Label htmlFor="welcome-message">Welcome Message</Label>
-                <Input
-                  id="welcome-message"
-                  value={settings.welcome_message || ''}
-                  onChange={(e) => handleSettingChange('welcome_message', e.target.value)}
-                  disabled={!canModifySettings}
-                  placeholder="Welcome message for new users"
-                />
-              </div>
-            </CardContent>
-          </Card>
+          <GeneralSettingsForm
+            settings={settings}
+            onUpdate={(data) => updateSettings('general', data)}
+            onSave={(data) => saveSectionSettings('general', data)}
+            saving={saving}
+          />
         </TabsContent>
 
+        {/* Access Control Tab */}
         <TabsContent value="access" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                Member Access Control
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="membership-required">Membership Required</Label>
-                  <p className="text-sm text-gray-600">Require membership to access the makerspace</p>
-                </div>
-                <Switch
-                  id="membership-required"
-                  checked={settings.membership_required || false}
-                  onCheckedChange={(checked) => handleSettingChange('membership_required', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="public-registration">Public Registration</Label>
-                  <p className="text-sm text-gray-600">Allow public user registration</p>
-                </div>
-                <Switch
-                  id="public-registration"
-                  checked={settings.public_registration || false}
-                  onCheckedChange={(checked) => handleSettingChange('public_registration', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="skill-gated-access">Skill-Gated Equipment Access</Label>
-                  <p className="text-sm text-gray-600">Require certifications for equipment access</p>
-                </div>
-                <Switch
-                  id="skill-gated-access"
-                  checked={settings.skill_gated_access || false}
-                  onCheckedChange={(checked) => handleSettingChange('skill_gated_access', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="auto-approve-members">Auto-approve Members</Label>
-                  <p className="text-sm text-gray-600">Automatically approve new member registrations</p>
-                </div>
-                <Switch
-                  id="auto-approve-members"
-                  checked={settings.auto_approve_members || false}
-                  onCheckedChange={(checked) => handleSettingChange('auto_approve_members', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="visitor-registration">Visitor Registration Required</Label>
-                  <p className="text-sm text-gray-600">Require visitors to register before entry</p>
-                </div>
-                <Switch
-                  id="visitor-registration"
-                  checked={settings.visitor_registration_required || false}
-                  onCheckedChange={(checked) => handleSettingChange('visitor_registration_required', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-            </CardContent>
-          </Card>
+          <AccessControlSettings
+            settings={settings}
+            onUpdate={(data) => updateSettings('access', data)}
+            onSave={(data) => saveSectionSettings('access', data)}
+            saving={saving}
+          />
         </TabsContent>
 
+        {/* Inventory Settings Tab */}
         <TabsContent value="inventory" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Package className="h-5 w-5" />
-                Inventory Management
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="filament-deduction">Filament Auto-deduction</Label>
-                  <p className="text-sm text-gray-600">Automatically deduct filament usage from inventory</p>
-                </div>
-                <Switch
-                  id="filament-deduction"
-                  checked={settings.filament_deduction_enabled || false}
-                  onCheckedChange={(checked) => handleSettingChange('filament_deduction_enabled', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="stock-alerts">Minimum Stock Alerts</Label>
-                  <p className="text-sm text-gray-600">Send alerts when inventory is running low</p>
-                </div>
-                <Switch
-                  id="stock-alerts"
-                  checked={settings.minimum_stock_alerts || false}
-                  onCheckedChange={(checked) => handleSettingChange('minimum_stock_alerts', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="stock-threshold">Default Stock Threshold</Label>
-                <Input
-                  id="stock-threshold"
-                  type="number"
-                  value={settings.default_stock_threshold || 10}
-                  onChange={(e) => handleSettingChange('default_stock_threshold', parseInt(e.target.value))}
-                  disabled={!canModifySettings}
-                  className="w-32"
-                />
-                <p className="text-sm text-gray-600 mt-1">Minimum quantity before low stock alert</p>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="personal-consumables">Allow Personal Consumables</Label>
-                  <p className="text-sm text-gray-600">Allow members to bring their own materials</p>
-                </div>
-                <Switch
-                  id="personal-consumables"
-                  checked={settings.allow_personal_consumables || false}
-                  onCheckedChange={(checked) => handleSettingChange('allow_personal_consumables', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-            </CardContent>
-          </Card>
+          <InventorySettings
+            settings={settings}
+            onUpdate={(data) => updateSettings('inventory', data)}
+            onSave={(data) => saveSectionSettings('inventory', data)}
+            saving={saving}
+          />
         </TabsContent>
 
+        {/* Billing Configuration Tab */}
         <TabsContent value="billing" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CreditCard className="h-5 w-5" />
-                Billing Configuration
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="credit-system">Credit System</Label>
-                  <p className="text-sm text-gray-600">Enable credit-based billing for equipment usage</p>
-                </div>
-                <Switch
-                  id="credit-system"
-                  checked={settings.credit_system_enabled || false}
-                  onCheckedChange={(checked) => handleSettingChange('credit_system_enabled', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="default-tax">Default Tax Rate (%)</Label>
-                  <Input
-                    id="default-tax"
-                    type="number"
-                    step="0.01"
-                    value={settings.default_tax_percent || 0}
-                    onChange={(e) => handleSettingChange('default_tax_percent', parseFloat(e.target.value))}
-                    disabled={!canModifySettings}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="default-currency">Default Currency</Label>
-                  <Input
-                    id="default-currency"
-                    value={settings.default_currency || 'USD'}
-                    onChange={(e) => handleSettingChange('default_currency', e.target.value)}
-                    disabled={!canModifySettings}
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="membership-billing">Membership Billing</Label>
-                  <p className="text-sm text-gray-600">Enable recurring membership billing</p>
-                </div>
-                <Switch
-                  id="membership-billing"
-                  checked={settings.enable_membership_billing || false}
-                  onCheckedChange={(checked) => handleSettingChange('enable_membership_billing', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="service-mode">Service Mode</Label>
-                  <p className="text-sm text-gray-600">Accept jobs from external customers</p>
-                </div>
-                <Switch
-                  id="service-mode"
-                  checked={settings.service_mode_enabled || false}
-                  onCheckedChange={(checked) => handleSettingChange('service_mode_enabled', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              {settings.service_mode_enabled && (
-                <div>
-                  <Label htmlFor="service-fee">Default Service Fee (%)</Label>
-                  <Input
-                    id="service-fee"
-                    type="number"
-                    step="0.01"
-                    value={settings.default_service_fee_percent || 0}
-                    onChange={(e) => handleSettingChange('default_service_fee_percent', parseFloat(e.target.value))}
-                    disabled={!canModifySettings}
-                    className="w-32"
-                  />
-                  <p className="text-sm text-gray-600 mt-1">Service fee percentage for external jobs</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+          <BillingConfig
+            settings={settings}
+            onUpdate={(data) => updateSettings('billing', data)}
+            onSave={(data) => saveSectionSettings('billing', data)}
+            saving={saving}
+          />
         </TabsContent>
 
-        <TabsContent value="advanced" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <SettingsIcon className="h-5 w-5" />
-                Advanced Settings
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="equipment-logging">Equipment Access Logging</Label>
-                  <p className="text-sm text-gray-600">Log all equipment access and usage</p>
-                </div>
-                <Switch
-                  id="equipment-logging"
-                  checked={settings.equipment_access_logging || false}
-                  onCheckedChange={(checked) => handleSettingChange('equipment_access_logging', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="safety-training">Require Safety Training</Label>
-                  <p className="text-sm text-gray-600">Require safety training before equipment access</p>
-                </div>
-                <Switch
-                  id="safety-training"
-                  checked={settings.require_safety_training || false}
-                  onCheckedChange={(checked) => handleSettingChange('require_safety_training', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="maintenance-reminder">Maintenance Reminder (days)</Label>
-                <Input
-                  id="maintenance-reminder"
-                  type="number"
-                  value={settings.maintenance_reminder_days || 7}
-                  onChange={(e) => handleSettingChange('maintenance_reminder_days', parseInt(e.target.value))}
-                  disabled={!canModifySettings}
-                  className="w-32"
-                />
-                <p className="text-sm text-gray-600 mt-1">Days before sending maintenance reminders</p>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="iot-monitoring">IoT Equipment Monitoring</Label>
-                  <p className="text-sm text-gray-600">Enable IoT sensors for equipment monitoring</p>
-                </div>
-                <Switch
-                  id="iot-monitoring"
-                  checked={settings.enable_iot_monitoring || false}
-                  onCheckedChange={(checked) => handleSettingChange('enable_iot_monitoring', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="rfid-access">RFID Access Control</Label>
-                  <p className="text-sm text-gray-600">Enable RFID-based access control</p>
-                </div>
-                <Switch
-                  id="rfid-access"
-                  checked={settings.enable_rfid_access || false}
-                  onCheckedChange={(checked) => handleSettingChange('enable_rfid_access', checked)}
-                  disabled={!canModifySettings}
-                />
-              </div>
-            </CardContent>
-          </Card>
+        {/* Service Provider Mode Tab */}
+        <TabsContent value="service" className="space-y-6">
+          <ServiceModeToggle
+            settings={settings}
+            onUpdate={(data) => updateSettings('service', data)}
+            onSave={(data) => saveSectionSettings('service', data)}
+            saving={saving}
+          />
         </TabsContent>
+
+
       </Tabs>
+
+      {/* Quick Actions */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Quick Actions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-4">
+            <Button variant="outline" onClick={() => fetchSettings()}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh Settings
+            </Button>
+            <Button variant="outline" onClick={exportSettings}>
+              <Download className="h-4 w-4 mr-2" />
+              Export Settings
+            </Button>
+            <Button variant="outline" className="text-red-600 hover:text-red-700" onClick={resetToDefaults}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Reset to Defaults
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

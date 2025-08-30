@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button } from '../../components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
-import { Badge } from '../../components/ui/badge';
-import { Input } from '../../components/ui/input';
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Input } from '../components/ui/input';
 import { MapPin, Clock, Users, Star, Filter, Search, Phone, Mail, Globe, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import InteractiveMap from '../components/InteractiveMap';
 
 interface Makerspace {
   id: string;
@@ -41,7 +42,7 @@ interface Makerspace {
   verified: boolean;
 }
 
-export default function FindMakerspacePage() {
+const FindMakerspace = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
@@ -128,10 +129,10 @@ export default function FindMakerspacePage() {
     },
     {
       id: 'ms_3',
-      name: 'Brooklyn Create Space',
-      description: 'A collaborative workspace providing tools and resources for makers of all skill levels.',
+      name: 'Brooklyn Build Lab',
+      description: 'Urban makerspace specializing in sustainable making and circular design principles.',
       location: {
-        address: '789 Maker Avenue',
+        address: '789 Maker Boulevard',
         city: 'Brooklyn',
         state: 'NY',
         country: 'USA',
@@ -142,45 +143,56 @@ export default function FindMakerspacePage() {
         weekends: '11:00 AM - 7:00 PM'
       },
       contact: {
-        email: 'contact@brooklyncreate.space',
-        website: 'https://brooklyncreate.space'
+        email: 'contact@brooklynbuildlab.com',
+        website: 'https://brooklynbuildlab.com'
       },
-      amenities: ['WiFi', 'Cafe', 'Storage', 'Workshops', 'Gallery Space'],
-      equipment: ['3D Printers', 'Sewing Machines', 'Screen Printing', 'Ceramics', 'Digital Fabrication'],
+      amenities: ['WiFi', 'Sustainable Materials', 'Recycling Center', 'Garden Space'],
+      equipment: ['3D Printers', 'Laser Cutters', 'Upcycling Workshop', 'Sewing Machines', 'Electronics'],
       membershipPlans: [
         {
-          name: 'Artist',
-          price: '$75/month',
-          features: ['Studio access', 'Basic tools', 'Gallery exhibitions']
+          name: 'Community',
+          price: '$79/month',
+          features: ['Daytime access', 'Workshop participation', 'Material sharing']
         },
         {
           name: 'Maker',
-          price: '$125/month',
-          features: ['Full access', 'All equipment', 'Workshops', 'Storage']
+          price: '$159/month',
+          features: ['Extended hours', 'All equipment', 'Project storage', 'Mentorship']
         }
       ],
-      rating: 4.4,
+      rating: 4.9,
       memberCount: 89,
       images: ['/placeholder.svg'],
-      verified: false
+      verified: true
     }
   ];
 
   const filterOptions = [
-    '3D Printing', 'Laser Cutting', 'Woodworking', 'Electronics', 'Textiles',
-    'Ceramics', 'Metal Shop', '24/7 Access', 'Parking', 'Community Events'
+    'All Equipment',
+    '3D Printers',
+    'Laser Cutters',
+    'Electronics Lab',
+    'Woodworking',
+    'CNC Machines',
+    'Metal Shop',
+    'Textiles',
+    '24/7 Access',
+    'Student Friendly',
+    'Parking Available'
   ];
 
-  const filteredMakerspaces = makerspaces.filter(space => {
+  const filteredMakerspaces = makerspaces.filter(makerspace => {
     const matchesSearch = searchQuery === '' || 
-      space.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      space.location.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      space.location.state.toLowerCase().includes(searchQuery.toLowerCase());
+      makerspace.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      makerspace.location.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      makerspace.location.state.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesFilters = selectedFilters.length === 0 || 
-      selectedFilters.some(filter => 
-        space.equipment.some(eq => eq.toLowerCase().includes(filter.toLowerCase())) ||
-        space.amenities.some(am => am.toLowerCase().includes(filter.toLowerCase()))
+      selectedFilters.every(filter => 
+        makerspace.equipment.includes(filter) || 
+        makerspace.amenities.includes(filter) ||
+        (filter === 'Student Friendly' && makerspace.membershipPlans.some(plan => plan.name === 'Student')) ||
+        (filter === 'Parking Available' && makerspace.amenities.includes('Parking'))
       );
 
     return matchesSearch && matchesFilters;
@@ -195,230 +207,249 @@ export default function FindMakerspacePage() {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">Find Makerspaces</h1>
-        <p className="text-xl text-gray-600">
-          Discover creative spaces and communities near you
-        </p>
-      </div>
+      <header className="relative z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">M</span>
+              </div>
+              <span className="text-2xl font-bold text-white">MakrCave</span>
+            </Link>
+            
+            <nav className="hidden md:flex items-center space-x-8">
+              <Link href="/" className="text-white/80 hover:text-white transition-colors">Home</Link>
+              <Link href="/makrverse" className="text-white/80 hover:text-white transition-colors">MakrVerse</Link>
+              <Link href="/find-makerspace" className="text-white hover:text-white font-semibold">Find Makerspace</Link>
+            </nav>
 
-      {/* Search and Filters */}
-      <div className="mb-8 space-y-4">
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <Input
-                placeholder="Search by name, city, or state..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12"
-              />
+            <div className="flex items-center space-x-4">
+              <Link href="/login">
+                <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none">
+                  Join Makerspace
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
             </div>
           </div>
-          
-          <div className="flex gap-2">
-            <Button
-              variant={viewMode === 'grid' ? 'default' : 'outline'}
-              onClick={() => setViewMode('grid')}
-            >
-              Grid View
-            </Button>
-            <Button
-              variant={viewMode === 'map' ? 'default' : 'outline'}
-              onClick={() => setViewMode('map')}
-            >
-              Map View
-            </Button>
-          </div>
         </div>
+      </header>
 
-        {/* Filter Tags */}
-        <div className="flex flex-wrap gap-2">
-          <span className="text-sm text-gray-600 flex items-center gap-2 mr-2">
-            <Filter className="h-4 w-4" />
-            Filters:
-          </span>
-          {filterOptions.map(filter => (
-            <Button
-              key={filter}
-              variant={selectedFilters.includes(filter) ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => toggleFilter(filter)}
-              className="h-8 text-xs"
-            >
-              {filter}
-            </Button>
-          ))}
-        </div>
-
-        {selectedFilters.length > 0 && (
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600">Active filters:</span>
-            {selectedFilters.map(filter => (
-              <Badge key={filter} variant="secondary" className="cursor-pointer" onClick={() => toggleFilter(filter)}>
-                {filter} ×
-              </Badge>
-            ))}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => setSelectedFilters([])}
-              className="text-xs"
-            >
-              Clear all
-            </Button>
+      {/* Hero Section */}
+      <section className="py-16 bg-black/20">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+              Find Your Local{' '}
+              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                MakrCave
+              </span>
+            </h1>
+            <p className="text-xl text-white/80 mb-8 max-w-3xl mx-auto">
+              Discover makerspaces near you with the tools, community, and resources to bring your ideas to life.
+            </p>
           </div>
-        )}
-      </div>
 
-      {/* Results Count */}
-      <div className="mb-6">
-        <p className="text-gray-600">
-          Found {filteredMakerspaces.length} makerspace{filteredMakerspaces.length !== 1 ? 's' : ''}
-        </p>
-      </div>
-
-      {/* Makerspaces Grid */}
-      {viewMode === 'grid' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredMakerspaces.map((space) => (
-            <Card key={space.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="relative">
-                <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-500">Image placeholder</span>
-                </div>
-                {space.verified && (
-                  <Badge className="absolute top-3 left-3 bg-green-600 text-white">
-                    Verified
-                  </Badge>
-                )}
+          {/* Search and Filters */}
+          <div className="max-w-4xl mx-auto mb-8">
+            <div className="flex flex-col md:flex-row gap-4 mb-6">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Input
+                  type="text"
+                  placeholder="Search by location, name, or city..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 bg-white/10 border-white/20 text-white placeholder-white/60"
+                />
               </div>
-              
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-lg">{space.name}</CardTitle>
-                    <div className="flex items-center gap-1 mt-1">
-                      <MapPin className="h-4 w-4 text-gray-400" />
-                      <span className="text-sm text-gray-600">
-                        {space.location.city}, {space.location.state}
-                      </span>
+              <div className="flex gap-2">
+                <Button
+                  variant={viewMode === 'grid' ? 'default' : 'outline'}
+                  onClick={() => setViewMode('grid')}
+                  className="border-white/30"
+                >
+                  Grid View
+                </Button>
+                <Button
+                  variant={viewMode === 'map' ? 'default' : 'outline'}
+                  onClick={() => setViewMode('map')}
+                  className="border-white/30"
+                >
+                  Map View
+                </Button>
+              </div>
+            </div>
+
+            {/* Filters */}
+            <div className="flex items-center gap-2 mb-4">
+              <Filter className="h-5 w-5 text-white/70" />
+              <span className="text-white/70 text-sm">Filters:</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {filterOptions.map((filter) => (
+                <Badge
+                  key={filter}
+                  variant={selectedFilters.includes(filter) ? 'default' : 'outline'}
+                  className={`cursor-pointer transition-colors ${
+                    selectedFilters.includes(filter)
+                      ? 'bg-blue-600 text-white'
+                      : 'border-white/30 text-white/80 hover:bg-white/10'
+                  }`}
+                  onClick={() => toggleFilter(filter)}
+                >
+                  {filter}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Results Section */}
+      <section className="py-12">
+        <div className="container mx-auto px-6">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-bold text-white">
+              Found {filteredMakerspaces.length} Makerspaces
+            </h2>
+          </div>
+
+          {viewMode === 'map' ? (
+            <div className="bg-white/10 backdrop-blur-md rounded-lg p-4 mb-8">
+              <InteractiveMap />
+            </div>
+          ) : null}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredMakerspaces.map((makerspace) => (
+              <Card key={makerspace.id} className="bg-white/10 backdrop-blur-md border-white/20 hover:bg-white/15 transition-all duration-300">
+                <CardHeader>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <CardTitle className="text-white text-lg">{makerspace.name}</CardTitle>
+                      {makerspace.verified && (
+                        <Badge className="bg-green-600 text-white text-xs">Verified</Badge>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                      <span className="text-white/80 text-sm">{makerspace.rating}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                    <span className="text-sm font-medium">{space.rating}</span>
-                  </div>
-                </div>
-              </CardHeader>
+                  <CardDescription className="text-white/70 text-sm">
+                    {makerspace.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-2">
+                      <MapPin className="h-4 w-4 text-blue-400 mt-1 flex-shrink-0" />
+                      <div className="text-white/80 text-sm">
+                        <div>{makerspace.location.address}</div>
+                        <div>{makerspace.location.city}, {makerspace.location.state}</div>
+                      </div>
+                    </div>
 
-              <CardContent className="space-y-4">
-                <CardDescription className="line-clamp-2">
-                  {space.description}
-                </CardDescription>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-blue-400" />
+                      <span className="text-white/80 text-sm">{makerspace.hours.weekdays}</span>
+                    </div>
 
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Clock className="h-4 w-4" />
-                    <span>Weekdays: {space.hours.weekdays}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Users className="h-4 w-4" />
-                    <span>{space.memberCount} members</span>
-                  </div>
-                </div>
+                    <div className="flex items-center gap-2">
+                      <Users className="h-4 w-4 text-blue-400" />
+                      <span className="text-white/80 text-sm">{makerspace.memberCount} active members</span>
+                    </div>
 
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-gray-700">Equipment:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {space.equipment.slice(0, 3).map((eq, idx) => (
-                      <Badge key={idx} variant="outline" className="text-xs">
-                        {eq}
-                      </Badge>
-                    ))}
-                    {space.equipment.length > 3 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{space.equipment.length - 3} more
-                      </Badge>
-                    )}
-                  </div>
-                </div>
+                    <div>
+                      <div className="text-white/70 text-xs mb-2">Available Equipment:</div>
+                      <div className="flex flex-wrap gap-1">
+                        {makerspace.equipment.slice(0, 3).map((equipment) => (
+                          <Badge key={equipment} variant="outline" className="border-white/30 text-white/70 text-xs">
+                            {equipment}
+                          </Badge>
+                        ))}
+                        {makerspace.equipment.length > 3 && (
+                          <Badge variant="outline" className="border-white/30 text-white/70 text-xs">
+                            +{makerspace.equipment.length - 3} more
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
 
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-gray-700">Membership:</p>
-                  <div className="text-sm text-gray-600">
-                    Starting from {space.membershipPlans[0]?.price}
-                  </div>
-                </div>
+                    <div>
+                      <div className="text-white/70 text-xs mb-2">Membership Plans:</div>
+                      <div className="space-y-1">
+                        {makerspace.membershipPlans.map((plan) => (
+                          <div key={plan.name} className="flex justify-between items-center text-sm">
+                            <span className="text-white/80">{plan.name}</span>
+                            <span className="text-blue-400 font-semibold">{plan.price}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
 
-                <div className="flex justify-between items-center pt-4">
-                  <div className="flex gap-2">
-                    {space.contact.phone && (
-                      <Button variant="outline" size="sm">
-                        <Phone className="h-4 w-4" />
+                    <div className="flex gap-2 pt-4">
+                      <Button className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white text-sm">
+                        View Details
                       </Button>
-                    )}
-                    <Button variant="outline" size="sm">
-                      <Mail className="h-4 w-4" />
-                    </Button>
-                    {space.contact.website && (
-                      <Button variant="outline" size="sm">
-                        <Globe className="h-4 w-4" />
+                      {makerspace.contact.phone && (
+                        <Button variant="outline" size="sm" className="border-white/30 text-white/80">
+                          <Phone className="h-4 w-4" />
+                        </Button>
+                      )}
+                      <Button variant="outline" size="sm" className="border-white/30 text-white/80">
+                        <Mail className="h-4 w-4" />
                       </Button>
-                    )}
+                      {makerspace.contact.website && (
+                        <Button variant="outline" size="sm" className="border-white/30 text-white/80">
+                          <Globe className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
                   </div>
-                  
-                  <Link href={`/locations/${space.id}`}>
-                    <Button size="sm">
-                      View Details
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
 
-      {/* Map View */}
-      {viewMode === 'map' && (
-        <Card>
-          <CardContent className="p-6">
-            <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center">
-              <div className="text-center">
-                <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">Interactive map view coming soon</p>
-                <p className="text-sm text-gray-500 mt-2">
-                  Switch to grid view to explore makerspaces
-                </p>
-              </div>
+          {filteredMakerspaces.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-white/60 text-lg mb-4">No makerspaces found matching your criteria.</p>
+              <Button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedFilters([]);
+                }}
+                variant="outline"
+                className="border-white/30 text-white/80"
+              >
+                Clear Filters
+              </Button>
             </div>
-          </CardContent>
-        </Card>
-      )}
+          )}
+        </div>
+      </section>
 
-      {/* No Results */}
-      {filteredMakerspaces.length === 0 && (
-        <Card>
-          <CardContent className="p-12 text-center">
-            <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No makerspaces found</h3>
-            <p className="text-gray-600 mb-4">
-              Try adjusting your search criteria or removing some filters
-            </p>
-            <Button onClick={() => {
-              setSearchQuery('');
-              setSelectedFilters([]);
-            }}>
-              Clear all filters
-            </Button>
-          </CardContent>
-        </Card>
-      )}
+      {/* CTA Section */}
+      <section className="py-16 bg-black/20">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold text-white mb-6">
+            Don't see your makerspace listed?
+          </h2>
+          <p className="text-xl text-white/80 mb-8">
+            Join the MakrCave network and connect your makerspace to the global community.
+          </p>
+          <Button className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-8 py-3 text-lg">
+            Become a MakrCave
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
+        </div>
+      </section>
     </div>
   );
-}
+};
+
+export default FindMakerspace;
