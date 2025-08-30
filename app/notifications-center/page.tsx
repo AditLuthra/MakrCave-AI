@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import {
   Bell,
   AlertTriangle,
@@ -20,8 +20,8 @@ import {
   Settings,
   Filter
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { useToast } from '../hooks/use-toast';
+import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../hooks/use-toast';
 
 interface Notification {
   id: string;

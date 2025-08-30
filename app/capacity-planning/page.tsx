@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { 
   BarChart3,
   Users,
@@ -33,15 +33,15 @@ import {
   Filter,
   Eye
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { useMakerspace } from '../contexts/MakerspaceContext';
-import RealTimeOccupancyMonitor from '../components/capacity/RealTimeOccupancyMonitor';
-import SpaceUtilizationAnalytics from '../components/capacity/SpaceUtilizationAnalytics';
-import ResourceOptimizationEngine from '../components/capacity/ResourceOptimizationEngine';
-import CapacityForecastingWidget from '../components/capacity/CapacityForecastingWidget';
-import ZoneManagementPanel from '../components/capacity/ZoneManagementPanel';
-import PeakTimeAnalysis from '../components/capacity/PeakTimeAnalysis';
-import CapacityAlerts from '../components/capacity/CapacityAlerts';
+import { useAuth } from '../../contexts/AuthContext';
+import { useMakerspace } from '../../contexts/MakerspaceContext';
+import RealTimeOccupancyMonitor from '../../components/capacity/RealTimeOccupancyMonitor';
+import SpaceUtilizationAnalytics from '../../components/capacity/SpaceUtilizationAnalytics';
+import ResourceOptimizationEngine from '../../components/capacity/ResourceOptimizationEngine';
+import CapacityForecastingWidget from '../../components/capacity/CapacityForecastingWidget';
+import ZoneManagementPanel from '../../components/capacity/ZoneManagementPanel';
+import PeakTimeAnalysis from '../../components/capacity/PeakTimeAnalysis';
+import CapacityAlerts from '../../components/capacity/CapacityAlerts';
 
 interface CapacityMetrics {
   current_occupancy: number;

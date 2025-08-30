@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import OnboardingFlow from '../components/onboarding/OnboardingFlow';
-import TutorialOverlay from '../components/onboarding/TutorialOverlay';
-import QuickStartWizard from '../components/onboarding/QuickStartWizard';
-import { Button } from '../components/ui/button';
-import { Card, CardContent } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
+import OnboardingFlow from '../../components/onboarding/OnboardingFlow';
+import TutorialOverlay from '../../components/onboarding/TutorialOverlay';
+import QuickStartWizard from '../../components/onboarding/QuickStartWizard';
+import { Button } from '../../components/ui/button';
+import { Card, CardContent } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
 import { 
   ArrowRight, CheckCircle, Clock, Users, Zap, Star,
   Play, BookOpen, MessageCircle, Gift, Target

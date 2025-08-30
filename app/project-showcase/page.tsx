@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Badge } from '../components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
+import { Badge } from '../../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { 
   Search,
   Filter,
@@ -39,12 +39,12 @@ import {
   Target,
   Gauge
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import ProjectShowcaseCard from '../components/showcase/ProjectShowcaseCard';
-import FeaturedProjectCarousel from '../components/showcase/FeaturedProjectCarousel';
-import ProjectCategoryExplorer from '../components/showcase/ProjectCategoryExplorer';
-import TrendingProjectsWidget from '../components/showcase/TrendingProjectsWidget';
-import MakerSpotlight from '../components/showcase/MakerSpotlight';
+import { useAuth } from '../../contexts/AuthContext';
+import ProjectShowcaseCard from '../../components/showcase/ProjectShowcaseCard';
+import FeaturedProjectCarousel from '../../components/showcase/FeaturedProjectCarousel';
+import ProjectCategoryExplorer from '../../components/showcase/ProjectCategoryExplorer';
+import TrendingProjectsWidget from '../../components/showcase/TrendingProjectsWidget';
+import MakerSpotlight from '../../components/showcase/MakerSpotlight';
 
 interface ShowcaseProject {
   project_id: string;

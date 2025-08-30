@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Badge } from '../components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
+import { Badge } from '../../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { 
   Plus,
   Search,
@@ -20,11 +20,11 @@ import {
   Star,
   MoreHorizontal
 } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../components/ui/dropdown-menu';
-import { useAuth } from '../contexts/AuthContext';
-import AddProjectModal from '../components/AddProjectModal';
-import ProjectCard from '../components/ProjectCard';
-import AnalyticsWidget from '../components/AnalyticsWidget';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../../components/ui/dropdown-menu';
+import { useAuth } from '../../contexts/AuthContext';
+import AddProjectModal from '../../components/AddProjectModal';
+import ProjectCard from '../../components/ProjectCard';
+import AnalyticsWidget from '../../components/AnalyticsWidget';
 
 interface Project {
   project_id: string;

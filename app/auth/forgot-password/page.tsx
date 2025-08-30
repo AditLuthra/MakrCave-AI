@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Building2 } from 'lucide-react';
 import { ThemeToggle } from '../../../packages/ui/components/ThemeToggle';
-import auth from '../lib/auth';
+import auth from '../../lib/auth';
 
 export default function ForgotPassword() {
   useEffect(() => {

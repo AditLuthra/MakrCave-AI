@@ -4,13 +4,13 @@ import {
   AlertTriangle, BarChart3, Grid, List, Calendar, Eye, Edit,
   X, Save, FileText, MapPin, Shield, ExternalLink, QrCode, Trash2
 } from 'lucide-react';
-import { useMakerspace } from '../contexts/MakerspaceContext';
-import { useAuth } from '../contexts/AuthContext';
-import { FeatureGate } from '../components/FeatureGate';
-import InventoryCard from '../components/InventoryCard';
-import LowStockBanner from '../components/LowStockBanner';
-import UsageTimeline from '../components/UsageTimeline';
-import AddItemModal from '../components/AddItemModal';
+import { useMakerspace } from '../../contexts/MakerspaceContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { FeatureGate } from '../../components/FeatureGate';
+import InventoryCard from '../../components/InventoryCard';
+import LowStockBanner from '../../components/LowStockBanner';
+import UsageTimeline from '../../components/UsageTimeline';
+import AddItemModal from '../../components/AddItemModal';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 
 interface InventoryUsageLog {

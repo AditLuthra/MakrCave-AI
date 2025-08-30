@@ -4,10 +4,10 @@
 // Administrative dashboard for viewing and managing system error logs
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
-import { Button } from '../components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
+import { Button } from '../../components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import { 
   AlertTriangle, 
   Bug, 
@@ -23,10 +23,10 @@ import {
   Smartphone,
   Eye
 } from 'lucide-react';
-import loggingService, { LogEntry } from '../services/loggingService';
-import { useAuth } from '../contexts/AuthContext';
-import ProtectedRoute from '../components/ProtectedRoute';
-import { PageErrorBoundary } from '../components/ErrorBoundary';
+import loggingService, { LogEntry } from '../../services/loggingService';
+import { useAuth } from '../../contexts/AuthContext';
+import ProtectedRoute from '../../components/ProtectedRoute';
+import { PageErrorBoundary } from '../../components/ErrorBoundary';
 
 export default function ErrorLogs() {
   return (

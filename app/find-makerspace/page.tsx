@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button } from '../components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
-import { Input } from '../components/ui/input';
+import { Button } from '../../components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
+import { Input } from '../../components/ui/input';
 import { MapPin, Clock, Users, Star, Filter, Search, Phone, Mail, Globe, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import InteractiveMap from '../components/InteractiveMap';
+import InteractiveMap from '../../components/InteractiveMap';
 
 interface Makerspace {
   id: string;

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Badge } from '../components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
+import { Badge } from '../../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { 
   Wrench,
   Calendar,
@@ -24,12 +24,12 @@ import {
   Edit,
   Trash2
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { useToast } from '../hooks/use-toast';
-import MaintenanceLogModal from '../components/maintenance/MaintenanceLogModal';
-import ScheduleMaintenanceModal from '../components/maintenance/ScheduleMaintenanceModal';
-import MaintenanceStatsWidget from '../components/maintenance/MaintenanceStatsWidget';
-import DowntimeTimeline from '../components/maintenance/DowntimeTimeline';
+import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../hooks/use-toast';
+import MaintenanceLogModal from '../../components/maintenance/MaintenanceLogModal';
+import ScheduleMaintenanceModal from '../../components/maintenance/ScheduleMaintenanceModal';
+import MaintenanceStatsWidget from '../../components/maintenance/MaintenanceStatsWidget';
+import DowntimeTimeline from '../../components/maintenance/DowntimeTimeline';
 
 interface MaintenanceLog {
   id: string;

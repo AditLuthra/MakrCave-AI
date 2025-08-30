@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import {
   CreditCard,
   DollarSign,
@@ -26,23 +26,23 @@ import {
 } from 'lucide-react';
 
 // Import new billing components
-import MembershipCard from '../components/billing/MembershipCard';
-import SubscriptionStatus from '../components/billing/SubscriptionStatus';
-import UpgradePlanModal from '../components/billing/UpgradePlanModal';
-import CreditBalanceDisplay from '../components/billing/CreditBalanceDisplay';
-import AddCreditsButton from '../components/billing/AddCreditsButton';
-import TransactionHistoryList from '../components/billing/TransactionHistoryList';
-import InvoiceCard from '../components/billing/InvoiceCard';
-import InventoryReorderModal from '../components/billing/InventoryReorderModal';
-import ReorderHistoryTable from '../components/billing/ReorderHistoryTable';
-import PaymentForm from '../components/billing/PaymentForm';
-import PricingConfigForm from '../components/billing/PricingConfigForm';
-import BillingOverview from '../components/billing/BillingOverview';
-import RevenueGraph from '../components/billing/RevenueGraph';
-import UsageByCategoryPieChart from '../components/billing/UsageByCategoryPieChart';
+import MembershipCard from '../../components/billing/MembershipCard';
+import SubscriptionStatus from '../../components/billing/SubscriptionStatus';
+import UpgradePlanModal from '../../components/billing/UpgradePlanModal';
+import CreditBalanceDisplay from '../../components/billing/CreditBalanceDisplay';
+import AddCreditsButton from '../../components/billing/AddCreditsButton';
+import TransactionHistoryList from '../../components/billing/TransactionHistoryList';
+import InvoiceCard from '../../components/billing/InvoiceCard';
+import InventoryReorderModal from '../../components/billing/InventoryReorderModal';
+import ReorderHistoryTable from '../../components/billing/ReorderHistoryTable';
+import PaymentForm from '../../components/billing/PaymentForm';
+import PricingConfigForm from '../../components/billing/PricingConfigForm';
+import BillingOverview from '../../components/billing/BillingOverview';
+import RevenueGraph from '../../components/billing/RevenueGraph';
+import UsageByCategoryPieChart from '../../components/billing/UsageByCategoryPieChart';
 
-import { useAuth } from '../contexts/AuthContext';
-import { useToast } from '../hooks/use-toast';
+import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../hooks/use-toast';
 
 const Billing: React.FC = () => {
   const { user, hasPermission, isSuperAdmin, isMakerspaceAdmin } = useAuth();

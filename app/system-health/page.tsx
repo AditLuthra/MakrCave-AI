@@ -5,11 +5,11 @@
 // Displays real-time status of all system components
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
-import { Button } from '../components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import HealthStatusDashboard from '../components/HealthStatusDashboard';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
+import { Button } from '../../components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
+import HealthStatusDashboard from '../../components/HealthStatusDashboard';
 import { 
   Activity, 
   BarChart3, 
@@ -21,7 +21,7 @@ import {
   CheckCircle,
   Info
 } from 'lucide-react';
-import healthCheckService, { SystemHealthStatus } from '../services/healthCheckService';
+import healthCheckService, { SystemHealthStatus } from '../../services/healthCheckService';
 
 export default function SystemHealth() {
   const [healthHistory, setHealthHistory] = useState<SystemHealthStatus[]>([]);

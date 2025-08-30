@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import {
   Package, Palette, AlertTriangle, TrendingUp, ShoppingCart, 
   RefreshCw, Plus, Download, Upload, BarChart3, Scale,
   Zap, Target, Activity, Clock, Settings
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { useToast } from '../hooks/use-toast';
-import FilamentTracker from '../components/FilamentTracker';
+import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../hooks/use-toast';
+import FilamentTracker from '../../components/FilamentTracker';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 
 interface InventorySummary {

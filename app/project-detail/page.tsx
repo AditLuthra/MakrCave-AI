@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Progress } from '../components/ui/progress';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
+import { Progress } from '../../components/ui/progress';
 import { 
   ArrowLeft, 
   Edit, 
@@ -30,19 +30,19 @@ import {
   Copy,
   Plus
 } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '../components/ui/dropdown-menu';
-import { useAuth } from '../contexts/AuthContext';
-import { useProjectPermissions } from '../hooks/useProjectPermissions';
-import TeamManagement from '../components/TeamManagement';
-import BOMManagement from '../components/BOMManagement';
-import EquipmentReservations from '../components/EquipmentReservations';
-import ProjectTimeline from '../components/ProjectTimeline';
-import ProjectFiles from '../components/ProjectFiles';
-import ProjectActivity from '../components/ProjectActivity';
-import ProjectCollaborationHub from '../components/collaboration/ProjectCollaborationHub';
-import RealTimeEditingIndicators from '../components/collaboration/RealTimeEditingIndicators';
-import CollaborativeWhiteboard from '../components/collaboration/CollaborativeWhiteboard';
-import SharedDocumentEditor from '../components/collaboration/SharedDocumentEditor';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '../../components/ui/dropdown-menu';
+import { useAuth } from '../../contexts/AuthContext';
+import { useProjectPermissions } from '../../hooks/useProjectPermissions';
+import TeamManagement from '../../components/TeamManagement';
+import BOMManagement from '../../components/BOMManagement';
+import EquipmentReservations from '../../components/EquipmentReservations';
+import ProjectTimeline from '../../components/ProjectTimeline';
+import ProjectFiles from '../../components/ProjectFiles';
+import ProjectActivity from '../../components/ProjectActivity';
+import ProjectCollaborationHub from '../../components/collaboration/ProjectCollaborationHub';
+import RealTimeEditingIndicators from '../../components/collaboration/RealTimeEditingIndicators';
+import CollaborativeWhiteboard from '../../components/collaboration/CollaborativeWhiteboard';
+import SharedDocumentEditor from '../../components/collaboration/SharedDocumentEditor';
 import { formatDistanceToNow } from 'date-fns';
 
 interface Project {

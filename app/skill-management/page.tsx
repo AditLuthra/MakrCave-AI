@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
-import { Input } from '../components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { Input } from '../../components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import {
   GraduationCap,
   Users,
@@ -21,15 +21,15 @@ import {
   Eye,
   XCircle
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { useToast } from '../hooks/use-toast';
+import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../hooks/use-toast';
 
 // Import all the new modals
-import CertifyMemberModal from '../components/modals/CertifyMemberModal';
-import SkillRequirementsModal from '../components/modals/SkillRequirementsModal';
-import RevokeSkillModal from '../components/modals/RevokeSkillModal';
-import AddSkillModal from '../components/modals/AddSkillModal';
-import SkillDetailsModal from '../components/modals/SkillDetailsModal';
+import CertifyMemberModal from '../../components/modals/CertifyMemberModal';
+import SkillRequirementsModal from '../../components/modals/SkillRequirementsModal';
+import RevokeSkillModal from '../../components/modals/RevokeSkillModal';
+import AddSkillModal from '../../components/modals/AddSkillModal';
+import SkillDetailsModal from '../../components/modals/SkillDetailsModal';
 
 interface Skill {
   id: string;

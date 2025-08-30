@@ -3,8 +3,8 @@ import { useRouter } from 'next/navigation';
 import { Building2, Loader2, CheckCircle, XCircle } from 'lucide-react';
 // ThemeToggle component not available, commenting out
 // import { ThemeToggle } from '../../../packages/ui/components/ThemeToggle';
-import auth from '../lib/auth';
-import { getRoleRedirect } from '../lib/roleRedirect';
+import auth from '../../lib/auth';
+import { getRoleRedirect } from '../../lib/roleRedirect';
 
 export default function AuthCallback() {
   const router = useRouter();

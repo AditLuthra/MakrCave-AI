@@ -1,4 +1,4 @@
-import RoleDashboard from '../components/RoleDashboard';
+import RoleDashboard from '../../components/RoleDashboard';
 import { ThemeToggle } from '../../../packages/ui/components/ThemeToggle';
 
 export default function Dashboard() {

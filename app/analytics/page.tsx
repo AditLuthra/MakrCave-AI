@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Badge } from '../components/ui/badge';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
+import { Badge } from '../../components/ui/badge';
 import {
   BarChart3,
   TrendingUp,
@@ -17,15 +17,15 @@ import {
   AlertCircle,
   CheckCircle
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { useToast } from '../hooks/use-toast';
-import UsageDashboard from '../components/analytics/UsageDashboard';
-import InventoryInsights from '../components/analytics/InventoryInsights';
-import EquipmentMetrics from '../components/analytics/EquipmentMetrics';
-import ProjectAnalytics from '../components/analytics/ProjectAnalytics';
-import RevenueCharts from '../components/analytics/RevenueCharts';
+import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../hooks/use-toast';
+import UsageDashboard from '../../components/analytics/UsageDashboard';
+import InventoryInsights from '../../components/analytics/InventoryInsights';
+import EquipmentMetrics from '../../components/analytics/EquipmentMetrics';
+import ProjectAnalytics from '../../components/analytics/ProjectAnalytics';
+import RevenueCharts from '../../components/analytics/RevenueCharts';
 
-import DataExports from '../components/analytics/DataExports';
+import DataExports from '../../components/analytics/DataExports';
 
 interface AnalyticsOverview {
   total_users: number;

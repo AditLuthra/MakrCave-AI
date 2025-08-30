@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Badge } from '../components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
+import { Badge } from '../../components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import {
   Users,
   UserPlus,
@@ -27,13 +27,13 @@ import {
   Award,
   MapPin
 } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '../components/ui/dropdown-menu';
-import { useMember, Member } from '../contexts/MemberContext';
-import AddMemberModal from '../components/modals/AddMemberModal';
-import EditMemberModal from '../components/modals/EditMemberModal';
-import MembershipPlanModal from '../components/modals/MembershipPlanModal';
-import InviteMemberModal from '../components/modals/InviteMemberModal';
-import MemberDetailsModal from '../components/modals/MemberDetailsModal';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '../../components/ui/dropdown-menu';
+import { useMember, Member } from '../../contexts/MemberContext';
+import AddMemberModal from '../../components/modals/AddMemberModal';
+import EditMemberModal from '../../components/modals/EditMemberModal';
+import MembershipPlanModal from '../../components/modals/MembershipPlanModal';
+import InviteMemberModal from '../../components/modals/InviteMemberModal';
+import MemberDetailsModal from '../../components/modals/MemberDetailsModal';
 
 const Members: React.FC = () => {
   const {

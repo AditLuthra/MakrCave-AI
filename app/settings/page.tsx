@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Badge } from '../components/ui/badge';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
+import { Badge } from '../../components/ui/badge';
 import {
   Settings as SettingsIcon,
   Building2,
@@ -18,13 +18,13 @@ import {
   AlertCircle,
   Info
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import GeneralSettingsForm from '../components/settings/GeneralSettingsForm';
-import AccessControlSettings from '../components/settings/AccessControlSettings';
-import InventorySettings from '../components/settings/InventorySettings';
-import BillingConfig from '../components/settings/BillingConfig';
-import ServiceModeToggle from '../components/settings/ServiceModeToggle';
-import { useToast } from '../hooks/use-toast';
+import { useAuth } from '../../contexts/AuthContext';
+import GeneralSettingsForm from '../../components/settings/GeneralSettingsForm';
+import AccessControlSettings from '../../components/settings/AccessControlSettings';
+import InventorySettings from '../../components/settings/InventorySettings';
+import BillingConfig from '../../components/settings/BillingConfig';
+import ServiceModeToggle from '../../components/settings/ServiceModeToggle';
+import { useToast } from '../../hooks/use-toast';
 
 interface MakerspaceSettings {
   id?: string;

@@ -1,12 +1,12 @@
 'use client';
 
 import React from 'react';
-import { Button } from '../components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
+import { Button } from '../../components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
 import { ArrowRight, MapPin, Users, Zap, Shield, Star, ChevronRight, Play, ExternalLink, Menu, X } from 'lucide-react';
 import Link from 'next/link';
-import InteractiveMap from '../components/InteractiveMap';
+import InteractiveMap from '../../components/InteractiveMap';
 
 const LandingPage = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);

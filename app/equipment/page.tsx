@@ -6,17 +6,17 @@ import {
   PlayCircle, PauseCircle, BarChart3, Users, Activity,
   X, DollarSign, GraduationCap
 } from 'lucide-react';
-import { useMakerspace } from '../contexts/MakerspaceContext';
-import { useAuth } from '../contexts/AuthContext';
-import { useSkills } from '../contexts/SkillContext';
-import { FeatureGate } from '../components/FeatureGate';
-import EquipmentCard from '../components/EquipmentCard';
-import ReservationModal from '../components/ReservationModal';
-import EquipmentRating from '../components/EquipmentRating';
-import AddEquipmentModal from '../components/AddEquipmentModal';
-import MaintenanceModal from '../components/MaintenanceModal';
-import EquipmentSkillRequirements from '../components/EquipmentSkillRequirements';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { useMakerspace } from '../../contexts/MakerspaceContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { useSkills } from '../../contexts/SkillContext';
+import { FeatureGate } from '../../components/FeatureGate';
+import EquipmentCard from '../../components/EquipmentCard';
+import ReservationModal from '../../components/ReservationModal';
+import EquipmentRating from '../../components/EquipmentRating';
+import AddEquipmentModal from '../../components/AddEquipmentModal';
+import MaintenanceModal from '../../components/MaintenanceModal';
+import EquipmentSkillRequirements from '../../components/EquipmentSkillRequirements';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 interface Equipment {

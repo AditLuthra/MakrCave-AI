@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Textarea } from '../components/ui/textarea';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { Input } from '../../components/ui/input';
+import { Label } from '../../components/ui/label';
+import { Textarea } from '../../components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger
-} from '../components/ui/dialog';
+} from '../../components/ui/dialog';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger
-} from '../components/ui/dropdown-menu';
+} from '../../components/ui/dropdown-menu';
 import {
   Plus, Edit, Trash2, Copy, Users, DollarSign, Clock, Settings, 
   Star, Eye, EyeOff, Crown, MoreVertical, CheckCircle, AlertCircle
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { useToast } from '../hooks/use-toast';
+import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../hooks/use-toast';
 
 interface MembershipPlan {
   id: string;

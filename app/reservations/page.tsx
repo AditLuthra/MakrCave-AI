@@ -1,5 +1,5 @@
 import React from 'react';
-import EquipmentReservationSystem from '../components/EquipmentReservationSystem';
+import EquipmentReservationSystem from '../../components/EquipmentReservationSystem';
 
 const Reservations: React.FC = () => {
   return (

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import { 
   Users, 
   MessageCircle, 
@@ -20,10 +20,10 @@ import {
   Lightbulb,
   Rocket
 } from 'lucide-react';
-import ProjectCollaborationHub from '../components/collaboration/ProjectCollaborationHub';
-import RealTimeEditingIndicators from '../components/collaboration/RealTimeEditingIndicators';
-import CollaborativeWhiteboard from '../components/collaboration/CollaborativeWhiteboard';
-import SharedDocumentEditor from '../components/collaboration/SharedDocumentEditor';
+import ProjectCollaborationHub from '../../components/collaboration/ProjectCollaborationHub';
+import RealTimeEditingIndicators from '../../components/collaboration/RealTimeEditingIndicators';
+import CollaborativeWhiteboard from '../../components/collaboration/CollaborativeWhiteboard';
+import SharedDocumentEditor from '../../components/collaboration/SharedDocumentEditor';
 
 const CollaborationDemo: React.FC = () => {
   const [activeDemo, setActiveDemo] = useState<string | null>(null);
