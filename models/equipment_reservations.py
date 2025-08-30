@@ -5,7 +5,7 @@ import enum
 import uuid
 from datetime import datetime
 
-from database import Base
+from ..database import Base
 
 class ReservationStatus(str, enum.Enum):
     PENDING = "pending"

@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import datetime, timedelta
 
-from crud.equipment import EquipmentCRUD
-from schemas.equipment import (
+from ..crud.equipment import EquipmentCRUD
+from ..schemas.equipment import (
     EquipmentResponse, EquipmentCreate, EquipmentUpdate, EquipmentFilter,
     ReservationResponse, ReservationCreate, ReservationUpdate, ReservationApprovalRequest,
     MaintenanceLogResponse, MaintenanceLogCreate, MaintenanceLogUpdate,
@@ -13,8 +13,8 @@ from schemas.equipment import (
     EquipmentStatsResponse, AvailabilityResponse, MaintenanceModeRequest,
     BulkOperationRequest, SuccessResponse
 )
-from models.equipment import Equipment, EquipmentReservation, EquipmentMaintenanceLog
-from dependencies import get_db, get_current_user, check_permission
+from ..models.equipment import Equipment, EquipmentReservation, EquipmentMaintenanceLog
+from ..dependencies import get_db, get_current_user, check_permission
 
 router = APIRouter(prefix="/equipment", tags=["equipment"])
 equipment_crud = EquipmentCRUD()
@@ -273,7 +273,7 @@ async def approve_reservation(
             return {"message": "Reservation approved", "reservation": reservation}
         else:
             # For rejection, we update status
-            from schemas.equipment import ReservationUpdate, ReservationStatus
+            from ..schemas.equipment import ReservationUpdate, ReservationStatus
             update_data = ReservationUpdate(
                 status=ReservationStatus.CANCELLED,
                 admin_notes=approval_data.admin_notes
@@ -487,11 +487,11 @@ async def bulk_equipment_operation(
                 if operation_data.action == "maintenance":
                     equipment_crud.set_maintenance_mode(db=db, equipment_id=equipment_id, enable=True, reason=operation_data.reason)
                 elif operation_data.action == "offline":
-                    from schemas.equipment import EquipmentUpdate, EquipmentStatus
+                    from ..schemas.equipment import EquipmentUpdate, EquipmentStatus
                     update_data = EquipmentUpdate(status=EquipmentStatus.OFFLINE, updated_by=current_user.id)
                     equipment_crud.update_equipment(db=db, equipment_id=equipment_id, equipment_data=update_data, updated_by_user_id=current_user.id)
                 elif operation_data.action == "available":
-                    from schemas.equipment import EquipmentUpdate, EquipmentStatus
+                    from ..schemas.equipment import EquipmentUpdate, EquipmentStatus
                     update_data = EquipmentUpdate(status=EquipmentStatus.AVAILABLE, updated_by=current_user.id)
                     equipment_crud.update_equipment(db=db, equipment_id=equipment_id, equipment_data=update_data, updated_by_user_id=current_user.id)
                 elif operation_data.action == "delete":

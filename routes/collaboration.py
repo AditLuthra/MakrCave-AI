@@ -6,15 +6,15 @@ from datetime import datetime, timedelta
 import asyncio
 from collections import defaultdict
 
-from database import get_db
-from models.projects import Project
-from models.collaboration import (
+from ..database import get_db
+from ..models.projects import Project
+from ..models.collaboration import (
     CollaborationMessage, 
     DocumentVersion, 
     WhiteboardAction,
     UserPresence
 )
-from schemas.collaboration import (
+from ..schemas.collaboration import (
     MessageCreate,
     MessageResponse,
     CursorUpdate,
@@ -23,7 +23,7 @@ from schemas.collaboration import (
     DocumentChangeCreate,
     DocumentVersionCreate
 )
-from dependencies import get_current_user
+from ..dependencies import get_current_user
 
 router = APIRouter(prefix="/api/v1/collaboration", tags=["collaboration"])
 

@@ -4,16 +4,16 @@ from typing import List, Optional, Dict, Any
 import json
 from datetime import datetime, timedelta
 
-from database import get_db
-from models.projects import Project, ProjectCollaborator
-from models.member import Member
-from schemas.project_showcase import (
+from ..database import get_db
+from ..models.projects import Project, ProjectCollaborator
+from ..models.member import Member
+from ..schemas.project_showcase import (
     ShowcaseProjectResponse,
     FeaturedMakerResponse,
     ProjectStatsResponse,
     ShowcaseFiltersResponse
 )
-from dependencies import get_current_user
+from ..dependencies import get_current_user
 
 router = APIRouter(prefix="/api/v1/projects", tags=["project-showcase"])
 

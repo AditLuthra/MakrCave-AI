@@ -5,9 +5,9 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta, date
 import uuid
 
-from database import get_db
-from dependencies import get_current_user
-from schemas.enhanced_analytics import (
+from ..database import get_db
+from ..dependencies import get_current_user
+from ..schemas.enhanced_analytics import (
     EnhancedUsageMetricsCreate, EnhancedUsageMetricsResponse,
     EquipmentUtilizationMetricsCreate, EquipmentUtilizationMetricsResponse,
     RevenueAnalyticsEnhancedCreate, RevenueAnalyticsEnhancedResponse,
@@ -20,7 +20,7 @@ from schemas.enhanced_analytics import (
     ForecastRequest, ForecastResult, AnalyticsExportRequest, AnalyticsExportResponse,
     AggregationPeriod, MetricType, AlertSeverity, TrendDirection
 )
-from crud import enhanced_analytics as crud_analytics
+from ..crud import enhanced_analytics as crud_analytics
 
 router = APIRouter()
 

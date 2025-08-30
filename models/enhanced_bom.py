@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Text, DateTime, Boolean, ForeignKey, Inte
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 import enum
-from database import Base
+from ..database import Base
 
 class ProcurementStatus(str, enum.Enum):
     NEEDED = "needed"

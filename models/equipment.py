@@ -5,7 +5,7 @@ from datetime import datetime
 import enum
 import uuid
 
-from database import Base
+from ..database import Base
 
 class EquipmentStatus(enum.Enum):
     AVAILABLE = "available"

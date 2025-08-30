@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, validator
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 from enum import Enum
-from models.project import ProjectStatus, ProjectVisibility, CollaboratorRole, ActivityType
+from ..models.project import ProjectStatus, ProjectVisibility, CollaboratorRole, ActivityType
 
 # Project type enum
 class ProjectType(str, enum.Enum):

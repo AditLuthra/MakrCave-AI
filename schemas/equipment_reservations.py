@@ -3,7 +3,7 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime
 from enum import Enum
 
-from models.equipment_reservations import (
+from ..models.equipment_reservations import (
     ReservationStatus, PaymentStatus, CostRuleType, SkillGateType
 )
 

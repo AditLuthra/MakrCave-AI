@@ -14,10 +14,10 @@ from datetime import datetime, timedelta
 from pydantic import BaseModel, Field, EmailStr
 from enum import Enum
 
-from database import get_db
-from models.project import Project
-from models.equipment import Equipment
-from models.member import Member, MakerspaceSettings
+from ..database import get_db
+from ..models.project import Project
+from ..models.equipment import Equipment
+from ..models.member import Member, MakerspaceSettings
 
 logger = logging.getLogger(__name__)
 

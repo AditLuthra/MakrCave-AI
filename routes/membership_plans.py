@@ -6,12 +6,12 @@ from pydantic import BaseModel, Field
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
-from database import get_db
-from dependencies import get_current_admin_user, get_current_user
-from models.member import Member
-from models.membership_plans import AccessType, BillingCycle, MembershipPlan, PlanType
-# User import removed - using CurrentUser from dependencies
-from security.events import SecurityEventType, log_security_event
+from ..database import get_db
+from ..dependencies import get_current_admin_user, get_current_user
+from ..models.member import Member
+from ..models.membership_plans import AccessType, BillingCycle, MembershipPlan, PlanType
+from ..models.user import User
+from ..security.events import SecurityEventType, log_security_event
 
 router = APIRouter(prefix="/api/v1/membership-plans", tags=["Membership Plans"])
 
@@ -193,7 +193,7 @@ async def get_membership_plan(
 async def create_membership_plan(
     plan_data: MembershipPlanCreate,
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_admin_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
     """Create a new membership plan"""
     
@@ -247,7 +247,7 @@ async def update_membership_plan(
     plan_id: str,
     plan_data: MembershipPlanUpdate,
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_admin_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
     """Update an existing membership plan"""
     
@@ -314,7 +314,7 @@ async def delete_membership_plan(
     plan_id: str,
     force: bool = Query(False, description="Force delete even if members are assigned"),
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_admin_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
     """Delete a membership plan"""
     
@@ -362,7 +362,7 @@ async def duplicate_membership_plan(
     plan_id: str,
     new_name: str = Query(..., description="Name for the duplicated plan"),
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_admin_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
     """Duplicate an existing membership plan"""
     
@@ -427,7 +427,7 @@ async def duplicate_membership_plan(
 @router.post("/initialize-defaults", response_model=List[Dict[str, Any]])
 async def initialize_default_plans(
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_admin_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
     """Initialize default membership plans for a makerspace"""
     
@@ -475,7 +475,7 @@ async def get_plan_members(
     plan_id: str,
     active_only: bool = Query(True, description="Only return active members"),
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_admin_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
     """Get members assigned to a specific membership plan"""
     

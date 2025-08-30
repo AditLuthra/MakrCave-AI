@@ -6,7 +6,7 @@ from datetime import datetime
 import re
 from urllib.parse import urlparse
 
-from schemas.project import GitHubRepoInfo, GitHubCommit, GitHubFile, GitHubActivity
+from ..schemas.project import GitHubRepoInfo, GitHubCommit, GitHubFile, GitHubActivity
 
 class GitHubService:
     def __init__(self, access_token: Optional[str] = None):

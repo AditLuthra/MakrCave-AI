@@ -5,11 +5,11 @@ from datetime import datetime, timedelta
 import uuid
 import secrets
 
-from models.member import (
+from ..models.member import (
     Member, MembershipPlan, MemberInvite, MemberActivityLog, 
     MembershipTransaction, MemberRole, MemberStatus, InviteStatus
 )
-from schemas.member import (
+from ..schemas.member import (
     MemberCreate, MemberUpdate, MemberSuspend, MemberFilter, MemberSort,
     MembershipPlanCreate, MembershipPlanUpdate,
     MemberInviteCreate, MemberInviteUpdate,

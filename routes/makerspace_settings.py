@@ -3,10 +3,10 @@ from sqlalchemy.orm import Session
 from typing import Dict, Any
 from datetime import datetime
 
-from database import get_db
-from dependencies import get_current_user, get_current_admin_user
-# User import removed - using CurrentUser from dependencies
-from schemas.makerspace_settings import (
+from ..database import get_db
+from ..dependencies import get_current_user, get_current_admin_user
+from ..models.user import User
+from ..schemas.makerspace_settings import (
     MakerspaceSettingsResponse,
     MakerspaceSettingsUpdate,
     MakerspaceSettingsPublic,
@@ -20,13 +20,13 @@ from schemas.makerspace_settings import (
     ServiceModeUpdate,
     AppearanceUpdate
 )
-from crud.makerspace_settings import get_makerspace_settings_crud
+from ..crud.makerspace_settings import get_makerspace_settings_crud
 
 router = APIRouter(prefix="/makerspace/settings", tags=["Makerspace Settings"])
 
 @router.get("/", response_model=MakerspaceSettingsResponse)
 async def get_makerspace_settings(
-    current_user = Depends(get_current_admin_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -61,7 +61,7 @@ async def get_makerspace_settings(
 @router.post("/update", response_model=MakerspaceSettingsResponse)
 async def update_makerspace_settings(
     settings_data: MakerspaceSettingsUpdate,
-    current_user = Depends(get_current_admin_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -96,7 +96,7 @@ async def update_makerspace_settings(
 async def update_settings_section(
     section: str,
     section_data: Dict[str, Any],
-    current_user = Depends(get_current_admin_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -146,7 +146,7 @@ async def update_settings_section(
 async def toggle_feature(
     feature: str,
     toggle_data: FeatureToggleRequest,
-    current_user = Depends(get_current_admin_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -213,7 +213,7 @@ async def get_public_settings(
 
 @router.get("/export", response_model=SettingsExportResponse)
 async def export_settings(
-    current_user = Depends(get_current_admin_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -248,7 +248,7 @@ async def export_settings(
 @router.post("/import", response_model=MakerspaceSettingsResponse)
 async def import_settings(
     import_data: SettingsImportRequest,
-    current_user = Depends(get_current_admin_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -285,7 +285,7 @@ async def import_settings(
 @router.post("/general", response_model=MakerspaceSettingsResponse)
 async def update_general_information(
     general_data: GeneralInformationUpdate,
-    current_user = Depends(get_current_admin_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """Update general information section"""
@@ -294,7 +294,7 @@ async def update_general_information(
 @router.post("/access", response_model=MakerspaceSettingsResponse)
 async def update_access_control(
     access_data: AccessControlUpdate,
-    current_user = Depends(get_current_admin_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """Update access control section"""
@@ -303,7 +303,7 @@ async def update_access_control(
 @router.post("/inventory", response_model=MakerspaceSettingsResponse)
 async def update_inventory_settings(
     inventory_data: InventorySettingsUpdate,
-    current_user = Depends(get_current_admin_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """Update inventory settings section"""
@@ -312,7 +312,7 @@ async def update_inventory_settings(
 @router.post("/billing", response_model=MakerspaceSettingsResponse)
 async def update_billing_config(
     billing_data: BillingConfigUpdate,
-    current_user = Depends(get_current_admin_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """Update billing configuration section"""
@@ -321,7 +321,7 @@ async def update_billing_config(
 @router.post("/service", response_model=MakerspaceSettingsResponse)
 async def update_service_mode(
     service_data: ServiceModeUpdate,
-    current_user = Depends(get_current_admin_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """Update service mode section"""
@@ -330,7 +330,7 @@ async def update_service_mode(
 @router.post("/appearance", response_model=MakerspaceSettingsResponse)
 async def update_appearance(
     appearance_data: AppearanceUpdate,
-    current_user = Depends(get_current_admin_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """Update appearance section"""
@@ -338,7 +338,7 @@ async def update_appearance(
 
 @router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_settings(
-    current_user = Depends(get_current_admin_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """

@@ -5,10 +5,10 @@ from typing import List, Optional
 import uuid
 from datetime import datetime
 
-from  import models
-from database import get_db
-from dependencies import get_current_user
-from schemas.project import (
+from .. import models
+from ..database import get_db
+from ..dependencies import get_current_user
+from ..schemas.project import (
     ProjectForkCreate, ProjectForkResponse, ProjectCommentCreate, ProjectCommentResponse,
     BOMOrderCreate, BOMOrderResponse, ProjectTeamRoleCreate, ProjectTeamRoleResponse,
     ResourceSharingCreate, ResourceSharingResponse, PublicProjectsFilter,
@@ -365,7 +365,7 @@ async def create_bom_order(
 ):
     """Create order for BOM item through MakrX Store"""
     # Check project access
-    from crud.project import has_project_edit_access
+    from ..crud.project import has_project_edit_access
     if not has_project_edit_access(db, project_id, current_user["user_id"]):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -435,7 +435,7 @@ async def assign_team_role(
     db: Session = Depends(get_db)
 ):
     """Assign custom team role to project collaborator"""
-    from crud.project import has_project_edit_access
+    from ..crud.project import has_project_edit_access
     if not has_project_edit_access(db, project_id, current_user["user_id"]):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -489,7 +489,7 @@ async def share_resource(
     db: Session = Depends(get_db)
 ):
     """Share project resource with another project"""
-    from crud.project import has_project_edit_access
+    from ..crud.project import has_project_edit_access
     if not has_project_edit_access(db, project_id, current_user["user_id"]):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

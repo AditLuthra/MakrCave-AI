@@ -5,11 +5,11 @@ from typing import List, Optional
 import uuid
 from datetime import datetime
 
-from  import models
+from .. import models
 
-from database import get_db
-from dependencies import get_current_user
-from schemas.project import (
+from ..database import get_db
+from ..dependencies import get_current_user
+from ..schemas.project import (
     ProjectCreate, ProjectUpdate, ProjectResponse, ProjectSummaryResponse,
     CollaboratorAdd, CollaboratorUpdate, BOMItemCreate, BOMItemUpdate,
     EquipmentReservationCreate, EquipmentReservationUpdate,
@@ -17,7 +17,7 @@ from schemas.project import (
     ProjectStatistics, UserProjectStatistics, FileUpload,
     GitHubRepoConnect, GitHubRepoInfo, GitHubFile, GitHubCommit
 )
-from crud import project as crud_project
+from ..crud import project as crud_project
 
 router = APIRouter()
 security = HTTPBearer()
@@ -697,7 +697,7 @@ async def get_github_commits(
             detail="Project not found or GitHub integration not enabled"
         )
 
-    from utils.github_service import GitHubService
+    from ..utils.github_service import GitHubService
     github_service = GitHubService(project.github_access_token)
     branch = branch or project.github_default_branch
 
@@ -718,7 +718,7 @@ async def generate_project_readme(
             detail="Insufficient permissions to generate README"
         )
 
-    from utils.readme_generator import create_github_readme, generate_project_readme
+    from ..utils.readme_generator import create_github_readme, generate_project_readme
 
     project = crud_project.get_project(db, project_id, current_user["user_id"])
     if not project:

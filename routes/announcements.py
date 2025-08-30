@@ -5,14 +5,14 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 from uuid import UUID
 
-from database import get_db
-from dependencies import get_current_user, get_current_admin_user
-# User import removed - using CurrentUser from dependencies
-from models.announcements import (
+from ..database import get_db
+from ..dependencies import get_current_user, get_current_admin_user
+from ..models.user import User
+from ..models.announcements import (
     Announcement, AnnouncementAcknowledgment, AnnouncementView,
     AnnouncementType, Priority, TargetAudience
 )
-from models.member import Member
+from ..models.member import Member
 
 router = APIRouter(prefix="/api/v1/announcements", tags=["Announcements"])
 
@@ -326,7 +326,7 @@ async def get_announcement(
 async def create_announcement(
     announcement_data: AnnouncementCreate,
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_admin_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
     """Create a new announcement"""
     
@@ -380,7 +380,7 @@ async def update_announcement(
     announcement_id: str,
     announcement_data: AnnouncementUpdate,
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_admin_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
     """Update an existing announcement"""
     
@@ -445,7 +445,7 @@ async def update_announcement(
 async def delete_announcement(
     announcement_id: str,
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_admin_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
     """Delete an announcement"""
     
@@ -564,7 +564,7 @@ async def record_announcement_click(
 async def get_announcement_stats(
     announcement_id: str,
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_admin_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
     """Get detailed statistics for an announcement"""
     

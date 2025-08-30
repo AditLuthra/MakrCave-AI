@@ -163,13 +163,6 @@ async def get_current_user(
         )
 
 
-async def get_current_makerspace(
-    user: CurrentUser = Depends(get_current_user)
-) -> Optional[str]:
-    """Return the current user's makerspace ID."""
-    return user.makerspace_id
-
-
 def check_permission(user_role: str, permission: str) -> bool:
     """Check if user role has specific permission"""
 
@@ -486,45 +479,3 @@ def get_permission_checker(
 ) -> PermissionChecker:
     """Get permission checker instance for current user"""
     return PermissionChecker(current_user)
-
-
-def require_roles(roles: list):
-    """Create a dependency that requires specific roles"""
-    def role_dependency(user: CurrentUser = Depends(get_current_user)):
-        if user.role not in roles:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"Insufficient permissions: roles {roles} required"
-            )
-        return user
-    return role_dependency
-
-
-def require_permission(permission: str):
-    """Create a dependency that requires a specific permission"""
-    def permission_dependency(user: CurrentUser = Depends(get_current_user)):
-        if not check_permission(user.role, permission):
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"Insufficient permissions: {permission} required"
-            )
-        return user
-    return permission_dependency
-
-
-def require_scope(scope: str):
-    """Create a dependency that requires a specific scope"""
-    def scope_dependency(user: CurrentUser = Depends(get_current_user)):
-        # For now, just return the user - can implement scope checking later
-        return user
-    return scope_dependency
-
-
-async def get_current_admin_user(current_user: CurrentUser = Depends(get_current_user)) -> CurrentUser:
-    """Get current user and ensure they have admin privileges"""
-    if current_user.role not in ["admin", "makerspace_admin", "super_admin"]:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admin privileges required"
-        )
-    return current_user
