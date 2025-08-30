@@ -1,5 +1,11 @@
-import Dashboard from '../../pages/Dashboard';
+'use client';
+
+import RoleDashboard from '../../components/RoleDashboard';
 
 export default function DashboardPage() {
-  return <Dashboard />;
+  return (
+    <div className="p-6">
+      <RoleDashboard />
+    </div>
+  );
 }
