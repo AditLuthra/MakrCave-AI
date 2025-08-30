@@ -21,7 +21,7 @@ interface OnboardingState {
 
 const OnboardingPage: React.FC = () => {
   const router = useRouter();
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
   const [onboardingState, setOnboardingState] = useState<OnboardingState>({
     stage: 'welcome',
     userType: '',
@@ -31,9 +31,9 @@ const OnboardingPage: React.FC = () => {
   });
 
   // Check if user is returning from invitation or specific flow
-  const inviteCode = searchParams.get('invite');
-  const userTypeParam = searchParams.get('type') as 'user' | 'admin' | 'provider' | 'super_admin';
-  const skipToParam = searchParams.get('skip_to');
+  const inviteCode = searchParams?.get('invite');
+  const userTypeParam = searchParams?.get('type') as 'user' | 'admin' | 'provider' | 'super_admin' | null;
+  const skipToParam = searchParams?.get('skip_to');
 
   useEffect(() => {
     // Handle URL parameters for direct flows

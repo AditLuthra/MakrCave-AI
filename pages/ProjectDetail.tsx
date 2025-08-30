@@ -27,7 +27,8 @@ import {
   MoreHorizontal,
   Settings,
   Archive,
-  Copy
+  Copy,
+  Plus
 } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '../components/ui/dropdown-menu';
 import { useAuth } from '../contexts/AuthContext';

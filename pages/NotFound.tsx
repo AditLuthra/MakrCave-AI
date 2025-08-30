@@ -259,7 +259,7 @@ const NotFound = () => {
           </div>
 
           <div className="space-y-4">
-            <Link to="/">
+            <Link href="/">
               <Button className="bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white px-8 py-3 text-lg">
                 <ArrowLeft className="mr-2 h-5 w-5" />
                 Return to MakrCave
@@ -291,13 +291,13 @@ const NotFound = () => {
               <span className="text-red-400">SYSTEM</span> {'>'} <span className="text-yellow-400">LAB_404</span> {'>'} <span className="text-white">ERROR_STATE</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Link to="/">
+              <Link href="/">
                 <Button variant="outline" size="sm" className="border-gray-600 text-gray-300 hover:bg-gray-800 text-xs sm:text-sm">
                   <Home className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
                   Home
                 </Button>
               </Link>
-              <Link to="/portal">
+              <Link href="/portal">
                 <Button variant="outline" size="sm" className="border-blue-600 text-blue-300 hover:bg-blue-900/20 text-xs sm:text-sm">
                   <Settings className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
                   Portal
@@ -407,13 +407,13 @@ const NotFound = () => {
               <div className="space-y-4 sm:space-y-6">
                 {/* Primary Navigation */}
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-lg sm:max-w-none mx-auto">
-                  <Link to="/" className="flex-1 sm:flex-none">
+                  <Link href="/" className="flex-1 sm:flex-none">
                     <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-700 hover:from-blue-500 hover:to-purple-600 text-white px-6 sm:px-8 py-3 text-sm sm:text-base">
                       <Home className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                       MakrCave Home
                     </Button>
                   </Link>
-                  <Link to="/portal" className="flex-1 sm:flex-none">
+                  <Link href="/portal" className="flex-1 sm:flex-none">
                     <Button className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white px-6 sm:px-8 py-3 text-sm sm:text-base">
                       <ArrowLeft className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                       Back to Portal
@@ -423,7 +423,7 @@ const NotFound = () => {
 
                 {/* Alternative Options */}
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center max-w-md sm:max-w-none mx-auto">
-                  <Link to="/makrverse" className="flex-1 sm:flex-none">
+                  <Link href="/makrverse" className="flex-1 sm:flex-none">
                     <Button variant="outline" className="w-full border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 text-sm">
                       <MapPin className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                       Explore MakrVerse

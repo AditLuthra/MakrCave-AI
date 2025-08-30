@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Building2, Loader2, CheckCircle, XCircle } from 'lucide-react';
-import { ThemeToggle } from '../../../packages/ui/components/ThemeToggle';
+// ThemeToggle component not available, commenting out
+// import { ThemeToggle } from '../../../packages/ui/components/ThemeToggle';
 import auth from '../lib/auth';
 import { getRoleRedirect } from '../lib/roleRedirect';
 
@@ -26,13 +27,13 @@ export default function AuthCallback() {
       }
     };
     process();
-  }, [navigate]);
+  }, [router]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-makrx-blue via-makrx-blue/95 to-makrx-blue/90 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-6">
-      {/* Theme Toggle */}
+      {/* Theme Toggle - Temporarily disabled */}
       <div className="fixed top-6 right-6 z-50">
-        <ThemeToggle variant="default" />
+        {/* <ThemeToggle variant="default" /> */}
       </div>
 
       <div className="w-full max-w-md relative">

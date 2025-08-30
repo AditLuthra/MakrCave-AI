@@ -95,7 +95,7 @@ const Contact = () => {
       <header className="relative z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">M</span>
               </div>
@@ -103,13 +103,13 @@ const Contact = () => {
             </Link>
             
             <nav className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-white/80 hover:text-white transition-colors">Home</Link>
-              <Link to="/find-makerspace" className="text-white/80 hover:text-white transition-colors">Find Makerspace</Link>
-              <Link to="/contact" className="text-white hover:text-white font-semibold">Contact</Link>
+              <Link href="/" className="text-white/80 hover:text-white transition-colors">Home</Link>
+              <Link href="/find-makerspace" className="text-white/80 hover:text-white transition-colors">Find Makerspace</Link>
+              <Link href="/contact" className="text-white hover:text-white font-semibold">Contact</Link>
             </nav>
 
             <div className="flex items-center space-x-4">
-              <Link to="/login">
+              <Link href="/login">
                 <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none">
                   Portal Login
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -372,13 +372,13 @@ const Contact = () => {
             Join the growing network of MakrCaves and revolutionize how you manage your space.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/find-makerspace">
+            <Link href="/find-makerspace">
               <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3">
                 Find a MakrCave
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link to="/login">
+            <Link href="/login">
               <Button variant="outline" className="border-white/30 text-white/80 px-8 py-3">
                 Start Your Application
               </Button>

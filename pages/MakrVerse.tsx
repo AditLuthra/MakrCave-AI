@@ -417,7 +417,7 @@ const MakrVerse = () => {
             {/* Logo and Title Row */}
             <div className="flex items-center justify-between w-full sm:w-auto">
               <div className="flex items-center space-x-2 sm:space-x-4">
-                <Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+                <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
                   <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-400 to-purple-600 rounded-lg flex items-center justify-center">
                     <span className="text-white font-bold text-xs sm:text-sm">M</span>
                   </div>
@@ -430,12 +430,12 @@ const MakrVerse = () => {
 
               {/* Mobile Navigation Buttons */}
               <div className="flex items-center space-x-2 sm:hidden">
-                <Link to="/">
+                <Link href="/">
                   <Button variant="outline" size="sm" className="border-gray-600 text-gray-300 hover:bg-gray-800 px-2">
                     <Home className="h-4 w-4" />
                   </Button>
                 </Link>
-                <Link to="/portal">
+                <Link href="/portal">
                   <Button size="sm" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-3">
                     Portal
                   </Button>
@@ -447,7 +447,7 @@ const MakrVerse = () => {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
               {/* Navigation Breadcrumb */}
               <div className="hidden lg:flex items-center text-gray-400 text-sm">
-                <Link to="/" className="hover:text-white transition-colors">Home</Link>
+                <Link href="/" className="hover:text-white transition-colors">Home</Link>
                 <span className="mx-2">{'>'}</span>
                 <span className="text-white">MakrVerse</span>
               </div>
@@ -478,14 +478,14 @@ const MakrVerse = () => {
 
                 {/* Desktop Navigation Buttons */}
                 <div className="hidden sm:flex items-center space-x-2">
-                  <Link to="/">
+                  <Link href="/">
                     <Button variant="outline" size="sm" className="border-gray-600 text-gray-300 hover:bg-gray-800">
                       <Home className="h-4 w-4 mr-1" />
                       Home
                     </Button>
                   </Link>
 
-                  <Link to="/portal">
+                  <Link href="/portal">
                     <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white">
                       Portal
                     </Button>
@@ -671,7 +671,7 @@ const MakrVerse = () => {
         <div className="flex-1 relative h-[50vh] lg:h-full">
           {/* Mobile Back Button */}
           <div className="absolute top-2 left-2 z-30 sm:top-4 sm:left-4 lg:hidden">
-            <Link to="/">
+            <Link href="/">
               <Button size="sm" className="bg-black/80 backdrop-blur-md text-white border border-white/20 hover:bg-black/90 text-xs sm:text-sm">
                 <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
                 Back
