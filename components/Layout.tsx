@@ -61,7 +61,7 @@ export default function Layout() {
 
       {/* Sidebar with mobile support */}
       <div className={`makrcave-sidebar ${isMobileSidebarOpen ? 'open' : ''}`}>
-        <RoleBasedSidebar onMobileClose={() => setIsMobileSidebarOpen(false)} />
+        <RoleBasedSidebar />
       </div>
 
       <div className="makrcave-main">

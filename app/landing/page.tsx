@@ -14,14 +14,14 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Public Header */}
-      <header className="relative z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
+      <header className="relative z-50 bg-black/20 backdrop-blur-md border-b border-white/10 shadow-lg">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">M</span>
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-lg">M</span>
               </div>
-              <span className="text-2xl font-bold text-white">MakrCave</span>
+              <span className="text-2xl font-bold text-white tracking-tight">MakrCave</span>
             </div>
             
             <nav className="hidden md:flex items-center space-x-8">
@@ -32,7 +32,7 @@ const LandingPage = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div className="absolute left-0 mt-2 w-64 bg-black/90 backdrop-blur-md border border-white/20 shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div className="absolute left-0 mt-2 w-64 bg-black/90 backdrop-blur-md border border-white/20 shadow-xl rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                   <div className="p-4 space-y-2">
                     <a href="https://makrx.org" className="block p-2 hover:bg-white/10 rounded-md">
                       <div className="font-medium text-white">MakrX.org</div>
@@ -61,7 +61,7 @@ const LandingPage = () => {
                 Join the Movement
               </Link>
               <Link href="/login">
-                <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none">
+                <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
                   Go to Portal
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -106,7 +106,9 @@ const LandingPage = () => {
 
       {/* Responsive Hero Section */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-3xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-3xl">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-purple-500/10"></div>
+        </div>
         <div className="relative container mx-auto px-4 sm:px-6 py-16 sm:py-24 lg:py-32 text-center">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold text-white mb-6 sm:mb-8 leading-tight">
