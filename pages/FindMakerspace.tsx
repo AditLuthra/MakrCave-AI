@@ -1,10 +1,12 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Input } from '../components/ui/input';
 import { MapPin, Clock, Users, Star, Filter, Search, Phone, Mail, Globe, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import InteractiveMap from '../components/InteractiveMap';
 
 interface Makerspace {
@@ -210,7 +212,7 @@ const FindMakerspace = () => {
       <header className="relative z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">M</span>
               </div>
@@ -218,13 +220,13 @@ const FindMakerspace = () => {
             </Link>
             
             <nav className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-white/80 hover:text-white transition-colors">Home</Link>
-              <Link to="/makrverse" className="text-white/80 hover:text-white transition-colors">MakrVerse</Link>
-              <Link to="/find-makerspace" className="text-white hover:text-white font-semibold">Find Makerspace</Link>
+              <Link href="/" className="text-white/80 hover:text-white transition-colors">Home</Link>
+              <Link href="/makrverse" className="text-white/80 hover:text-white transition-colors">MakrVerse</Link>
+              <Link href="/find-makerspace" className="text-white hover:text-white font-semibold">Find Makerspace</Link>
             </nav>
 
             <div className="flex items-center space-x-4">
-              <Link to="/login">
+              <Link href="/login">
                 <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none">
                   Join Makerspace
                   <ArrowRight className="ml-2 h-4 w-4" />
