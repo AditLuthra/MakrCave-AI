@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable transpilation of packages from monorepo
-  transpilePackages: ['@makrx/ui', '@makrx/types', '@makrx/utils', '@makrx/feature-flags'],
+  // Enable transpilation of local packages
+  transpilePackages: [],
   
   // Environment variables
   env: {
