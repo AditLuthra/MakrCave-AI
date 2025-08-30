@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useMemo, useEffect } from 'react';
 import {
   Package, Plus, Search, Filter, Download, Upload, ShoppingCart,

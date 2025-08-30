@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { Settings, ToggleLeft, ToggleRight, Shield, Info, Eye, EyeOff } from 'lucide-react';
 import { useFeatureFlags } from '../../contexts/FeatureFlagContext';

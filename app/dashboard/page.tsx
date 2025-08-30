@@ -1,3 +1,5 @@
+'use client';
+
 import RoleDashboard from '../../components/RoleDashboard';
 import { ThemeToggle } from '../../../packages/ui/components/ThemeToggle';
 

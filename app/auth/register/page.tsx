@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect } from 'react';
 import { Building2 } from 'lucide-react';
 import { ThemeToggle } from '../../../packages/ui/components/ThemeToggle';

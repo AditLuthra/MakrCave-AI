@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useMemo, useEffect } from 'react';
 import {
   Wrench, Plus, Search, Filter, Calendar, Star, MapPin,
