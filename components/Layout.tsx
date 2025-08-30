@@ -2,7 +2,7 @@ import { Outlet, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import RoleBasedSidebar from './RoleBasedSidebar';
-import Header from './Header';
+import EnhancedHeader from './EnhancedHeader';
 
 export default function Layout() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -65,7 +65,7 @@ export default function Layout() {
       </div>
 
       <div className="makrcave-main">
-        <Header onMobileMenuClick={() => setIsMobileSidebarOpen(true)} />
+        <EnhancedHeader onMobileMenuClick={() => setIsMobileSidebarOpen(true)} />
         <main className="p-3 sm:p-6 bg-background">
           <Outlet />
         </main>

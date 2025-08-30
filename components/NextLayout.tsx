@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import RoleBasedSidebar from './RoleBasedSidebar';
-import Header from './Header';
+import EnhancedHeader from './EnhancedHeader';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -55,7 +55,7 @@ export default function NextLayout({ children }: LayoutProps) {
 
       {/* Main content */}
       <div className="lg:pl-64">
-        <Header onMobileSidebarToggle={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)} />
+        <EnhancedHeader onMobileMenuClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)} />
         
         <main className="pt-16">
           <div className="p-4 sm:p-6 lg:p-8">
