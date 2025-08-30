@@ -7,7 +7,8 @@
 
 import { useEffect } from 'react';
 import { Building2 } from 'lucide-react';
-import { ThemeToggle } from '../../../packages/ui/components/ThemeToggle';
+// Theme toggle component - using button for now until proper ThemeToggle is available
+// import { ThemeToggle } from '../../../packages/ui/components/ThemeToggle';
 import auth from '../lib/auth';
 
 export default function Login() {
@@ -31,7 +32,7 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
       <div className="absolute top-4 right-4">
-        <ThemeToggle />
+        {/* <ThemeToggle /> */}
       </div>
       
       <div className="max-w-md w-full space-y-8">
